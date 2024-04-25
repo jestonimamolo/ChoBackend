@@ -530,6 +530,38 @@ namespace choapi.Controllers
             }
         }
 
+        [HttpGet("menus/{id}"), Authorize()]
+        public ActionResult<MenuResponse> GetMenu(int id)
+        {
+            var response = new MenuResponse();
+            try
+            {
+                var result = _restaurantDAL.GetMenu(id);
+
+                if (result != null)
+                {
+                    response.Menu = result;
+                    response.Message = "Successfully get Restaurant Menu.";
+
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Message = $"No Restaurant Menu found by restaurant id: {id}";
+                    response.Status = "Failed";
+
+                    return BadRequest(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
+
         [HttpGet("menus"), Authorize()]
         public ActionResult<MenusResponse> GetMenus(int restaurantId)
         {
