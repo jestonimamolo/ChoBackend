@@ -6,14 +6,26 @@ namespace choapi.Models
     {
         public ChoDBContext(DbContextOptions<ChoDBContext> options) : base(options) { }
 
-        public virtual DbSet<User> User { get; set; }
+        public virtual DbSet<Users> Users { get; set; }
 
-        public virtual DbSet<Restaurant> Restaurant { get; set; }
+        public virtual DbSet<Restaurants> Restaurants { get; set; }
 
-        public virtual DbSet<Booking> Booking { get; set; }
+        public virtual DbSet<RestaurantImages> RestaurantImages { get; set; }
+
+        public virtual DbSet<Menus> Menus { get; set; }
+
+        public virtual DbSet<RestaurantAvailability> RestaurantAvailability { get; set; }
+
+        public virtual DbSet<RestaurantCuisines> RestaurantCuisines { get; set; }
+
+        public virtual DbSet<Cuisines> Cuisines { get; set; }
+
+        public virtual DbSet<Bookings> Bookings { get; set; }
+
+        public virtual DbSet<RestaurantBookType> RestaurantBookType { get; set; }
 
         public virtual DbSet<RestaurantTable> RestaurantTable { get; set; }
 
-
+        public virtual DbSet<Payment> Payment { get; set; }
     }
 }

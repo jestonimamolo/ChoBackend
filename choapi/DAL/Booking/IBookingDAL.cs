@@ -4,10 +4,16 @@ namespace choapi.DAL
 {
     public interface IBookingDAL
     {
-        Booking? Add(Booking model);
+        Bookings Add(Bookings model);
 
-        Booking? GetBooking(int id);
+        Bookings Update(Bookings model);
+
+        Bookings? GetBooking(int id);
 
         void DeleteBooking(int id);
+
+        List<Bookings>? GetRestaurantBookings(int id);
+
+        List<Bookings>? GetUserBookings(int id);
     }
 }

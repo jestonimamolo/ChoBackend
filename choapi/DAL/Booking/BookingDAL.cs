@@ -11,29 +11,48 @@ namespace choapi.DAL
             _context = choDBContext;
         }
 
-        public Booking? Add(Booking model)
+        public Bookings Add(Bookings model)
         {
-            if (model != null)
-            {
-                _context.Booking.Add(model);
+            _context.Bookings.Add(model);
 
-                _context.SaveChanges();
-            }
+            _context.SaveChanges();
+
             return model;
         }
 
-        public Booking? GetBooking(int id)
+        public Bookings Update(Bookings model)
         {
-            return _context.Booking.FirstOrDefault(r => r.Booking_Id == id);
+            _context.Bookings.Update(model);
+
+            _context.SaveChanges();
+
+            return model;
+        }
+
+        public Bookings? GetBooking(int id)
+        {
+            return _context.Bookings.FirstOrDefault(r => r.Booking_Id == id);
         }
 
         public void DeleteBooking(int id)
         {
-            var booking = _context.Booking.FirstOrDefault(r => r.Booking_Id == id);
+            var booking = _context.Bookings.FirstOrDefault(r => r.Booking_Id == id);
             if (booking != null)
             {
-                _context.Booking.Remove(booking);
+                _context.Bookings.Remove(booking);
             }
         }
+
+        public List<Bookings>? GetRestaurantBookings(int id)
+        {
+            return _context.Bookings.Where(b => b.Restaurant_Id == id).ToList();
+        }
+
+        public List<Bookings>? GetUserBookings(int id)
+        {
+            return _context.Bookings.Where(b => b.User_Id == id).ToList();
+        }
+
+
     }
 }

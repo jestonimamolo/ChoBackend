@@ -1,6 +1,8 @@
 ﻿using choapi.DAL;
 using choapi.DTOs;
+using choapi.Messages;
 using choapi.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -16,7 +18,7 @@ namespace choapi.Controllers
         //Server=localhost\SQLEXPRESS01;Database=master;Trusted_Connection=True;
         private readonly IUserDAL _userDAL;
 
-        public static User _user = new User();
+        public static Users _user = new Users();
 
         private readonly IConfiguration _configuration;
 
@@ -27,8 +29,9 @@ namespace choapi.Controllers
         }
 
         [HttpPost("register")]
-        public ActionResult<User> Register(UserDto request)
+        public ActionResult<RegisterReponse> Register(UserDTO request)
         {
+            var response = new RegisterReponse();
             try
             {
                 string passwordinputed = request.Password;
@@ -37,50 +40,117 @@ namespace choapi.Controllers
 
                 if (existUser != null)
                 {
-                    return BadRequest("Username/email is already existed.");
+                    response.Message = "Username is already existed";
+                    response.Status = "Failed";
+
+                    return BadRequest(response);
                 }
 
                 string passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
 
-                var user = new User
+                var user = new Users
                 {
                     Username = request.Username,
                     Password_Hash = passwordHash,
-                    Role = request.Role,
+                    Role_Id = request.Role_Id,
+                    Email = request.Email,
+                    Phone = request.Phone,
+                    Display_Name = request.Display_Name,
+                    Photo_Url = request.Photo_Url,
+                    Latitude = request.Latitude,
+                    Longitude = request.Longitude,
                     Is_Active = true
                 };
 
-                var resultUser = _userDAL.Add(user);
+                var userResult = _userDAL.Add(user);                
 
-                return Ok(resultUser);
+                response.User.User_Id = userResult.User_Id;
+                response.User.Username = userResult.Username;
+                response.User.Email = user.Email;
+                response.User.Phone = user.Phone;
+                response.User.Role_Id = userResult.Role_Id;
+                response.User.Is_Active = userResult.Is_Active;
+                response.User.Display_Name = userResult.Display_Name;
+                response.User.Photo_Url = userResult.Photo_Url;
+                response.User.Latitude = userResult.Latitude;
+                response.User.Longitude = userResult.Longitude;
+
+                response.Message = "Successfully registered.";
+
+                return Ok(response);
             }
             catch(Exception ex)
             {
-                return BadRequest(ex.Message);
+                response.User.User_Id = 0;
+                response.User.Username = request.Username;
+                response.User.Email = request.Email;
+                response.User.Phone = request.Phone;
+                response.User.Role_Id = request.Role_Id;
+                response.User.Display_Name = request.Display_Name;
+                response.User.Photo_Url = request.Photo_Url;
+                response.User.Latitude = request.Latitude;
+                response.User.Longitude = request.Longitude;
+
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
             }
             
         }
 
         [HttpPost("login")]
-        public ActionResult<User> Login(UserDto request)
+        public ActionResult<LoginResponse> Login(LoginDTO request)
         {
-            var user = _userDAL.GetUserByUsername(request.Username);
-            if (user == null)
+            var response = new LoginResponse();
+            try
             {
-                return BadRequest("User not found.");
-            }
+                var user = _userDAL.GetUserByUsername(request.Username);
+                if (user == null)
+                {
+                    response.Message = "Username not found.";
+                    response.Status = "Failed";
 
-            if (!BCrypt.Net.BCrypt.Verify(request.Password, user.Password_Hash))
+                    return BadRequest(response);
+                }
+
+                if (!BCrypt.Net.BCrypt.Verify(request.Password, user.Password_Hash))
+                {
+                    response.Message = "Incorrect password.";
+                    response.Status = "Failed";
+
+                    return BadRequest(response);
+                }                
+
+                response.User.User_Id = user.User_Id;
+                response.User.Username = user.Username;
+                response.User.Email = user.Email;
+                response.User.Phone = user.Phone;
+                response.User.Role_Id = user.Role_Id;
+                response.User.Is_Active = user.Is_Active;
+                response.User.Display_Name = user.Display_Name;
+                response.User.Photo_Url = user.Photo_Url;
+                response.User.Latitude = user.Latitude;
+                response.User.Longitude = user.Longitude;
+
+                response.Message = "Successfully login.";
+
+                string token = CreateToken(user);
+
+                response.Token = token;
+
+                return Ok(response);
+            }
+            catch (Exception ex)
             {
-                return BadRequest("Incorrect password.");
-            }
+                response.Message = ex.Message;
+                response.Status = "Failed";
 
-            string token = CreateToken(user);
-
-            return Ok(token);
+                return BadRequest(response);
+            }            
         }
 
-        private string CreateToken(User user)
+        private string CreateToken(Users user)
         {
             List<Claim> claims = new List<Claim>
             {

@@ -4,8 +4,12 @@ namespace choapi.DAL
 {
     public interface IUserDAL
     {
-        User? Add(User user);
+        Users Add(Users user);
 
-        User? GetUserByUsername(string username);
+        Users? GetUserByUsername(string username);
+
+        Users? GetUser(int id);
+
+        Users Update(Users model);
     }
 }

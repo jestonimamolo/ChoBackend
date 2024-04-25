@@ -22,7 +22,7 @@ namespace choapi.Controllers
         }
 
         [HttpPost("add"), Authorize()]
-        public ActionResult<RestaurantTable> Add(RestaurantTableDto request)
+        public ActionResult<RestaurantTable> Add(RestaurantTableDTO request)
         {
             var restaurantTable = new RestaurantTable
             {

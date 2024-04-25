@@ -11,21 +11,32 @@ namespace choapi.DAL
             _context = choDBContext;
         }
 
-        public User? Add(User user)
+        public Users Add(Users user)
         {
-            if (user != null)
-            {
-                _context.User.Add(user);
+            _context.Users.Add(user);
 
-                _context.SaveChanges();
-            }
+            _context.SaveChanges();
 
             return user;
         }
 
-        public User? GetUserByUsername(string username)
+        public Users? GetUserByUsername(string username)
         {
-            return _context.User.FirstOrDefault(u => u.Username == username);
+            return _context.Users.FirstOrDefault(u => u.Username == username);
+        }
+
+        public Users? GetUser(int id)
+        {
+            return _context.Users.FirstOrDefault(u => u.User_Id == id);
+        }
+
+        public Users Update(Users model)
+        {
+            _context.Users.Update(model);
+
+            _context.SaveChanges();
+
+            return model;
         }
     }
 }

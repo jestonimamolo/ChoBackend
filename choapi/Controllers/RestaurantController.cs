@@ -1,5 +1,6 @@
 ﻿using choapi.DAL;
 using choapi.DTOs;
+using choapi.Messages;
 using choapi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -48,39 +49,613 @@ namespace choapi.Controllers
         #endregion
 
         [HttpPost("register"), Authorize()]
-        public ActionResult<Restaurant> Register(RestaurantDto request)
+        public ActionResult<RestaurantResponse> Register(RestaurantDTO request)
         {
-            var restaurant = new Restaurant
+            var response = new RestaurantResponse();
+            try
             {
-                Name = request.Name,
-                Address = request.Address,
-                Contact_Number = request.Contact_Number,
-                Opening_Hours = request.Opening_Hours,
-                Cousine_Type = request.Cousine_Type,
-                Registration_Fee = request.Registration_Fee,
-                User_Id_Manager = request.User_Id_Manager,
-                Is_Registered = true
-            };
+                var restaurant = new Restaurants
+                {
+                    Name = request.Name,
+                    Description = request.Description,
+                    User_Id = request.User_Id,
+                    Credits = request.Credits,
+                    Plan = request.Plan,
+                    Latitude = request.Latitude,
+                    Longitude = request.Longitude,
+                    Is_Promoted = request.Is_Promoted,
+                    Address = request.Address,
+                    Is_Active = true
+                };
 
-            var resultRestaurant = _restaurantDAL.Add(restaurant);
+                var resultRestaurant = _restaurantDAL.Add(restaurant);
 
-            return Ok(resultRestaurant);
+                var restaurantImages = new List<RestaurantImages>();
+
+                if (request.Images != null)
+                {
+                    foreach (var image in request.Images)
+                    {
+                        var addRestaurantImages = new RestaurantImages();
+                        addRestaurantImages.Restaurant_Id = resultRestaurant.Restaurant_Id;
+                        addRestaurantImages.Image_Url = image.Image_Url;
+
+                        restaurantImages.Add(addRestaurantImages);
+                    }
+                }
+
+                var resultRestaurantImages = _restaurantDAL.AddImages(restaurantImages);
+
+                response.Restaurant = resultRestaurant;
+
+                response.Images = resultRestaurantImages;
+
+                response.Message = "Successfully added.";
+
+                return Ok(response);
+            }
+            catch(Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+            
         }
 
         [HttpGet("restaurants/{id}"), Authorize()]
-        public ActionResult<Restaurant> GetRestaurant(int id)
+        public ActionResult<RestaurantResponse> GetRestaurant(int id)
         {
-            var restaurant = _restaurantDAL.GetRestaurant(id);
+            var response = new RestaurantResponse();
 
-            return Ok(restaurant);
+            try
+            {
+                var resultRestaurant = _restaurantDAL.GetRestaurant(id);
+
+                if (resultRestaurant != null)
+                {
+                    response.Restaurant = resultRestaurant;
+
+                    response.Images = _restaurantDAL.GetRestaurantImages(resultRestaurant.Restaurant_Id);
+
+                    response.Message = $"Successfully get restaurant.";
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Message = $"No restaurant found by restaurant id: {id}";
+                    response.Status = "Failed";
+                    return BadRequest(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
         }
 
         [HttpGet("restaurants"), Authorize()]
-        public ActionResult<List<Restaurant>> GetRestaurants(int userIdManager)
+        public ActionResult<RestuarantUserIdResponnse> GetRestaurants(int? userId)
         {
-            var restaurants = _restaurantDAL.GetRestaurants(userIdManager);
+            var response = new RestuarantUserIdResponnse();
 
-            return Ok(restaurants);
+            try
+            {
+                var resultRestaurants = _restaurantDAL.GetRestaurants(userId);
+
+                if (resultRestaurants != null && resultRestaurants.Count > 0)
+                {
+                    foreach (var restaurant in resultRestaurants)
+                    {
+                        var resultRestaurant = new RestaurantsReponse();
+
+                        resultRestaurant.Restaurant_Id = restaurant.Restaurant_Id;
+                        resultRestaurant.Name = restaurant.Name;
+                        resultRestaurant.Description = restaurant.Description;
+                        resultRestaurant.User_Id = restaurant.User_Id;
+                        resultRestaurant.Credits = restaurant.Credits;
+                        resultRestaurant.Plan = restaurant.Plan;
+                        resultRestaurant.Latitude = restaurant.Latitude;
+                        resultRestaurant.Longitude = restaurant.Longitude;
+                        resultRestaurant.Is_Promoted = restaurant.Is_Promoted;
+                        resultRestaurant.Address = restaurant.Address;
+                        resultRestaurant.Is_Active = restaurant.Is_Active;
+
+                        resultRestaurant.Images = _restaurantDAL.GetRestaurantImages(restaurant.Restaurant_Id);
+
+                        response.Restaurants.Add(resultRestaurant);
+                    }
+                    response.Message = $"Successfully get restaurants.";
+
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Message = $"No restaurant found by user id: {userId}";
+                    response.Status = "Failed";
+                    return BadRequest(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }            
+        }
+
+        [HttpPost("menus/add"), Authorize()]
+        public ActionResult<MenuResponse> MenuAdd(MenuDto request)
+        {
+            var response = new MenuResponse();
+            try
+            {
+                var menu = new Menus
+                {
+                    Restaurant_Id = request.Restaurant_Id,
+                    Type = request.Type,
+                    Path = request.Path
+                };
+
+                var result = _restaurantDAL.Add(menu);
+
+                response.Menu = result;
+
+                response.Message = "Successfully added.";
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
+
+        [HttpPost("menus/update"), Authorize()]
+        public ActionResult<MenuResponse> MenuUpdate(MenuDto request)
+        {
+            var response = new MenuResponse();
+            try
+            {
+                var menu = _restaurantDAL.GetMenu(request.Menu_Id);
+
+                if (menu != null)
+                {
+                    menu.Restaurant_Id = request.Restaurant_Id;
+                    menu.Type = request.Type;
+                    menu.Path = request.Path;
+
+                    var result = _restaurantDAL.UpdateMenu(menu);
+
+                    response.Menu = result;
+                    response.Message = "Successfully updated.";
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Status = "Failed";
+                    response.Message = $"No found Menu id: {request.Menu_Id}";
+
+                    return Ok(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
+
+        [HttpPost("menus/delete/{id}"), Authorize()]
+        public ActionResult<MenuResponse> MenuDelete(int id)
+        {
+            var response = new MenuResponse();
+            try
+            {
+                var menu = _restaurantDAL.GetMenu(id);
+
+                if (menu != null)
+                {
+                    _restaurantDAL.DeleteMenu(menu);
+
+                    response.Menu = new Menus();
+                    response.Message = "Successfully deleted.";
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Status = "Failed";
+                    response.Message = $"No found Menu id: {id}";
+
+                    return Ok(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
+
+        [HttpGet("menus"), Authorize()]
+        public ActionResult<MenusResponse> GetMenus(int restaurantId)
+        {
+            var response = new MenusResponse();
+            try
+            {
+                var result = _restaurantDAL.GetMenus(restaurantId);
+
+                if (result != null && result.Count > 0)
+                {
+                    response.Menus = result;
+                    response.Message = "Successfully get Restaurant Menus.";
+
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Message = $"No Restaurant Menus found by restaurant id: {restaurantId}";
+                    response.Status = "Failed";
+
+                    return BadRequest(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
+
+        [HttpPost("availability/add"), Authorize()]
+        public ActionResult<RestaurantAvailabilityResponse> AvailabilityAdd(RestaurantAvailabilityDTO request)
+        {
+            var response = new RestaurantAvailabilityResponse();
+            try
+            {
+                var availability = new RestaurantAvailability
+                {
+                    Restaurant_Id = request.Restaurant_Id,
+                    Day = request.Day,
+                    Time_Start = request.Time_Start,
+                    Time_End = request.Time_End
+                };
+
+                var result = _restaurantDAL.Add(availability);
+
+                response.Availability = result;
+
+                response.Message = "Successfully added.";
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
+
+        [HttpPost("availability/update"), Authorize()]
+        public ActionResult<RestaurantAvailabilityResponse> AvailabilityUpdate(RestaurantAvailabilityDTO request)
+        {
+            var response = new RestaurantAvailabilityResponse();
+            try
+            {
+                var availability = _restaurantDAL.GetAvailability(request.RestaurantAvailability_Id);
+
+                if (availability != null)
+                {
+                    availability.Restaurant_Id = request.Restaurant_Id;
+                    availability.Day = request.Day;
+                    availability.Time_Start = request.Time_Start;
+                    availability.Time_End = request.Time_End;
+
+                    var result = _restaurantDAL.UpdateAvailability(availability);
+
+                    response.Availability = result;
+                    response.Message = "Successfully updated.";
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Status = "Failed";
+                    response.Message = $"No found Availability id: {request.RestaurantAvailability_Id}";
+
+                    return Ok(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
+
+        [HttpPost("availability/delete/{id}"), Authorize()]
+        public ActionResult<RestaurantAvailabilityResponse> AvailabilityDelete(int id)
+        {
+            var response = new RestaurantAvailabilityResponse();
+            try
+            {
+                var availability = _restaurantDAL.GetAvailability(id);
+
+                if (availability != null)
+                {
+                    _restaurantDAL.DeleteAvailability(availability);
+
+                    response.Availability = new RestaurantAvailability();
+                    response.Message = "Successfully deleted.";
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Status = "Failed";
+                    response.Message = $"No found Availability id: {id}";
+
+                    return Ok(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
+
+        
+
+        [HttpGet("availabilities"), Authorize()]
+        public ActionResult<RestaurantAvailabilitiesResponse> GetAvailability(int restaurantId)
+        {
+            var response = new RestaurantAvailabilitiesResponse();
+            try
+            {
+                var result = _restaurantDAL.GetAvailabilities(restaurantId);
+
+                if(result != null && result.Count > 0)
+                {
+                    response.Availabilities = result;
+
+                    response.Message = "Successfully get Restaurant Availabilities.";
+
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Message = $"No Restaurant Availability found by restaurant id: {restaurantId}";
+                    response.Status = "Failed";
+
+                    return BadRequest(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
+
+        [HttpPost("cuisines/add"), Authorize()]
+        public ActionResult<RestaurantCuisineResponse> CuisinesAdd(RestaurantCuisineDTO request)
+        {
+            var response = new RestaurantCuisineResponse();
+            try
+            {
+                var restaurantCuisine = new RestaurantCuisines
+                {
+                    Restaurant_Id = request.Restaurant_Id,
+                    Name = request.Name
+                };
+
+                var result = _restaurantDAL.Add(restaurantCuisine);
+
+                response.RestaurantCuisine = result;
+
+                response.Message = "Successfully added.";
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
+
+        [HttpGet("cuicines"), Authorize()]
+        public ActionResult<RestaurantCuisinesResponse> GetCuicines(int? restaurantId)
+        {
+            var response = new RestaurantCuisinesResponse();
+            try
+            {
+                var result = _restaurantDAL.GetRestaurantCuicines(restaurantId);
+
+                if (result != null && result.Count > 0)
+                {
+                    response.RestaurantCuisines = result;
+                    response.Message = "Successfully get Restaurant Cuisines.";
+
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Message = $"No Restaurant Cuicine found by restaurant id: {restaurantId}";
+                    response.Status = "Failed";
+
+                    return BadRequest(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
+
+        [HttpPost("booktype/add"), Authorize()]
+        public ActionResult<RestaurantBookTypeResponse> BookTypeAdd(RestaurantBookTypeDTO request)
+        {
+            var response = new RestaurantBookTypeResponse();
+            try
+            {
+                var bookType = new RestaurantBookType
+                {
+                    Restaurant_Id = request.Restaurant_Id,
+                    Is_Payable = request.Is_Payable,
+                    Name = request.Name,
+                    Currency = request.Currency,
+                    Price = request.Price,
+                    Is_Deleted = false
+                };
+
+                var result = _restaurantDAL.Add(bookType);
+
+                response.BookType = result;
+
+                response.Message = "Successfully added.";
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
+
+        [HttpPost("booktype/update"), Authorize()]
+        public ActionResult<RestaurantBookTypeResponse> BookTypeUpdate(RestaurantBookTypeDTO request)
+        {
+            var response = new RestaurantBookTypeResponse();
+            try
+            {
+                var bookType = _restaurantDAL.GetBookType(request.RestaurantBookType_Id);
+
+                if (bookType != null)
+                {
+                    bookType.Restaurant_Id = request.Restaurant_Id;
+                    bookType.Is_Payable = request.Is_Payable;
+                    bookType.Name = request.Name;
+                    bookType.Currency = request.Currency;
+                    bookType.Price = request.Price;
+
+                    var result = _restaurantDAL.UpdateBookType(bookType);
+
+                    response.BookType = result;
+                    response.Message = "Successfully updated.";
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Status = "Failed";
+                    response.Message = $"No found BookType id: {request.RestaurantBookType_Id}";
+
+                    return Ok(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
+
+        [HttpPost("booktype/delete/{id}"), Authorize()]
+        public ActionResult<RestaurantBookTypeResponse> BookTypeDelete(int id)
+        {
+            var response = new RestaurantBookTypeResponse();
+            try
+            {
+                var bookType = _restaurantDAL.GetBookType(id);
+
+                if (bookType != null)
+                {
+                    bookType.Is_Deleted = true;
+
+                    var result = _restaurantDAL.UpdateBookType(bookType);
+
+                    response.BookType = result;
+                    response.Message = "Successfully deleted.";
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Status = "Failed";
+                    response.Message = $"No found BookType id: {id}";
+
+                    return Ok(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
+
+        [HttpGet("booktype"), Authorize()]
+        public ActionResult<RestaurantBookTypesResponse> GetBookTypes(int? restaurantId)
+        {
+            var response = new RestaurantBookTypesResponse();
+            try
+            {
+                var result = _restaurantDAL.GetBookTypes(restaurantId);
+
+                if (result != null && result.Count > 0)
+                {
+                    response.BookTypes = result;
+                    response.Message = "Successfully get Restaurant Book types.";
+
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Message = $"No Restaurant Book Type found by restaurant id: {restaurantId}";
+                    response.Status = "Failed";
+
+                    return BadRequest(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
         }
     }
 }
