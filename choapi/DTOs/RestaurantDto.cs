@@ -20,6 +20,6 @@
 
         public string? Address { get; set; } = null;
 
-        public List<RestaurantImagesDTO>? Images { get; set; } = null;
+        public List<RestaurantImageDTO>? Images { get; set; } = null;
     }
 }

@@ -6,13 +6,21 @@ namespace choapi.DAL
     {
         Restaurants Add(Restaurants model);
 
-        List<RestaurantImages>? AddImages(List<RestaurantImages> restaurantImages);
+        RestaurantImages AddImage(RestaurantImages model);
+
+        List<RestaurantImages>? AddImages(List<RestaurantImages> moel);
 
         Restaurants? GetRestaurant(int id);
+
+        RestaurantImages? GetRestaurantImage(int id);
 
         List<RestaurantImages>? GetRestaurantImages(int id);
 
         List<Restaurants>? GetRestaurants(int? userId);
+
+        RestaurantImages UpdateImage(RestaurantImages model);
+
+        void DeleteImage(RestaurantImages model);
 
         Menus Add(Menus model);
 
@@ -36,7 +44,13 @@ namespace choapi.DAL
 
         RestaurantCuisines Add(RestaurantCuisines model);
 
-        List<RestaurantCuisines>? GetRestaurantCuicines(int? restaurantId);
+        RestaurantCuisines UpdateCuisine(RestaurantCuisines model);
+
+        void DeleteCuisine(RestaurantCuisines model);
+
+        RestaurantCuisines? GetRestaurantCuisine(int id);
+
+        List<RestaurantCuisines>? GetRestaurantCuisines(int? restaurantId);
 
         RestaurantBookType Add(RestaurantBookType model);
 

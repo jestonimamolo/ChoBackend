@@ -77,6 +77,7 @@ namespace choapi.Controllers
                     foreach (var image in request.Images)
                     {
                         var addRestaurantImages = new RestaurantImages();
+
                         addRestaurantImages.Restaurant_Id = resultRestaurant.Restaurant_Id;
                         addRestaurantImages.Image_Url = image.Image_Url;
 
@@ -87,9 +88,7 @@ namespace choapi.Controllers
                 var resultRestaurantImages = _restaurantDAL.AddImages(restaurantImages);
 
                 response.Restaurant = resultRestaurant;
-
                 response.Images = resultRestaurantImages;
-
                 response.Message = "Successfully added.";
 
                 return Ok(response);
@@ -102,6 +101,103 @@ namespace choapi.Controllers
                 return BadRequest(response);
             }
             
+        }
+
+        [HttpPost("images/add"), Authorize()]
+        public ActionResult<RestaurantImageResponse> AddImage(RestaurantImageDTO request)
+        {
+            var response = new RestaurantImageResponse();
+            try
+            {
+                var image = new RestaurantImages
+                {
+                    Restaurant_Id = request.Restaurant_Id,
+                    Image_Url = request.Image_Url
+                };
+
+                var result = _restaurantDAL.AddImage(image);
+
+                response.Image = result;
+                response.Message = "Successfully added.";
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
+
+        [HttpPost("images/update"), Authorize()]
+        public ActionResult<RestaurantImageResponse> UpdateImage(RestaurantImageDTO request)
+        {
+            var response = new RestaurantImageResponse();
+            try
+            {
+                var image = _restaurantDAL.GetRestaurantImage(request.RestaurantImages_Id);
+
+                if (image != null)
+                {
+                    image.Restaurant_Id = request.Restaurant_Id;
+                    image.Image_Url = request.Image_Url;
+
+                    var result = _restaurantDAL.UpdateImage(image);
+
+                    response.Image = result;
+                    response.Message = "Successfully updated.";
+
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Message = $"No restaurant images found by id: {request.RestaurantImages_Id}";
+                    response.Status = "Failed";
+                    return BadRequest(response);
+                }                
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
+
+        [HttpPost("images/delete/{id}"), Authorize()]
+        public ActionResult<RestaurantImageResponse> DeleteImage(int id)
+        {
+            var response = new RestaurantImageResponse();
+            try
+            {
+                var image = _restaurantDAL.GetRestaurantImage(id);
+
+                if (image != null)
+                {
+                    _restaurantDAL.DeleteImage(image);
+
+                    response.Image = new RestaurantImages();
+                    response.Message = "Successfully deleted.";
+
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Message = $"No restaurant images found by id: {id}";
+                    response.Status = "Failed";
+                    return BadRequest(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
         }
 
         [HttpGet("restaurants/{id}"), Authorize()]
@@ -187,6 +283,38 @@ namespace choapi.Controllers
 
                 return BadRequest(response);
             }            
+        }
+
+        [HttpGet("images/{id}"), Authorize()]
+        public ActionResult<RestaurantImagesResponse> GetImages(int id)
+        {
+            var response = new RestaurantImagesResponse();
+
+            try
+            {
+                var result = _restaurantDAL.GetRestaurantImages(id);
+
+                if (result != null && result.Count > 0)
+                {
+                    response.Images = result;
+                    response.Message = $"Successfully get Restaurant Images.";
+
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Message = $"No Restaurant I mages found by id: {id}";
+                    response.Status = "Failed";
+                    return BadRequest(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
         }
 
         [HttpPost("menus/add"), Authorize()]
@@ -487,13 +615,82 @@ namespace choapi.Controllers
             }
         }
 
+        [HttpPost("cuisines/update"), Authorize()]
+        public ActionResult<RestaurantCuisineResponse> CuisineUpdate(RestaurantCuisineDTO request)
+        {
+            var response = new RestaurantCuisineResponse();
+            try
+            {
+                var cuisine = _restaurantDAL.GetRestaurantCuisine(request.RestaurantCuisine_Id);
+
+                if (cuisine != null)
+                {
+                    cuisine.Restaurant_Id = request.Restaurant_Id;
+                    cuisine.Name = request.Name;
+
+                    var result = _restaurantDAL.UpdateCuisine(cuisine);
+
+                    response.RestaurantCuisine = result;
+                    response.Message = "Successfully updated.";
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Status = "Failed";
+                    response.Message = $"No found Cuisine id: {request.RestaurantCuisine_Id}";
+
+                    return Ok(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
+
+        [HttpPost("cuisines/delete/{id}"), Authorize()]
+        public ActionResult<RestaurantCuisineResponse> CuisineDelete(int id)
+        {
+            var response = new RestaurantCuisineResponse();
+            try
+            {
+                var cuisine = _restaurantDAL.GetRestaurantCuisine(id);
+
+                if (cuisine != null)
+                {
+                    _restaurantDAL.DeleteCuisine(cuisine);
+
+                    response.RestaurantCuisine = new RestaurantCuisines();
+                    response.Message = "Successfully deleted.";
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Status = "Failed";
+                    response.Message = $"No found Cuisine id: {id}";
+
+                    return Ok(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
+
         [HttpGet("cuicines"), Authorize()]
         public ActionResult<RestaurantCuisinesResponse> GetCuicines(int? restaurantId)
         {
             var response = new RestaurantCuisinesResponse();
             try
             {
-                var result = _restaurantDAL.GetRestaurantCuicines(restaurantId);
+                var result = _restaurantDAL.GetRestaurantCuisines(restaurantId);
 
                 if (result != null && result.Count > 0)
                 {

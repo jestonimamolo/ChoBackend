@@ -20,15 +20,24 @@ namespace choapi.DAL
             return model;
         }
 
-        public List<RestaurantImages>? AddImages(List<RestaurantImages> restaurantImages)
+        public RestaurantImages AddImage(RestaurantImages model)
         {
-            if (restaurantImages != null)
+            _context.RestaurantImages.Add(model);
+
+            _context.SaveChanges();
+
+            return model;
+        }
+
+        public List<RestaurantImages>? AddImages(List<RestaurantImages> model)
+        {
+            if (model != null)
             {
-                _context.RestaurantImages.AddRange(restaurantImages);
+                _context.RestaurantImages.AddRange(model);
 
                 _context.SaveChanges();
 
-                return restaurantImages;
+                return model;
             }
 
             return null;
@@ -37,6 +46,11 @@ namespace choapi.DAL
         public Restaurants? GetRestaurant(int id)
         {
             return _context.Restaurants.FirstOrDefault(r => r.Restaurant_Id == id);
+        }
+
+        public RestaurantImages? GetRestaurantImage(int id)
+        {
+            return _context.RestaurantImages.FirstOrDefault(r => r.RestaurantImages_Id == id);
         }
 
         public List<RestaurantImages>? GetRestaurantImages(int id)
@@ -50,6 +64,22 @@ namespace choapi.DAL
                 return _context.Restaurants.ToList();
             else
                 return _context.Restaurants.Where(r => r.User_Id == userId).ToList();
+        }
+
+        public RestaurantImages UpdateImage(RestaurantImages model)
+        {
+            _context.RestaurantImages.Update(model);
+
+            _context.SaveChanges();
+
+            return model;
+        }
+
+        public void DeleteImage(RestaurantImages model)
+        {
+            _context.RestaurantImages.Remove(model);
+
+            _context.SaveChanges();
         }
 
         public Menus Add(Menus model)
@@ -131,7 +161,28 @@ namespace choapi.DAL
             return model;
         }
 
-        public List<RestaurantCuisines>? GetRestaurantCuicines(int? restaurantId)
+        public RestaurantCuisines UpdateCuisine(RestaurantCuisines model)
+        {
+            _context.RestaurantCuisines.Update(model);
+
+            _context.SaveChanges();
+
+            return model;
+        }
+
+        public void DeleteCuisine(RestaurantCuisines model)
+        {
+            _context.RestaurantCuisines.Remove(model);
+
+            _context.SaveChanges();
+        }
+
+        public RestaurantCuisines? GetRestaurantCuisine(int id)
+        {
+            return _context.RestaurantCuisines.FirstOrDefault(c => c.RestaurantCuisine_Id == id);
+        }
+
+        public List<RestaurantCuisines>? GetRestaurantCuisines(int? restaurantId)
         {
             if (restaurantId == null)
             {
