@@ -1218,5 +1218,37 @@ namespace choapi.Controllers
                 return BadRequest(response);
             }
         }
+
+        [HttpGet("booktype/{id}"), Authorize()]
+        public ActionResult<RestaurantBookTypeResponse> GetBookTypes(int id)
+        {
+            var response = new RestaurantBookTypeResponse();
+            try
+            {
+                var result = _restaurantDAL.GetBookType(id);
+
+                if (result != null)
+                {
+                    response.BookType = result;
+                    response.Message = "Successfully get Restaurant Book type.";
+
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Message = $"No Restaurant Book Type found by id: {id}";
+                    response.Status = "Failed";
+
+                    return BadRequest(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
     }
 }
