@@ -364,23 +364,53 @@ namespace choapi.Controllers
 
                 return BadRequest(response);
             }
-        }
+        }        
 
-        
-
-        [HttpGet("images/{id}"), Authorize()]
-        public ActionResult<RestaurantImagesResponse> GetImages(int id)
+        [HttpGet("images"), Authorize()]
+        public ActionResult<RestaurantImagesResponse> GetImagesByRestaurantId(int restaurantId)
         {
             var response = new RestaurantImagesResponse();
 
             try
             {
-                var result = _restaurantDAL.GetRestaurantImages(id);
+                var result = _restaurantDAL.GetRestaurantImages(restaurantId);
 
                 if (result != null && result.Count > 0)
                 {
                     response.Images = result;
                     response.Message = $"Successfully get Restaurant Images.";
+
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Message = $"No Restaurant Images found by restaurant id: {restaurantId}";
+                    response.Status = "Failed";
+                    return BadRequest(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
+
+        [HttpGet("images/{id}"), Authorize()]
+        public ActionResult<RestaurantImageResponse> GetImage(int id)
+        {
+            var response = new RestaurantImageResponse();
+
+            try
+            {
+                var result = _restaurantDAL.GetRestaurantImage(id);
+
+                if (result != null)
+                {
+                    response.Image = result;
+                    response.Message = $"Successfully get Restaurant Image.";
 
                     return Ok(response);
                 }
