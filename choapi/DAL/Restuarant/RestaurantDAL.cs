@@ -20,6 +20,15 @@ namespace choapi.DAL
             return model;
         }
 
+        public Restaurants Update(Restaurants model)
+        {
+            _context.Restaurants.Update(model);
+
+            _context.SaveChanges();
+
+            return model;
+        }
+
         public RestaurantImages AddImage(RestaurantImages model)
         {
             _context.RestaurantImages.Add(model);

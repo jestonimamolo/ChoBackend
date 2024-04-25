@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using System.Net;
+using System.Numerics;
 
 namespace choapi.Controllers
 {
@@ -100,7 +102,171 @@ namespace choapi.Controllers
 
                 return BadRequest(response);
             }
-            
+        }
+
+        [HttpPost("update"), Authorize()]
+        public ActionResult<RestaurantResponse> Update(RestaurantDTO request)
+        {
+            var response = new RestaurantResponse();
+            try
+            {
+                var restaurant = _restaurantDAL.GetRestaurant(request.Restaurant_Id);
+
+                if (restaurant != null)
+                {
+                    restaurant.Name = request.Name;
+                    restaurant.Description = request.Description;
+                    restaurant.User_Id = request.User_Id;
+                    restaurant.Credits = request.Credits;
+                    restaurant.Plan = request.Plan;
+                    restaurant.Latitude = request.Latitude;
+                    restaurant.Longitude = request.Longitude;
+                    restaurant.Is_Promoted = request.Is_Promoted;
+                    restaurant.Address = request.Address;
+
+                    var result = _restaurantDAL.Update(restaurant);
+
+                    response.Restaurant = result;
+                    response.Images = _restaurantDAL.GetRestaurantImages(request.Restaurant_Id);
+                    response.Message = "Successfully updated.";
+
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Message = $"No restaurant found by id: {request.Restaurant_Id}";
+                    response.Status = "Failed";
+                    return BadRequest(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
+
+        [HttpPost("delete/{id}"), Authorize()]
+        public ActionResult<RestaurantResponse> Delete(int id)
+        {
+            var response = new RestaurantResponse();
+            try
+            {
+                var restaurant = _restaurantDAL.GetRestaurant(id);
+
+                if (restaurant != null)
+                {
+                    restaurant.Is_Active = false;
+
+                    var result = _restaurantDAL.Update(restaurant);
+
+                    response.Restaurant = new Restaurants();
+                    response.Images = new List<RestaurantImages>();
+                    response.Message = "Successfully deleted.";
+
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Message = $"No restaurant found by id: {id}";
+                    response.Status = "Failed";
+                    return BadRequest(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
+
+        [HttpGet("restaurants/{id}"), Authorize()]
+        public ActionResult<RestaurantResponse> GetRestaurant(int id)
+        {
+            var response = new RestaurantResponse();
+
+            try
+            {
+                var resultRestaurant = _restaurantDAL.GetRestaurant(id);
+
+                if (resultRestaurant != null)
+                {
+                    response.Restaurant = resultRestaurant;
+
+                    response.Images = _restaurantDAL.GetRestaurantImages(resultRestaurant.Restaurant_Id);
+
+                    response.Message = $"Successfully get restaurant.";
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Message = $"No restaurant found by restaurant id: {id}";
+                    response.Status = "Failed";
+                    return BadRequest(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
+
+        [HttpGet("restaurants"), Authorize()]
+        public ActionResult<RestuarantUserIdResponnse> GetRestaurants(int? userId)
+        {
+            var response = new RestuarantUserIdResponnse();
+
+            try
+            {
+                var resultRestaurants = _restaurantDAL.GetRestaurants(userId);
+
+                if (resultRestaurants != null && resultRestaurants.Count > 0)
+                {
+                    foreach (var restaurant in resultRestaurants)
+                    {
+                        var resultRestaurant = new RestaurantsReponse();
+
+                        resultRestaurant.Restaurant_Id = restaurant.Restaurant_Id;
+                        resultRestaurant.Name = restaurant.Name;
+                        resultRestaurant.Description = restaurant.Description;
+                        resultRestaurant.User_Id = restaurant.User_Id;
+                        resultRestaurant.Credits = restaurant.Credits;
+                        resultRestaurant.Plan = restaurant.Plan;
+                        resultRestaurant.Latitude = restaurant.Latitude;
+                        resultRestaurant.Longitude = restaurant.Longitude;
+                        resultRestaurant.Is_Promoted = restaurant.Is_Promoted;
+                        resultRestaurant.Address = restaurant.Address;
+                        resultRestaurant.Is_Active = restaurant.Is_Active;
+
+                        resultRestaurant.Images = _restaurantDAL.GetRestaurantImages(restaurant.Restaurant_Id);
+
+                        response.Restaurants.Add(resultRestaurant);
+                    }
+                    response.Message = $"Successfully get restaurants.";
+
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Message = $"No restaurant found by user id: {userId}";
+                    response.Status = "Failed";
+                    return BadRequest(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
         }
 
         [HttpPost("images/add"), Authorize()]
@@ -200,90 +366,7 @@ namespace choapi.Controllers
             }
         }
 
-        [HttpGet("restaurants/{id}"), Authorize()]
-        public ActionResult<RestaurantResponse> GetRestaurant(int id)
-        {
-            var response = new RestaurantResponse();
-
-            try
-            {
-                var resultRestaurant = _restaurantDAL.GetRestaurant(id);
-
-                if (resultRestaurant != null)
-                {
-                    response.Restaurant = resultRestaurant;
-
-                    response.Images = _restaurantDAL.GetRestaurantImages(resultRestaurant.Restaurant_Id);
-
-                    response.Message = $"Successfully get restaurant.";
-                    return Ok(response);
-                }
-                else
-                {
-                    response.Message = $"No restaurant found by restaurant id: {id}";
-                    response.Status = "Failed";
-                    return BadRequest(response);
-                }
-            }
-            catch (Exception ex)
-            {
-                response.Message = ex.Message;
-                response.Status = "Failed";
-
-                return BadRequest(response);
-            }
-        }
-
-        [HttpGet("restaurants"), Authorize()]
-        public ActionResult<RestuarantUserIdResponnse> GetRestaurants(int? userId)
-        {
-            var response = new RestuarantUserIdResponnse();
-
-            try
-            {
-                var resultRestaurants = _restaurantDAL.GetRestaurants(userId);
-
-                if (resultRestaurants != null && resultRestaurants.Count > 0)
-                {
-                    foreach (var restaurant in resultRestaurants)
-                    {
-                        var resultRestaurant = new RestaurantsReponse();
-
-                        resultRestaurant.Restaurant_Id = restaurant.Restaurant_Id;
-                        resultRestaurant.Name = restaurant.Name;
-                        resultRestaurant.Description = restaurant.Description;
-                        resultRestaurant.User_Id = restaurant.User_Id;
-                        resultRestaurant.Credits = restaurant.Credits;
-                        resultRestaurant.Plan = restaurant.Plan;
-                        resultRestaurant.Latitude = restaurant.Latitude;
-                        resultRestaurant.Longitude = restaurant.Longitude;
-                        resultRestaurant.Is_Promoted = restaurant.Is_Promoted;
-                        resultRestaurant.Address = restaurant.Address;
-                        resultRestaurant.Is_Active = restaurant.Is_Active;
-
-                        resultRestaurant.Images = _restaurantDAL.GetRestaurantImages(restaurant.Restaurant_Id);
-
-                        response.Restaurants.Add(resultRestaurant);
-                    }
-                    response.Message = $"Successfully get restaurants.";
-
-                    return Ok(response);
-                }
-                else
-                {
-                    response.Message = $"No restaurant found by user id: {userId}";
-                    response.Status = "Failed";
-                    return BadRequest(response);
-                }
-            }
-            catch (Exception ex)
-            {
-                response.Message = ex.Message;
-                response.Status = "Failed";
-
-                return BadRequest(response);
-            }            
-        }
+        
 
         [HttpGet("images/{id}"), Authorize()]
         public ActionResult<RestaurantImagesResponse> GetImages(int id)

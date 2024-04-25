@@ -6,6 +6,8 @@ namespace choapi.DAL
     {
         Restaurants Add(Restaurants model);
 
+        Restaurants Update(Restaurants model);
+
         RestaurantImages AddImage(RestaurantImages model);
 
         List<RestaurantImages>? AddImages(List<RestaurantImages> moel);
