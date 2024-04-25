@@ -549,10 +549,43 @@ namespace choapi.Controllers
 
                 return BadRequest(response);
             }
-        }        
+        }
+
+        [HttpGet("availabilities/{id}"), Authorize()]
+        public ActionResult<RestaurantAvailabilityResponse> GetAvailability(int id)
+        {
+            var response = new RestaurantAvailabilityResponse();
+            try
+            {
+                var result = _restaurantDAL.GetAvailability(id);
+
+                if (result != null)
+                {
+                    response.Availability = result;
+
+                    response.Message = "Successfully get Restaurant Availability.";
+
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Message = $"No Restaurant Availability found by id: {id}";
+                    response.Status = "Failed";
+
+                    return BadRequest(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
 
         [HttpGet("availabilities"), Authorize()]
-        public ActionResult<RestaurantAvailabilitiesResponse> GetAvailability(int restaurantId)
+        public ActionResult<RestaurantAvailabilitiesResponse> GetAvailabilityByRestaurantId(int restaurantId)
         {
             var response = new RestaurantAvailabilitiesResponse();
             try
