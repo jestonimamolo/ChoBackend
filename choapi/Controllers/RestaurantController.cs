@@ -828,7 +828,7 @@ namespace choapi.Controllers
         }
 
         [HttpPost("nonoperatinghours/delete/{id}"), Authorize()]
-        public ActionResult<NonOperatingHourResponse> Delete(int id)
+        public ActionResult<NonOperatingHourResponse> DeleteNonOperatingHours(int id)
         {
             var response = new NonOperatingHourResponse();
             try
@@ -1005,6 +1005,38 @@ namespace choapi.Controllers
                     response.Message = $"No found Cuisine id: {id}";
 
                     return Ok(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
+
+        [HttpGet("cuicines/{id}"), Authorize()]
+        public ActionResult<RestaurantCuisineResponse> GetCuicine(int id)
+        {
+            var response = new RestaurantCuisineResponse();
+            try
+            {
+                var result = _restaurantDAL.GetRestaurantCuisine(id);
+
+                if (result != null)
+                {
+                    response.RestaurantCuisine = result;
+                    response.Message = "Successfully get Restaurant Cuisine.";
+
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Message = $"No Restaurant Cuicine found by id: {id}";
+                    response.Status = "Failed";
+
+                    return BadRequest(response);
                 }
             }
             catch (Exception ex)
