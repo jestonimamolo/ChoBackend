@@ -549,9 +549,7 @@ namespace choapi.Controllers
 
                 return BadRequest(response);
             }
-        }
-
-        
+        }        
 
         [HttpGet("availabilities"), Authorize()]
         public ActionResult<RestaurantAvailabilitiesResponse> GetAvailability(int restaurantId)
@@ -582,6 +580,162 @@ namespace choapi.Controllers
                 response.Message = ex.Message;
                 response.Status = "Failed";
 
+                return BadRequest(response);
+            }
+        }
+
+        [HttpPost("nonoperatinghours/add"), Authorize()]
+        public ActionResult<NonOperatingHourResponse> Add(NonOperatingHoursDTO request)
+        {
+            var response = new NonOperatingHourResponse();
+            try
+            {
+                var nonOperatingHours = new NonOperatingHours
+                {
+                    Restaurant_Id = request.Restaurant_Id,
+                    Date = request.Date
+                };
+
+                var result = _restaurantDAL.Add(nonOperatingHours);
+
+                response.NonOperatingHours = result;
+
+                response.Message = "Successfully added.";
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
+
+        [HttpPost("nonoperatinghours/update"), Authorize()]
+        public ActionResult<NonOperatingHourResponse> Update(NonOperatingHoursDTO request)
+        {
+            var response = new NonOperatingHourResponse();
+            try
+            {
+                var nonOperatingHours = _restaurantDAL.GetNonOperatingHours(request.NonOperatingHours_Id);
+
+                if (nonOperatingHours != null)
+                {
+                    nonOperatingHours.Restaurant_Id = request.Restaurant_Id;
+                    nonOperatingHours.Date = request.Date;
+
+                    var result = _restaurantDAL.Update(nonOperatingHours);
+
+                    response.NonOperatingHours = result;
+                    response.Message = "Successfully updated.";
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Status = "Failed";
+                    response.Message = $"No found Non Operating hours id: {request.NonOperatingHours_Id}";
+
+                    return Ok(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
+
+        [HttpPost("nonoperatinghours/delete/{id}"), Authorize()]
+        public ActionResult<NonOperatingHourResponse> Delete(int id)
+        {
+            var response = new NonOperatingHourResponse();
+            try
+            {
+                var nonOperatingHours = _restaurantDAL.GetNonOperatingHours(id);
+
+                if (nonOperatingHours != null)
+                {
+                    _restaurantDAL.Delete(nonOperatingHours);
+
+                    response.NonOperatingHours = new NonOperatingHours();
+                    response.Message = "Successfully deleted.";
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Status = "Failed";
+                    response.Message = $"No found Non Operating Hours id: {id}";
+
+                    return Ok(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
+
+        [HttpGet("nonoperatinghours/{id}"), Authorize()]
+        public ActionResult<NonOperatingHourResponse> GetNonOperatingHours(int id)
+        {
+            var response = new NonOperatingHourResponse();
+            try
+            {
+                var result = _restaurantDAL.GetNonOperatingHours(id);
+
+                if (result != null)
+                {
+                    response.NonOperatingHours = result;
+                    response.Message = "Successfully get Non Operating Hours.";
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Message = $"No Non Operating Hours found by id: {id}";
+                    response.Status = "Failed";
+                    return BadRequest(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+                return BadRequest(response);
+            }
+        }
+
+        [HttpGet("nonoperatinghours"), Authorize()]
+        public ActionResult<NonOperatingHoursResponse> GetNonOperatingHoursByRestaurantId(int restaurantId)
+        {
+            var response = new NonOperatingHoursResponse();
+            try
+            {
+                var result = _restaurantDAL.GetNonOperatingHoursByRestaurantId(restaurantId);
+
+                if (result != null && result.Count > 0)
+                {
+                    response.NonOperatingHours = result;
+                    response.Message = "Successfully get Non Operating Hours.";
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Message = $"No Non Operating Hours found by restaurant id: {restaurantId}";
+                    response.Status = "Failed";
+                    return BadRequest(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
                 return BadRequest(response);
             }
         }

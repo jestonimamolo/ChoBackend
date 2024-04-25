@@ -42,6 +42,16 @@ namespace choapi.DAL
 
         List<RestaurantAvailability>? GetAvailabilities(int restaurantId);
 
+        NonOperatingHours Add(NonOperatingHours model);
+
+        void Delete(NonOperatingHours model);
+
+        NonOperatingHours Update(NonOperatingHours model);
+
+        NonOperatingHours? GetNonOperatingHours(int id);
+
+        List<NonOperatingHours>? GetNonOperatingHoursByRestaurantId(int id);
+
         RestaurantCuisines Add(RestaurantCuisines model);
 
         RestaurantCuisines UpdateCuisine(RestaurantCuisines model);

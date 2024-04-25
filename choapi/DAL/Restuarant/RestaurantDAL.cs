@@ -152,6 +152,41 @@ namespace choapi.DAL
             return _context.RestaurantAvailability.Where(a => a.Restaurant_Id == restaurantId).ToList();
         }
 
+        public NonOperatingHours Add(NonOperatingHours model)
+        {
+            _context.NonOperatingHours.Add(model);
+
+            _context.SaveChanges();
+
+            return model;
+        }
+
+        public void Delete(NonOperatingHours model)
+        {
+            _context.NonOperatingHours.Remove(model);
+
+            _context.SaveChanges();
+        }
+
+        public NonOperatingHours Update(NonOperatingHours model)
+        {
+            _context.NonOperatingHours.Update(model);
+
+            _context.SaveChanges();
+
+            return model;
+        }
+
+        public NonOperatingHours? GetNonOperatingHours(int id)
+        {
+            return _context.NonOperatingHours.FirstOrDefault(n => n.NonOperatingHours_Id == id);
+        }
+
+        public List<NonOperatingHours>? GetNonOperatingHoursByRestaurantId(int id)
+        {
+            return _context.NonOperatingHours.Where(n => n.Restaurant_Id == id).ToList();
+        }
+
         public RestaurantCuisines Add(RestaurantCuisines model)
         {
             _context.RestaurantCuisines.Add(model);
