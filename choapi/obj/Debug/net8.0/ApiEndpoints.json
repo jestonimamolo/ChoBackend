@@ -119,7 +119,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "choapi.Messages.BookingsResponse",
+        "Type": "choapi.Messages.BookingBookingsResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -145,7 +145,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "choapi.Messages.BookingsResponse",
+        "Type": "choapi.Messages.BookingBookingsResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -287,7 +287,7 @@
   },
   {
     "ContainingType": "choapi.Controllers.RestaurantController",
-    "Method": "GetAvailability",
+    "Method": "GetAvailabilityByRestaurantId",
     "RelativePath": "api/Restaurant/availabilities",
     "HttpMethod": "GET",
     "IsController": true,
@@ -302,6 +302,32 @@
     "ReturnTypes": [
       {
         "Type": "choapi.Messages.RestaurantAvailabilitiesResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.RestaurantController",
+    "Method": "GetAvailability",
+    "RelativePath": "api/Restaurant/availabilities/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.RestaurantAvailabilityResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -417,6 +443,32 @@
   },
   {
     "ContainingType": "choapi.Controllers.RestaurantController",
+    "Method": "GetBookTypes",
+    "RelativePath": "api/Restaurant/booktype/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.RestaurantBookTypeResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.RestaurantController",
     "Method": "BookTypeAdd",
     "RelativePath": "api/Restaurant/booktype/add",
     "HttpMethod": "POST",
@@ -521,6 +573,32 @@
   },
   {
     "ContainingType": "choapi.Controllers.RestaurantController",
+    "Method": "GetCuicine",
+    "RelativePath": "api/Restaurant/cuicines/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.RestaurantCuisineResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.RestaurantController",
     "Method": "CuisinesAdd",
     "RelativePath": "api/Restaurant/cuisines/add",
     "HttpMethod": "POST",
@@ -599,7 +677,59 @@
   },
   {
     "ContainingType": "choapi.Controllers.RestaurantController",
-    "Method": "GetImages",
+    "Method": "Delete",
+    "RelativePath": "api/Restaurant/delete/{id}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.RestaurantResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.RestaurantController",
+    "Method": "GetImagesByRestaurantId",
+    "RelativePath": "api/Restaurant/images",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "restaurantId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.RestaurantImagesResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.RestaurantController",
+    "Method": "GetImage",
     "RelativePath": "api/Restaurant/images/{id}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -613,7 +743,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "choapi.Messages.RestaurantImagesResponse",
+        "Type": "choapi.Messages.RestaurantImageResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -729,6 +859,32 @@
   },
   {
     "ContainingType": "choapi.Controllers.RestaurantController",
+    "Method": "GetMenu",
+    "RelativePath": "api/Restaurant/menus/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.MenuResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.RestaurantController",
     "Method": "MenuAdd",
     "RelativePath": "api/Restaurant/menus/add",
     "HttpMethod": "POST",
@@ -807,6 +963,136 @@
   },
   {
     "ContainingType": "choapi.Controllers.RestaurantController",
+    "Method": "GetNonOperatingHoursByRestaurantId",
+    "RelativePath": "api/Restaurant/nonoperatinghours",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "restaurantId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.NonOperatingHoursResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.RestaurantController",
+    "Method": "GetNonOperatingHours",
+    "RelativePath": "api/Restaurant/nonoperatinghours/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.NonOperatingHourResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.RestaurantController",
+    "Method": "Add",
+    "RelativePath": "api/Restaurant/nonoperatinghours/add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "choapi.DTOs.NonOperatingHoursDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.NonOperatingHourResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.RestaurantController",
+    "Method": "DeleteNonOperatingHours",
+    "RelativePath": "api/Restaurant/nonoperatinghours/delete/{id}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.NonOperatingHourResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.RestaurantController",
+    "Method": "Update",
+    "RelativePath": "api/Restaurant/nonoperatinghours/update",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "choapi.DTOs.NonOperatingHoursDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.NonOperatingHourResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.RestaurantController",
     "Method": "Register",
     "RelativePath": "api/Restaurant/register",
     "HttpMethod": "POST",
@@ -868,6 +1154,32 @@
       {
         "Name": "id",
         "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.RestaurantResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.RestaurantController",
+    "Method": "Update",
+    "RelativePath": "api/Restaurant/update",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "choapi.DTOs.RestaurantDTO",
         "IsRequired": true
       }
     ],

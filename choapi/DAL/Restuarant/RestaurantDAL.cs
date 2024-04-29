@@ -251,17 +251,17 @@ namespace choapi.DAL
         {
             if (restaurantId == null)
             {
-                return _context.RestaurantBookType.ToList();
+                return _context.RestaurantBookType.Where(c => c.Is_Deleted != false).ToList();
             }
             else
             {
-                return _context.RestaurantBookType.Where(c => c.Restaurant_Id == restaurantId).ToList();
+                return _context.RestaurantBookType.Where(c => c.Restaurant_Id == restaurantId && c.Is_Deleted != false).ToList();
             }
         }
 
         public RestaurantBookType? GetBookType(int id)
         {
-            return _context.RestaurantBookType.FirstOrDefault(b => b.RestaurantBookType_Id == id);
+            return _context.RestaurantBookType.FirstOrDefault(b => b.RestaurantBookType_Id == id && b.Is_Deleted != false);
         }
 
         public RestaurantBookType UpdateBookType(RestaurantBookType model)

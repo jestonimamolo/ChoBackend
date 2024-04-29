@@ -16,13 +16,17 @@ namespace choapi.Controllers
     public class BookingController : ControllerBase
     {
         private readonly IBookingDAL _bookingDAL;
+        private readonly IUserDAL _userDAL;
+        private readonly IRestaurantDAL _restaurantDAL;
 
         private readonly ILogger<BookingController> _logger;
 
-        public BookingController(ILogger<BookingController> logger, IBookingDAL bookingDAL)
+        public BookingController(ILogger<BookingController> logger, IBookingDAL bookingDAL, IUserDAL userDAL, IRestaurantDAL restaurantDAL)
         {
             _logger = logger;
             _bookingDAL = bookingDAL;
+            _userDAL = userDAL;
+            _restaurantDAL = restaurantDAL;
         }
 
         [HttpPost("add"), Authorize()]
@@ -134,18 +138,43 @@ namespace choapi.Controllers
         }
 
         [HttpGet("bookings/restaurant/{id}"), Authorize()]
-        public ActionResult<BookingsResponse> RestaurantBookings(int id)
+        public ActionResult<BookingBookingsResponse> RestaurantBookings(int id)
         {
-            var response = new BookingsResponse();
+            var response = new BookingBookingsResponse();
             try
             {
                 var result = _bookingDAL.GetRestaurantBookings(id);
 
                 if (result != null && result.Count > 0)
                 {
-                    response.Bookings = result;
-                    response.Message = "Successfully get Restaurant bookings.";
+                    foreach (var booking in result)
+                    {
+                        var bookingsResponse = new BookingsResponse();
 
+                        bookingsResponse.Booking = booking;
+
+                        var user = _userDAL.GetUser(booking.User_Id);
+                        if (user != null)
+                        {
+                            bookingsResponse.User.User_Id = user.User_Id;
+                            bookingsResponse.User.Username = user.Username;
+                            bookingsResponse.User.Email = user.Email;
+                            bookingsResponse.User.Phone = user.Phone;
+                            bookingsResponse.User.Role_Id = user.Role_Id;
+                            bookingsResponse.User.Is_Active = user.Is_Active;
+                            bookingsResponse.User.Display_Name = user.Display_Name;
+                            bookingsResponse.User.Photo_Url = user.Photo_Url;
+                            bookingsResponse.User.Latitude = user.Latitude;
+                            bookingsResponse.User.Longitude = user.Longitude;
+                        }
+
+                        var restaurant = _restaurantDAL.GetRestaurant(booking.Restaurant_Id);
+                        bookingsResponse.Restaurant = restaurant;
+
+                        response.Bookings.Add(bookingsResponse);
+                    }
+
+                    response.Message = "Successfully get Restaurant bookings.";
                     return Ok(response);
                 }
                 else
@@ -166,18 +195,43 @@ namespace choapi.Controllers
         }
 
         [HttpGet("bookings/user/{id}"), Authorize()]
-        public ActionResult<BookingsResponse> UserBooking(int id)
+        public ActionResult<BookingBookingsResponse> UserBooking(int id)
         {
-            var response = new BookingsResponse();
+            var response = new BookingBookingsResponse();
             try
             {
-                var result = _bookingDAL.GetRestaurantBookings(id);
+                var result = _bookingDAL.GetUserBookings(id);
 
                 if (result != null && result.Count > 0)
                 {
-                    response.Bookings = result;
-                    response.Message = "Successfully get User bookings.";
+                    foreach (var booking in result)
+                    {
+                        var bookingsResponse = new BookingsResponse();
 
+                        bookingsResponse.Booking = booking;
+
+                        var user = _userDAL.GetUser(booking.User_Id);
+                        if (user != null)
+                        {
+                            bookingsResponse.User.User_Id = user.User_Id;
+                            bookingsResponse.User.Username = user.Username;
+                            bookingsResponse.User.Email = user.Email;
+                            bookingsResponse.User.Phone = user.Phone;
+                            bookingsResponse.User.Role_Id = user.Role_Id;
+                            bookingsResponse.User.Is_Active = user.Is_Active;
+                            bookingsResponse.User.Display_Name = user.Display_Name;
+                            bookingsResponse.User.Photo_Url = user.Photo_Url;
+                            bookingsResponse.User.Latitude = user.Latitude;
+                            bookingsResponse.User.Longitude = user.Longitude;
+                        }
+
+                        var restaurant = _restaurantDAL.GetRestaurant(booking.Restaurant_Id);
+                        bookingsResponse.Restaurant = restaurant;
+
+                        response.Bookings.Add(bookingsResponse);
+                    }
+
+                    response.Message = "Successfully get User bookings.";
                     return Ok(response);
                 }
                 else

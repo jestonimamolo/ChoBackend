@@ -15,7 +15,7 @@ namespace choapi.Controllers
     [ApiController]
     public class RestaurantController : ControllerBase
     {
-        private readonly IRestaurantDAL _restaurantDAL;        
+        private readonly IRestaurantDAL _restaurantDAL;
 
         private readonly ILogger<RestaurantController> _logger;
 
@@ -1166,7 +1166,7 @@ namespace choapi.Controllers
 
                     var result = _restaurantDAL.UpdateBookType(bookType);
 
-                    response.BookType = result;
+                    response.BookType = new RestaurantBookType();
                     response.Message = "Successfully deleted.";
                     return Ok(response);
                 }
