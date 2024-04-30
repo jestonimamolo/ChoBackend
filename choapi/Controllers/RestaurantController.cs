@@ -1,5 +1,6 @@
 ﻿using choapi.DAL;
 using choapi.DTOs;
+using choapi.Helper;
 using choapi.Messages;
 using choapi.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -431,7 +432,7 @@ namespace choapi.Controllers
         }
 
         [HttpPost("menus/add"), Authorize()]
-        public ActionResult<MenuResponse> MenuAdd(MenuDto request)
+        public async Task<ActionResult<MenuResponse>> MenuAdd(MenuDto request)
         {
             var response = new MenuResponse();
             try
@@ -439,17 +440,30 @@ namespace choapi.Controllers
                 var menu = new Menus
                 {
                     Restaurant_Id = request.Restaurant_Id,
-                    Type = request.Type,
-                    Path = request.Path
+                    Type = request.Type
                 };
 
                 var result = _restaurantDAL.Add(menu);
 
-                response.Menu = result;
+                var path = await UploadHelper.SaveFile(request.File, result.Menu_Id);
 
-                response.Message = "Successfully added.";
+                if (!path.Contains("Error"))
+                {
+                    result.Path = path;
+                    _restaurantDAL.UpdateMenu(result);
 
-                return Ok(response);
+                    response.Menu = result;
+                    response.Message = "Successfully added.";
+                    return Ok(response);
+                }
+                else
+                {
+                    _restaurantDAL.DeleteMenu(result);
+
+                    response.Menu = new Menus();
+                    response.Message = path;
+                    return BadRequest(response);
+                }
             }
             catch (Exception ex)
             {
@@ -472,7 +486,6 @@ namespace choapi.Controllers
                 {
                     menu.Restaurant_Id = request.Restaurant_Id;
                     menu.Type = request.Type;
-                    menu.Path = request.Path;
 
                     var result = _restaurantDAL.UpdateMenu(menu);
 

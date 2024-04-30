@@ -892,9 +892,24 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "request",
-        "Type": "choapi.DTOs.MenuDto",
-        "IsRequired": true
+        "Name": "Menu_Id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Restaurant_Id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Type",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "File",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": [
@@ -944,9 +959,24 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "request",
-        "Type": "choapi.DTOs.MenuDto",
-        "IsRequired": true
+        "Name": "Menu_Id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Restaurant_Id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Type",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "File",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": [
