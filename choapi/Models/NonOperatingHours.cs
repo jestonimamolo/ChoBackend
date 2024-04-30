@@ -10,5 +10,7 @@ namespace choapi.Models
         public int Restaurant_Id { get; set; }
 
         public DateTime? Date { get; set; } = null;
+
+        public string? Title { get; set; } = null;
     }
 }

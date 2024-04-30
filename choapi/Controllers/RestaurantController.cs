@@ -771,7 +771,8 @@ namespace choapi.Controllers
                 var nonOperatingHours = new NonOperatingHours
                 {
                     Restaurant_Id = request.Restaurant_Id,
-                    Date = request.Date
+                    Date = request.Date,
+                    Title = request.Title
                 };
 
                 var result = _restaurantDAL.Add(nonOperatingHours);
@@ -803,6 +804,7 @@ namespace choapi.Controllers
                 {
                     nonOperatingHours.Restaurant_Id = request.Restaurant_Id;
                     nonOperatingHours.Date = request.Date;
+                    nonOperatingHours.Title = request.Title;
 
                     var result = _restaurantDAL.Update(nonOperatingHours);
 
