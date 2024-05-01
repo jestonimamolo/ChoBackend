@@ -21,36 +21,14 @@ namespace choapi.Controllers
 
         private readonly ILogger<RestaurantController> _logger;
 
+        private const string _fromMenus = "restaurant-menus";
+        private const string _fromImages = "restaurant-images";
+
         public RestaurantController(ILogger<RestaurantController> logger, IRestaurantDAL restaurantDAL)
         {
             _logger = logger;
             _restaurantDAL = restaurantDAL;
         }
-
-        #region commented
-
-        //private static readonly string[] Names =
-        //{
-        //    "Mang Inasal", "Jollibee", "McDonalds", "Chowking", "Greenwich", "Sols", "Angel Pizza", "Pizza Hot", "Snr Kimchi", "Vikings"
-        //};
-
-        //private static readonly string[] Address =
-        //{
-        //    "Cebu city", "Mandaue city", "Cebu city", "Mandaue city", "Lapu-Lapu city", "Lapu city", "Talisay city", "Cebu city", "Mandaue city", "Cebu city"
-        //};
-
-        //[HttpGet(Name = "GetRestaurant"), Authorize()]
-        //public IEnumerable<Restaurant> Get()
-        //{
-        //    return Enumerable.Range(1, 5).Select(index => new Restaurant
-        //    {
-        //        Name = Names[Random.Shared.Next(Names.Length)],
-        //        Address = Address[Random.Shared.Next(Address.Length)]
-        //    })
-        //    .ToArray();
-        //}
-
-        #endregion
 
         [HttpPost("register"), Authorize()]
         public ActionResult<RestaurantResponse> Register(RestaurantDTO request)
@@ -74,25 +52,25 @@ namespace choapi.Controllers
 
                 var resultRestaurant = _restaurantDAL.Add(restaurant);
 
-                var restaurantImages = new List<RestaurantImages>();
+                //var restaurantImages = new List<RestaurantImages>();
 
-                if (request.Images != null)
-                {
-                    foreach (var image in request.Images)
-                    {
-                        var addRestaurantImages = new RestaurantImages();
+                //if (request.Images != null)
+                //{
+                //    foreach (var image in request.Images)
+                //    {
+                //        var addRestaurantImages = new RestaurantImages();
 
-                        addRestaurantImages.Restaurant_Id = resultRestaurant.Restaurant_Id;
-                        addRestaurantImages.Image_Url = image.Image_Url;
+                //        addRestaurantImages.Restaurant_Id = resultRestaurant.Restaurant_Id;
+                //        addRestaurantImages.Image_Url = image.Image_Url;
 
-                        restaurantImages.Add(addRestaurantImages);
-                    }
-                }
+                //        restaurantImages.Add(addRestaurantImages);
+                //    }
+                //}
 
-                var resultRestaurantImages = _restaurantDAL.AddImages(restaurantImages);
+                //var resultRestaurantImages = _restaurantDAL.AddImages(restaurantImages);
 
                 response.Restaurant = resultRestaurant;
-                response.Images = resultRestaurantImages;
+                //response.Images = resultRestaurantImages;
                 response.Message = "Successfully added.";
 
                 return Ok(response);
@@ -129,7 +107,7 @@ namespace choapi.Controllers
                     var result = _restaurantDAL.Update(restaurant);
 
                     response.Restaurant = result;
-                    response.Images = _restaurantDAL.GetRestaurantImages(request.Restaurant_Id);
+                    //response.Images = _restaurantDAL.GetRestaurantImages(request.Restaurant_Id);
                     response.Message = "Successfully updated.";
 
                     return Ok(response);
@@ -165,7 +143,7 @@ namespace choapi.Controllers
                     var result = _restaurantDAL.Update(restaurant);
 
                     response.Restaurant = new Restaurants();
-                    response.Images = new List<RestaurantImages>();
+                    //response.Images = new List<RestaurantImages>();
                     response.Message = "Successfully deleted.";
 
                     return Ok(response);
@@ -199,7 +177,7 @@ namespace choapi.Controllers
                 {
                     response.Restaurant = resultRestaurant;
 
-                    response.Images = _restaurantDAL.GetRestaurantImages(resultRestaurant.Restaurant_Id);
+                    //response.Images = _restaurantDAL.GetRestaurantImages(resultRestaurant.Restaurant_Id);
 
                     response.Message = $"Successfully get restaurant.";
                     return Ok(response);
@@ -272,23 +250,43 @@ namespace choapi.Controllers
         }
 
         [HttpPost("images/add"), Authorize()]
-        public ActionResult<RestaurantImageResponse> AddImage(RestaurantImageDTO request)
+        public async Task<ActionResult<RestaurantImageResponse>> AddImage(RestaurantImageDTO request)
         {
             var response = new RestaurantImageResponse();
             try
             {
                 var image = new RestaurantImages
                 {
-                    Restaurant_Id = request.Restaurant_Id,
-                    Image_Url = request.Image_Url
+                    Restaurant_Id = request.Restaurant_Id
                 };
 
                 var result = _restaurantDAL.AddImage(image);
 
-                response.Image = result;
-                response.Message = "Successfully added.";
+                var path = await UploadHelper.SaveFile(request.File, result.RestaurantImages_Id, _fromImages);
 
-                return Ok(response);
+                if (!path.Contains("Error:"))
+                {
+                    if (!string.IsNullOrEmpty(path))
+                    {
+                        var host = Request.Host;
+                        var scheme = Request.Scheme;
+
+                        result.Image_Url = $"{scheme}://{host}/{path}";
+                        var updateResult = _restaurantDAL.UpdateImage(result);
+                    }
+
+                    response.Image = result;
+                    response.Message = "Successfully added.";
+                    return Ok(response);
+                }
+                else
+                {
+                    _restaurantDAL.DeleteImage(result);
+                    response.Status = "Failed";
+                    response.Image = new RestaurantImages();
+                    response.Message = path;
+                    return BadRequest(response);
+                }
             }
             catch (Exception ex)
             {
@@ -300,7 +298,7 @@ namespace choapi.Controllers
         }
 
         [HttpPost("images/update"), Authorize()]
-        public ActionResult<RestaurantImageResponse> UpdateImage(RestaurantImageDTO request)
+        public async Task<ActionResult<RestaurantImageResponse>> UpdateImage(RestaurantImageDTO request)
         {
             var response = new RestaurantImageResponse();
             try
@@ -309,15 +307,39 @@ namespace choapi.Controllers
 
                 if (image != null)
                 {
-                    image.Restaurant_Id = request.Restaurant_Id;
-                    image.Image_Url = request.Image_Url;
+                    string deleteFileResult = string.Empty;
+                    if (!string.IsNullOrEmpty(image.Image_Url))
+                    {
+                        deleteFileResult = UploadHelper.DeleteFile(image.Image_Url);
+                    }
 
-                    var result = _restaurantDAL.UpdateImage(image);
+                    var path = await UploadHelper.SaveFile(request.File, image.RestaurantImages_Id, _fromImages);
 
-                    response.Image = result;
-                    response.Message = "Successfully updated.";
+                    if (!path.Contains("Error:"))
+                    {
+                        if (!string.IsNullOrEmpty(path))
+                        {
+                            var host = Request.Host;
+                            var scheme = Request.Scheme;
 
-                    return Ok(response);
+                            image.Image_Url = $"{scheme}://{host}/{path}";
+                        }
+
+                        image.Restaurant_Id = request.Restaurant_Id;
+
+                        var updateResult = _restaurantDAL.UpdateImage(image);
+
+                        response.Image = updateResult;
+                        response.Message = "Successfully updated.";
+                        return Ok(response);
+                    }
+                    else
+                    {
+                        response.Image = image;
+                        response.Status = "Failed";
+                        response.Message = path;
+                        return BadRequest(response);
+                    }
                 }
                 else
                 {
@@ -345,12 +367,27 @@ namespace choapi.Controllers
 
                 if (image != null)
                 {
-                    _restaurantDAL.DeleteImage(image);
+                    string deleteFileResult = string.Empty;
+                    if (!string.IsNullOrEmpty(image.Image_Url))
+                    {
+                        deleteFileResult = UploadHelper.DeleteFile(image.Image_Url);
+                    }
 
-                    response.Image = new RestaurantImages();
-                    response.Message = "Successfully deleted.";
+                    if (!deleteFileResult.Contains("Error:"))
+                    {
+                        _restaurantDAL.DeleteImage(image);
 
-                    return Ok(response);
+                        response.Image = new RestaurantImages();
+                        response.Message = "Successfully deleted.";
+                        return Ok(response);
+                    }
+                    else
+                    {
+                        response.Image = image;
+                        response.Status = "Failed";
+                        response.Message = deleteFileResult;
+                        return BadRequest(response);
+                    }
                 }
                 else
                 {
@@ -446,7 +483,7 @@ namespace choapi.Controllers
 
                 var result = _restaurantDAL.Add(menu);
 
-                var path = await UploadHelper.SaveFile(request.File, result.Menu_Id);
+                var path = await UploadHelper.SaveFile(request.File, result.Menu_Id, _fromMenus);
 
                 if (!path.Contains("Error:"))
                 {
@@ -497,7 +534,7 @@ namespace choapi.Controllers
                         deleteFileResult = UploadHelper.DeleteFile(menu.Path);
                     }
 
-                    var path = await UploadHelper.SaveFile(request.File, menu.Menu_Id);
+                    var path = await UploadHelper.SaveFile(request.File, menu.Menu_Id, _fromMenus);
 
                     if (!path.Contains("Error:"))
                     {
@@ -506,7 +543,7 @@ namespace choapi.Controllers
                             var host = Request.Host;
                             var scheme = Request.Scheme;
 
-                            menu.Path = $"{scheme}://{host}/{path}";                            
+                            menu.Path = $"{scheme}://{host}/{path}";
                         }
 
                         menu.Restaurant_Id = request.Restaurant_Id;
@@ -573,7 +610,7 @@ namespace choapi.Controllers
                         response.Status = "Failed";
                         response.Message = deleteFileResult;
                         return BadRequest(response);
-                    }   
+                    }
                 }
                 else
                 {

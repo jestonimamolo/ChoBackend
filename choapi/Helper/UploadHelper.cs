@@ -7,7 +7,7 @@ namespace choapi.Helper
         public const string _contentFilesPath = "Content/Files";
         public const string _contentDirectoryFilesPath = "Content\\Files";
 
-        public static async Task<string> SaveFile(IFormFile? file, int id)
+        public static async Task<string> SaveFile(IFormFile? file, int id, string from)
         {
             try
             {
@@ -19,7 +19,7 @@ namespace choapi.Helper
                 string fileName = file.FileName.Replace(" ", "_");
                 string ext = Path.GetExtension(fileName);
 
-                string toSaveFileName = $"{id}-{fileName}";
+                string toSaveFileName = $"{from}-{id}-{fileName}";
 
                 var filePath = Path.Combine(Directory.GetCurrentDirectory(), _contentDirectoryFilesPath);
 
