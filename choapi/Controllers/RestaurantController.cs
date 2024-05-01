@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Net;
 using System.Numerics;
 
@@ -447,10 +448,16 @@ namespace choapi.Controllers
 
                 var path = await UploadHelper.SaveFile(request.File, result.Menu_Id);
 
-                if (!path.Contains("Error"))
+                if (!path.Contains("Error:"))
                 {
-                    result.Path = path;
-                    _restaurantDAL.UpdateMenu(result);
+                    if (!string.IsNullOrEmpty(path))
+                    {
+                        var host = Request.Host;
+                        var scheme = Request.Scheme;
+
+                        result.Path = $"{scheme}://{host}/{path}";
+                        var updateResult = _restaurantDAL.UpdateMenu(result);
+                    }
 
                     response.Menu = result;
                     response.Message = "Successfully added.";
@@ -459,7 +466,7 @@ namespace choapi.Controllers
                 else
                 {
                     _restaurantDAL.DeleteMenu(result);
-
+                    response.Status = "Failed";
                     response.Menu = new Menus();
                     response.Message = path;
                     return BadRequest(response);
@@ -475,7 +482,7 @@ namespace choapi.Controllers
         }
 
         [HttpPost("menus/update"), Authorize()]
-        public ActionResult<MenuResponse> MenuUpdate(MenuDto request)
+        public async Task<ActionResult<MenuResponse>> MenuUpdate(MenuDto request)
         {
             var response = new MenuResponse();
             try
@@ -484,14 +491,40 @@ namespace choapi.Controllers
 
                 if (menu != null)
                 {
-                    menu.Restaurant_Id = request.Restaurant_Id;
-                    menu.Type = request.Type;
+                    string deleteFileResult = string.Empty;
+                    if (!string.IsNullOrEmpty(menu.Path))
+                    {
+                        deleteFileResult = UploadHelper.DeleteFile(menu.Path);
+                    }
 
-                    var result = _restaurantDAL.UpdateMenu(menu);
+                    var path = await UploadHelper.SaveFile(request.File, menu.Menu_Id);
 
-                    response.Menu = result;
-                    response.Message = "Successfully updated.";
-                    return Ok(response);
+                    if (!path.Contains("Error:"))
+                    {
+                        if (!string.IsNullOrEmpty(path))
+                        {
+                            var host = Request.Host;
+                            var scheme = Request.Scheme;
+
+                            menu.Path = $"{scheme}://{host}/{path}";                            
+                        }
+
+                        menu.Restaurant_Id = request.Restaurant_Id;
+                        menu.Type = request.Type;
+
+                        var updateResult = _restaurantDAL.UpdateMenu(menu);
+
+                        response.Menu = updateResult;
+                        response.Message = "Successfully updated.";
+                        return Ok(response);
+                    }
+                    else
+                    {
+                        response.Menu = menu;
+                        response.Status = "Failed";
+                        response.Message = path;
+                        return BadRequest(response);
+                    }
                 }
                 else
                 {
@@ -520,11 +553,27 @@ namespace choapi.Controllers
 
                 if (menu != null)
                 {
-                    _restaurantDAL.DeleteMenu(menu);
+                    string deleteFileResult = string.Empty;
+                    if (!string.IsNullOrEmpty(menu.Path))
+                    {
+                        deleteFileResult = UploadHelper.DeleteFile(menu.Path);
+                    }
 
-                    response.Menu = new Menus();
-                    response.Message = "Successfully deleted.";
-                    return Ok(response);
+                    if (!deleteFileResult.Contains("Error:"))
+                    {
+                        _restaurantDAL.DeleteMenu(menu);
+
+                        response.Menu = new Menus();
+                        response.Message = "Successfully deleted.";
+                        return Ok(response);
+                    }
+                    else
+                    {
+                        response.Menu = menu;
+                        response.Status = "Failed";
+                        response.Message = deleteFileResult;
+                        return BadRequest(response);
+                    }   
                 }
                 else
                 {

@@ -7,6 +7,7 @@ using System.Text;
 using choapi.Models;
 using Microsoft.EntityFrameworkCore;
 using choapi.DAL;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -75,6 +76,14 @@ else
         c.RoutePrefix = string.Empty;  // Set Swagger UI at apps root    
     });
 }
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(app.Environment.ContentRootPath, "Content/Files")),
+    RequestPath = "/Content/Files"
+});
+
+//app.UseStaticFiles();
 
 app.UseHttpsRedirection();
 

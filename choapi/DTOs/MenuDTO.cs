@@ -8,6 +8,6 @@
 
         public string? Type { get; set; } = null;
 
-        public IFormFile File { get; set; }
+        public IFormFile? File { get; set; }
     }
 }
