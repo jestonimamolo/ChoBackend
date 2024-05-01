@@ -38,5 +38,12 @@ namespace choapi.DAL
 
             return model;
         }
+
+        public void Delete(Users model)
+        {
+            _context.Users.Remove(model);
+
+            _context.SaveChanges();
+        }
     }
 }

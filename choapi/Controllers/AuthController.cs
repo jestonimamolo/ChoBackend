@@ -1,5 +1,6 @@
 ﻿using choapi.DAL;
 using choapi.DTOs;
+using choapi.Helper;
 using choapi.Messages;
 using choapi.Models;
 using Microsoft.AspNetCore.Identity;
@@ -18,10 +19,9 @@ namespace choapi.Controllers
         //Server=localhost\SQLEXPRESS01;Database=master;Trusted_Connection=True;
         private readonly IUserDAL _userDAL;
 
-        public static Users _user = new Users();
-
         private readonly IConfiguration _configuration;
 
+        private const string _fromUsers = "users";
         public AuthController(IConfiguration configuration, IUserDAL userDAL)
         {
             _configuration = configuration;
@@ -29,11 +29,25 @@ namespace choapi.Controllers
         }
 
         [HttpPost("register")]
-        public ActionResult<RegisterReponse> Register(UserDTO request)
+        public async Task<ActionResult<RegisterReponse>> Register(UserDTO request)
         {
             var response = new RegisterReponse();
             try
             {
+                if (string.IsNullOrEmpty(request.Password))
+                {
+                    response.Message = "Password is required";
+                    response.Status = "Failed";
+                    return BadRequest(response);
+                }
+
+                if (string.IsNullOrEmpty(request.Username))
+                {
+                    response.Message = "Username is required";
+                    response.Status = "Failed";
+                    return BadRequest(response);
+                }
+
                 string passwordinputed = request.Password;
 
                 var existUser = _userDAL.GetUserByUsername(request.Username);
@@ -42,7 +56,6 @@ namespace choapi.Controllers
                 {
                     response.Message = "Username is already existed";
                     response.Status = "Failed";
-
                     return BadRequest(response);
                 }
 
@@ -56,28 +69,58 @@ namespace choapi.Controllers
                     Email = request.Email,
                     Phone = request.Phone,
                     Display_Name = request.Display_Name,
-                    Photo_Url = request.Photo_Url,
                     Latitude = request.Latitude,
                     Longitude = request.Longitude,
                     Is_Active = true
                 };
 
-                var userResult = _userDAL.Add(user);                
+                var userResult = _userDAL.Add(user);
 
-                response.User.User_Id = userResult.User_Id;
-                response.User.Username = userResult.Username;
-                response.User.Email = user.Email;
-                response.User.Phone = user.Phone;
-                response.User.Role_Id = userResult.Role_Id;
-                response.User.Is_Active = userResult.Is_Active;
-                response.User.Display_Name = userResult.Display_Name;
-                response.User.Photo_Url = userResult.Photo_Url;
-                response.User.Latitude = userResult.Latitude;
-                response.User.Longitude = userResult.Longitude;
+                var path = await UploadHelper.SaveFile(request.File, userResult.User_Id, _fromUsers);
 
-                response.Message = "Successfully registered.";
+                if (!path.Contains("Error:"))
+                {
+                    if (!string.IsNullOrEmpty(path))
+                    {
+                        var host = Request.Host;
+                        var scheme = Request.Scheme;
 
-                return Ok(response);
+                        user.Photo_Url = $"{scheme}://{host}/{path}";
+                        var updateResult = _userDAL.Update(userResult);
+                    }
+
+                    response.User.User_Id = userResult.User_Id;
+                    response.User.Username = userResult.Username;
+                    response.User.Email = user.Email;
+                    response.User.Phone = user.Phone;
+                    response.User.Role_Id = userResult.Role_Id;
+                    response.User.Is_Active = userResult.Is_Active;
+                    response.User.Display_Name = userResult.Display_Name;
+                    response.User.Photo_Url = userResult.Photo_Url;
+                    response.User.Latitude = userResult.Latitude;
+                    response.User.Longitude = userResult.Longitude;
+
+                    response.Message = "Successfully registered.";
+
+                    return Ok(response);
+                }
+                else
+                {
+                    _userDAL.Delete(userResult);
+
+                    response.User.User_Id = 0;
+                    response.User.Username = request.Username;
+                    response.User.Email = request.Email;
+                    response.User.Phone = request.Phone;
+                    response.User.Role_Id = request.Role_Id;
+                    response.User.Display_Name = request.Display_Name;
+                    response.User.Latitude = request.Latitude;
+                    response.User.Longitude = request.Longitude;
+
+                    response.Status = "Failed";
+                    response.Message = path;
+                    return BadRequest(response);
+                }                
             }
             catch(Exception ex)
             {
@@ -87,7 +130,6 @@ namespace choapi.Controllers
                 response.User.Phone = request.Phone;
                 response.User.Role_Id = request.Role_Id;
                 response.User.Display_Name = request.Display_Name;
-                response.User.Photo_Url = request.Photo_Url;
                 response.User.Latitude = request.Latitude;
                 response.User.Longitude = request.Longitude;
 
@@ -95,8 +137,7 @@ namespace choapi.Controllers
                 response.Status = "Failed";
 
                 return BadRequest(response);
-            }
-            
+            }            
         }
 
         [HttpPost("login")]

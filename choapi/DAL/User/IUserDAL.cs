@@ -11,5 +11,7 @@ namespace choapi.DAL
         Users? GetUser(int id);
 
         Users Update(Users model);
+
+        void Delete(Users model);
     }
 }
