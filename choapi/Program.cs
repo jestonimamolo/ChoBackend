@@ -9,7 +9,21 @@ using Microsoft.EntityFrameworkCore;
 using choapi.DAL;
 using Microsoft.Extensions.FileProviders;
 
+
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+        policy =>
+        {
+            policy.WithOrigins("https://cho-web-bm7qsb.flutterflow.app")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
 
 // Add services to the container.
 
@@ -83,7 +97,7 @@ app.UseStaticFiles(new StaticFileOptions
     RequestPath = "/Content/Files"
 });
 
-//app.UseStaticFiles();
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseHttpsRedirection();
 

@@ -34,9 +34,54 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "request",
-        "Type": "choapi.DTOs.UserDTO",
-        "IsRequired": true
+        "Name": "User_id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Username",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Password",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Role_Id",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Phone",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Display_Name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Latitude",
+        "Type": "System.Nullable\u00601[[System.Decimal, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Longitude",
+        "Type": "System.Nullable\u00601[[System.Decimal, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "File",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": [
@@ -762,9 +807,19 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "request",
-        "Type": "choapi.DTOs.RestaurantImageDTO",
-        "IsRequired": true
+        "Name": "RestaurantImages_Id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Restaurant_Id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "File",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": [
@@ -814,9 +869,19 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "request",
-        "Type": "choapi.DTOs.RestaurantImageDTO",
-        "IsRequired": true
+        "Name": "RestaurantImages_Id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Restaurant_Id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "File",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": [
@@ -1305,8 +1370,8 @@
   },
   {
     "ContainingType": "choapi.Controllers.UserController",
-    "Method": "Update",
-    "RelativePath": "api/User/update",
+    "Method": "UpdateLocation",
+    "RelativePath": "api/User/location/update",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -1315,6 +1380,67 @@
         "Name": "request",
         "Type": "choapi.DTOs.LocationDTO",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.UserUpdateResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.UserController",
+    "Method": "Update",
+    "RelativePath": "api/User/update",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "User_id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Role_Id",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Phone",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Display_Name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Latitude",
+        "Type": "System.Nullable\u00601[[System.Decimal, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Longitude",
+        "Type": "System.Nullable\u00601[[System.Decimal, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "File",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": [
