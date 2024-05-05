@@ -11,20 +11,34 @@ namespace choapi.DAL
             _context = choDBContext;
         }
 
-        public RestaurantTable? Add(RestaurantTable model)
+        public RestaurantTable Add(RestaurantTable model)
         {
-            if (model != null)
-            {
-                _context.RestaurantTable.Add(model);
+            _context.RestaurantTable.Add(model);
 
-                _context.SaveChanges();
-            }
+            _context.SaveChanges();
+
             return model;
+        }
+
+        public RestaurantTable Update(RestaurantTable model)
+        {
+            _context.RestaurantTable.Update(model);
+
+            _context.SaveChanges();
+
+            return model;
+        }
+
+        public void Delete(RestaurantTable model)
+        {
+            _context.RestaurantTable.Remove(model);
+
+            _context.SaveChanges();
         }
 
         public RestaurantTable? GetRestaurantTable(int id)
         {
-            return _context.RestaurantTable.FirstOrDefault(r => r.Restaurant_Table_Id == id);
+            return _context.RestaurantTable.FirstOrDefault(r => r.RestaurantTable_Id == id);
         }
 
         public List<RestaurantTable>? GetRestaurantTables(int restaurantId)
