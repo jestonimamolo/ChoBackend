@@ -1292,6 +1292,32 @@
   },
   {
     "ContainingType": "choapi.Controllers.RestaurantTableController",
+    "Method": "GetRestaurantTable",
+    "RelativePath": "api/RestaurantTable/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Models.RestaurantTable",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.RestaurantTableController",
     "Method": "Add",
     "RelativePath": "api/RestaurantTable/add",
     "HttpMethod": "POST",
@@ -1306,7 +1332,33 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "choapi.Models.RestaurantTable",
+        "Type": "choapi.Messages.RestaurantTableResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.RestaurantTableController",
+    "Method": "delete",
+    "RelativePath": "api/RestaurantTable/delete/{id}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.RestaurantTableResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1319,33 +1371,7 @@
   {
     "ContainingType": "choapi.Controllers.RestaurantTableController",
     "Method": "GetRestaurantTables",
-    "RelativePath": "api/RestaurantTable/tables",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "restaurantId",
-        "Type": "System.Int32",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.List\u00601[[choapi.Models.RestaurantTable, choapi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "choapi.Controllers.RestaurantTableController",
-    "Method": "GetRestaurantTable",
-    "RelativePath": "api/RestaurantTable/tables/{id}",
+    "RelativePath": "api/RestaurantTable/restaurant/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -1358,7 +1384,33 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "choapi.Models.RestaurantTable",
+        "Type": "System.Collections.Generic.List\u00601[[choapi.Messages.RestaurantTablesResponse, choapi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.RestaurantTableController",
+    "Method": "Update",
+    "RelativePath": "api/RestaurantTable/update",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "choapi.DTOs.RestaurantTableDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.RestaurantTableResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1446,6 +1498,26 @@
     "ReturnTypes": [
       {
         "Type": "choapi.Messages.UserUpdateResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.WooCommerceController",
+    "Method": "GetRestaurants",
+    "RelativePath": "api/WooCommerce/restaurants",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.RestuarantUserIdResponnse",
         "MediaTypes": [
           "text/plain",
           "application/json",

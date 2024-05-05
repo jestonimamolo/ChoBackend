@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("choapi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1a2e2dbfde61f654946bb894b1f68f2eb6d793c3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c49480297dfaf4feafa854f702c3aa888b2e542e")]
 [assembly: System.Reflection.AssemblyProductAttribute("choapi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("choapi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
