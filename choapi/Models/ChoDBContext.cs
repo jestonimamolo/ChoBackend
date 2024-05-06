@@ -28,6 +28,10 @@ namespace choapi.Models
 
         public virtual DbSet<RestaurantTable> RestaurantTable { get; set; }
 
+        public virtual DbSet<Credits> Credits { get; set; }
+
         public virtual DbSet<Payment> Payment { get; set; }
+
+
     }
 }
