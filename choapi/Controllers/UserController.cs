@@ -153,5 +153,48 @@ namespace choapi.Controllers
                 return BadRequest(response);
             }
         }
+
+        [HttpGet("{id}"), Authorize()]
+        public ActionResult<UserByIdResponse> GetUser(int id)
+        {
+            var response = new UserByIdResponse();
+            try
+            {
+                var result = _userDAL.GetUser(id);
+
+                if (result != null)
+                {
+                    var user = new UserResponse();
+
+                    user.User_Id = result.User_Id;
+                    user.Username = result.Username;
+                    user.Email = result.Email;
+                    user.Phone = result.Phone;
+                    user.Role_Id = result.Role_Id;
+                    user.Is_Active = result.Is_Active;
+                    user.Display_Name = result.Display_Name;
+                    user.Photo_Url = result.Photo_Url;
+                    user.Latitude = result.Latitude;
+                    user.Longitude = result.Longitude;
+
+                    response.User = user;
+                    response.Message = "Successfully get User.";
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Message = $"No User found by id: {id}";
+                    response.Status = "Failed";
+                    return BadRequest(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
     }
 }
