@@ -144,7 +144,7 @@ namespace choapi.Controllers
                 }
                 else
                 {
-                    response.Message = $"No restaurant table found by id: {id}";
+                    response.Message = $"No credit found by id: {id}";
                     response.Status = "Failed";
                     return BadRequest(response);
                 }
@@ -158,8 +158,8 @@ namespace choapi.Controllers
             }
         }
 
-        [HttpGet("credits/{id}"), Authorize()]
-        public ActionResult<CreditsResponse> GetRestaurantTables(int id)
+        [HttpGet("restaurant/{id}"), Authorize()]
+        public ActionResult<CreditsResponse> GetRestaurantCredits(int id)
         {
             var response = new CreditsResponse();
             try

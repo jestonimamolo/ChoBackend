@@ -165,9 +165,9 @@ namespace choapi.Controllers
         }
 
         [HttpGet("restaurants/{id}"), Authorize()]
-        public ActionResult<RestaurantResponse> GetRestaurant(int id)
+        public ActionResult<RestaurantByIdResponse> GetRestaurant(int id)
         {
-            var response = new RestaurantResponse();
+            var response = new RestaurantByIdResponse();
 
             try
             {
@@ -177,7 +177,7 @@ namespace choapi.Controllers
                 {
                     response.Restaurant = resultRestaurant;
 
-                    //response.Images = _restaurantDAL.GetRestaurantImages(resultRestaurant.Restaurant_Id);
+                    response.Images = _restaurantDAL.GetRestaurantImages(resultRestaurant.Restaurant_Id);
 
                     response.Message = $"Successfully get restaurant.";
                     return Ok(response);
