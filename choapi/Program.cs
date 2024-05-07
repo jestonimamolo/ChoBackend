@@ -8,8 +8,6 @@ using choapi.Models;
 using Microsoft.EntityFrameworkCore;
 using choapi.DAL;
 using Microsoft.Extensions.FileProviders;
-using choapi.DAL.Credit;
-
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
@@ -47,6 +45,7 @@ builder.Services.AddScoped<IRestaurantTableDAL, RestaurantTableDAL>();
 builder.Services.AddScoped<IPaymentDAL, PaymentDAL>();
 builder.Services.AddScoped<ICuisineDAL, CuisineDAL>();
 builder.Services.AddScoped<ICreditDAL, CreditDAL>();
+builder.Services.AddScoped<ITransactionDAL, TransactionDAL>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

@@ -1,6 +1,6 @@
 ﻿using choapi.Models;
 
-namespace choapi.DAL.Credit
+namespace choapi.DAL
 {
     public class CreditDAL : ICreditDAL
     {

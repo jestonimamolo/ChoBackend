@@ -306,32 +306,6 @@
   },
   {
     "ContainingType": "choapi.Controllers.CreditController",
-    "Method": "GetCredits",
-    "RelativePath": "api/Credit/credits/{id}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "choapi.Messages.CreditsResponse",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "choapi.Controllers.CreditController",
     "Method": "delete",
     "RelativePath": "api/Credit/delete/{id}",
     "HttpMethod": "POST",
@@ -347,6 +321,32 @@
     "ReturnTypes": [
       {
         "Type": "choapi.Messages.CreditResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.CreditController",
+    "Method": "GetRestaurantCredits",
+    "RelativePath": "api/Credit/restaurant/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.CreditsResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1384,7 +1384,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "choapi.Messages.RestaurantResponse",
+        "Type": "choapi.Messages.RestaurantByIdResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1541,6 +1541,136 @@
     "ReturnTypes": [
       {
         "Type": "choapi.Messages.RestaurantTableResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.TransactionController",
+    "Method": "GetTransaction",
+    "RelativePath": "api/Transaction/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.TransactionResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.TransactionController",
+    "Method": "Add",
+    "RelativePath": "api/Transaction/add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "choapi.DTOs.TransactionDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.TransactionResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.TransactionController",
+    "Method": "Delete",
+    "RelativePath": "api/Transaction/delete/{id}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.TransactionResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.TransactionController",
+    "Method": "GetTransactionByUserId",
+    "RelativePath": "api/Transaction/transactions/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.TransactionsResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.TransactionController",
+    "Method": "Update",
+    "RelativePath": "api/Transaction/update",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "choapi.DTOs.TransactionDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.TransactionResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",

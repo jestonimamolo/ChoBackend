@@ -10,43 +10,44 @@ namespace choapi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CreditController : ControllerBase
+    public class TransactionController : ControllerBase
     {
-        private readonly ICreditDAL _creditDAL;
+        private readonly ITransactionDAL _transactionDAL;
 
         private readonly ILogger<CreditController> _logger;
 
-        public CreditController(ILogger<CreditController> logger, ICreditDAL creditDAL)
+        public TransactionController(ILogger<CreditController> logger, ITransactionDAL transactionDAL)
         {
             _logger = logger;
-            _creditDAL = creditDAL;
+            _transactionDAL = transactionDAL;
         }
 
         [HttpPost("add"), Authorize()]
-        public ActionResult<CreditResponse> Add(CreditDTO request)
+        public ActionResult<TransactionResponse> Add(TransactionDTO request)
         {
-            var response = new CreditResponse();
+            var response = new TransactionResponse();
             try
             {
-                if (request.Restaurant_Id <= 0)
+                if (request.User_Id <= 0)
                 {
-                    response.Message = "Required Restaurant_Id.";
+                    response.Message = "Required User_Id.";
                     response.Status = "Failed";
 
                     return BadRequest(response);
                 }
 
-                var credit = new Credits
+                var transaction = new Transaction
                 {
-                    Restaurant_Id = request.Restaurant_Id,
-                    Amount = request.Amount,
+                    User_Id = request.User_Id,
                     Transaction_Type = request.Transaction_Type,
-                    Transaction_Date = request.Transaction_Date
+                    Type = request.Type,
+                    Status = request.Status,
+                    Created_Date = request.Created_Date
                 };
 
-                var result = _creditDAL.Add(credit);
+                var result = _transactionDAL.Add(transaction);
 
-                response.Credit = result;
+                response.Transaction = result;
                 response.Message = "Successfully added.";
                 return Ok(response);
             }
@@ -59,29 +60,30 @@ namespace choapi.Controllers
         }
 
         [HttpPost("update"), Authorize()]
-        public ActionResult<CreditResponse> Update(CreditDTO request)
+        public ActionResult<TransactionResponse> Update(TransactionDTO request)
         {
-            var response = new CreditResponse();
+            var response = new TransactionResponse();
             try
             {
-                var credit = _creditDAL.Get(request.Credit_Id);
+                var transaction = _transactionDAL.Get(request.Transaction_Id);
 
-                if (credit != null)
+                if (transaction != null)
                 {
-                    credit.Restaurant_Id = request.Restaurant_Id;
-                    credit.Amount = request.Amount;
-                    credit.Transaction_Type = request.Transaction_Type;
-                    credit.Transaction_Date = request.Transaction_Date;
+                    transaction.User_Id = request.User_Id;
+                    transaction.Transaction_Type = request.Transaction_Type;
+                    transaction.Type = request.Type;
+                    transaction.Status = request.Status;
+                    transaction.Created_Date = request.Created_Date;
 
-                    var result = _creditDAL.Update(credit);
+                    var result = _transactionDAL.Update(transaction);
 
-                    response.Credit = result;
+                    response.Transaction = result;
                     response.Message = "Successfully updated.";
                     return Ok(response);
                 }
                 else
                 {
-                    response.Message = $"No credit found by id: {request.Credit_Id}";
+                    response.Message = $"No transaction found by id: {request.Transaction_Id}";
                     response.Status = "Failed";
                     return BadRequest(response);
                 }
@@ -95,25 +97,25 @@ namespace choapi.Controllers
         }
 
         [HttpPost("delete/{id}"), Authorize()]
-        public ActionResult<CreditResponse> delete(int id)
+        public ActionResult<TransactionResponse> Delete(int id)
         {
-            var response = new CreditResponse();
+            var response = new TransactionResponse();
             try
             {
-                var credit = _creditDAL.Get(id);
+                var transaction = _transactionDAL.Get(id);
 
-                if (credit != null)
+                if (transaction != null)
                 {
-                    credit.Is_Deleted = true;
+                    transaction.Is_Deleted = true;
 
-                    var result =  _creditDAL.Update(credit);
+                    var result = _transactionDAL.Update(transaction);
 
                     response.Message = "Successfully deleted.";
                     return Ok(response);
                 }
                 else
                 {
-                    response.Message = $"No credit found by id: {id}";
+                    response.Message = $"No transaction found by id: {id}";
                     response.Status = "Failed";
                     return BadRequest(response);
                 }
@@ -128,22 +130,22 @@ namespace choapi.Controllers
         }
 
         [HttpGet("{id}"), Authorize()]
-        public ActionResult<CreditResponse> GetCredit(int id)
+        public ActionResult<TransactionResponse> GetTransaction(int id)
         {
-            var response = new CreditResponse();
+            var response = new TransactionResponse();
             try
             {
-                var result = _creditDAL.Get(id);
+                var result = _transactionDAL.Get(id);
 
                 if (result != null)
                 {
-                    response.Credit = result;
-                    response.Message = "Successfully get Credit.";
+                    response.Transaction = result;
+                    response.Message = "Successfully get Transaction.";
                     return Ok(response);
                 }
                 else
                 {
-                    response.Message = $"No credit found by id: {id}";
+                    response.Message = $"No transaction found by id: {id}";
                     response.Status = "Failed";
                     return BadRequest(response);
                 }
@@ -157,23 +159,23 @@ namespace choapi.Controllers
             }
         }
 
-        [HttpGet("restaurant/{id}"), Authorize()]
-        public ActionResult<CreditsResponse> GetRestaurantCredits(int id)
+        [HttpGet("transactions/{id}"), Authorize()]
+        public ActionResult<TransactionsResponse> GetTransactionByUserId(int id)
         {
-            var response = new CreditsResponse();
+            var response = new TransactionsResponse();
             try
             {
-                var result = _creditDAL.GetCredits(id);
+                var result = _transactionDAL.GetByUserId(id);
 
                 if (result != null && result.Count > 0)
                 {
-                    response.Credits = result;
-                    response.Message = "Successfully get Credits.";
+                    response.Transactions = result;
+                    response.Message = "Successfully get Transactions.";
                     return Ok(response);
                 }
                 else
                 {
-                    response.Message = $"No Credit found by restaurant id: {id}";
+                    response.Message = $"No Transaction found by user id: {id}";
                     response.Status = "Failed";
                     return BadRequest(response);
                 }

@@ -30,6 +30,8 @@ namespace choapi.Models
 
         public virtual DbSet<Credits> Credits { get; set; }
 
+        public virtual DbSet<Transaction> Transaction { get; set; }
+
         public virtual DbSet<Payment> Payment { get; set; }
 
 
