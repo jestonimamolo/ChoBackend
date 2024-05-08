@@ -10,44 +10,42 @@ namespace choapi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TransactionController : ControllerBase
+    public class ManagerController : ControllerBase
     {
-        private readonly ITransactionDAL _transactionDAL;
+        private readonly IManagerDAL _managerDAL;
 
-        private readonly ILogger<TransactionController> _logger;
+        private readonly ILogger<ManagerController> _logger;
 
-        public TransactionController(ILogger<TransactionController> logger, ITransactionDAL transactionDAL)
+        public ManagerController(ILogger<ManagerController> logger, IManagerDAL managerDAL)
         {
             _logger = logger;
-            _transactionDAL = transactionDAL;
+            _managerDAL = managerDAL;
         }
 
         [HttpPost("add"), Authorize()]
-        public ActionResult<TransactionResponse> Add(TransactionDTO request)
+        public ActionResult<ManagerResponse> Add(ManagerDTO request)
         {
-            var response = new TransactionResponse();
+            var response = new ManagerResponse();
             try
             {
-                if (request.User_Id <= 0)
+                if (request.Restaurant_Id <= 0)
                 {
-                    response.Message = "Required User_Id.";
+                    response.Message = "Required Restaurant_Id.";
                     response.Status = "Failed";
 
                     return BadRequest(response);
                 }
 
-                var transaction = new Transaction
+                var manager = new Manager
                 {
-                    User_Id = request.User_Id,
-                    Transaction_Type = request.Transaction_Type,
-                    Type = request.Type,
-                    Status = request.Status,
+                    Restaurant_Id = request.Restaurant_Id,
+                    Created_By = request.Created_By,
                     Created_Date = request.Created_Date
                 };
 
-                var result = _transactionDAL.Add(transaction);
+                var result = _managerDAL.Add(manager);
 
-                response.Transaction = result;
+                response.Manager = result;
                 response.Message = "Successfully added.";
                 return Ok(response);
             }
@@ -60,30 +58,28 @@ namespace choapi.Controllers
         }
 
         [HttpPost("update"), Authorize()]
-        public ActionResult<TransactionResponse> Update(TransactionDTO request)
+        public ActionResult<ManagerResponse> Update(ManagerDTO request)
         {
-            var response = new TransactionResponse();
+            var response = new ManagerResponse();
             try
             {
-                var transaction = _transactionDAL.Get(request.Transaction_Id);
+                var manager = _managerDAL.Get(request.Manager_Id);
 
-                if (transaction != null)
+                if (manager != null)
                 {
-                    transaction.User_Id = request.User_Id;
-                    transaction.Transaction_Type = request.Transaction_Type;
-                    transaction.Type = request.Type;
-                    transaction.Status = request.Status;
-                    transaction.Created_Date = request.Created_Date;
+                    manager.Restaurant_Id = request.Restaurant_Id;
+                    manager.Created_By = request.Created_By;
+                    manager.Created_Date = request.Created_Date;
 
-                    var result = _transactionDAL.Update(transaction);
+                    var result = _managerDAL.Update(manager);
 
-                    response.Transaction = result;
+                    response.Manager = result;
                     response.Message = "Successfully updated.";
                     return Ok(response);
                 }
                 else
                 {
-                    response.Message = $"No transaction found by id: {request.Transaction_Id}";
+                    response.Message = $"No manager found by id: {request.Manager_Id}";
                     response.Status = "Failed";
                     return BadRequest(response);
                 }
@@ -97,25 +93,25 @@ namespace choapi.Controllers
         }
 
         [HttpPost("delete/{id}"), Authorize()]
-        public ActionResult<TransactionResponse> Delete(int id)
+        public ActionResult<ManagerResponse> Delete(int id)
         {
-            var response = new TransactionResponse();
+            var response = new ManagerResponse();
             try
             {
-                var transaction = _transactionDAL.Get(id);
+                var manager = _managerDAL.Get(id);
 
-                if (transaction != null)
+                if (manager != null)
                 {
-                    transaction.Is_Deleted = true;
+                    manager.Is_Deleted = true;
 
-                    var result = _transactionDAL.Update(transaction);
+                    var result = _managerDAL.Delete(manager);
 
                     response.Message = "Successfully deleted.";
                     return Ok(response);
                 }
                 else
                 {
-                    response.Message = $"No transaction found by id: {id}";
+                    response.Message = $"No manager found by id: {id}";
                     response.Status = "Failed";
                     return BadRequest(response);
                 }
@@ -130,22 +126,22 @@ namespace choapi.Controllers
         }
 
         [HttpGet("{id}"), Authorize()]
-        public ActionResult<TransactionResponse> GetTransaction(int id)
+        public ActionResult<ManagerResponse> GetManager(int id)
         {
-            var response = new TransactionResponse();
+            var response = new ManagerResponse();
             try
             {
-                var result = _transactionDAL.Get(id);
+                var result = _managerDAL.Get(id);
 
                 if (result != null)
                 {
-                    response.Transaction = result;
-                    response.Message = "Successfully get Transaction.";
+                    response.Manager = result;
+                    response.Message = "Successfully get manager.";
                     return Ok(response);
                 }
                 else
                 {
-                    response.Message = $"No transaction found by id: {id}";
+                    response.Message = $"No manager found by id: {id}";
                     response.Status = "Failed";
                     return BadRequest(response);
                 }
@@ -159,23 +155,23 @@ namespace choapi.Controllers
             }
         }
 
-        [HttpGet("transactions/{id}"), Authorize()]
-        public ActionResult<TransactionsResponse> GetTransactionByUserId(int id)
+        [HttpGet("restaurant/{id}"), Authorize()]
+        public ActionResult<ManagersResponse> GetManagerByRestaurantId(int id)
         {
-            var response = new TransactionsResponse();
+            var response = new ManagersResponse();
             try
             {
-                var result = _transactionDAL.GetByUserId(id);
+                var result = _managerDAL.GetByRestaurantId(id);
 
                 if (result != null && result.Count > 0)
                 {
-                    response.Transactions = result;
-                    response.Message = "Successfully get Transactions.";
+                    response.Managers = result;
+                    response.Message = "Successfully get Managers.";
                     return Ok(response);
                 }
                 else
                 {
-                    response.Message = $"No Transaction found by user id: {id}";
+                    response.Message = $"No Manager found by restaurant id: {id}";
                     response.Status = "Failed";
                     return BadRequest(response);
                 }

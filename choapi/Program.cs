@@ -46,6 +46,7 @@ builder.Services.AddScoped<IPaymentDAL, PaymentDAL>();
 builder.Services.AddScoped<ICuisineDAL, CuisineDAL>();
 builder.Services.AddScoped<ICreditDAL, CreditDAL>();
 builder.Services.AddScoped<ITransactionDAL, TransactionDAL>();
+builder.Services.AddScoped<IManagerDAL, ManagerDAL>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
