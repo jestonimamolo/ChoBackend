@@ -40,7 +40,7 @@ namespace choapi.DAL
 
         public Manager? Get(int id)
         {
-            return _context.Manager.FirstOrDefault(m => m.Manager_Id == id && m.Is_Deleted != false);
+            return _context.Manager.FirstOrDefault(m => m.Manager_Id == id && m.Is_Deleted != true);
         }
 
         public List<Manager>? GetByRestaurantId(int id)

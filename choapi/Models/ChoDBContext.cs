@@ -34,6 +34,8 @@ namespace choapi.Models
 
         public virtual DbSet<Manager> Manager { get; set; }
 
+        public virtual DbSet<Promotion> Promotion { get; set; }
+
         public virtual DbSet<Payment> Payment { get; set; }
 
 

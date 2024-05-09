@@ -40,12 +40,12 @@ namespace choapi.DAL
 
         public Transaction? Get(int id)
         {
-            return _context.Transaction.FirstOrDefault(c => c.Transaction_Id == id && c.Is_Deleted != false);
+            return _context.Transaction.FirstOrDefault(c => c.Transaction_Id == id && c.Is_Deleted != true);
         }
 
         public List<Transaction>? GetByUserId(int id)
         {
-            return _context.Transaction.Where(c => c.User_Id == id && c.Is_Deleted != false).ToList();
+            return _context.Transaction.Where(c => c.User_Id == id && c.Is_Deleted != true).ToList();
         }
     }
 }

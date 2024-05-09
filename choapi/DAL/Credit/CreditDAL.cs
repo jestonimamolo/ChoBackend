@@ -40,7 +40,7 @@ namespace choapi.DAL
 
         public Credits? Get(int id)
         {
-            return _context.Credits.FirstOrDefault(c => c.Credit_Id == id && c.Is_Deleted != false);
+            return _context.Credits.FirstOrDefault(c => c.Credit_Id == id && c.Is_Deleted != true);
         }
 
         public List<Credits>? GetCredits(int id)

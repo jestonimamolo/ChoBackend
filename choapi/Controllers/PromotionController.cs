@@ -10,44 +10,43 @@ namespace choapi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TransactionController : ControllerBase
+    public class PromotionController : ControllerBase
     {
-        private readonly ITransactionDAL _transactionDAL;
+        private readonly IPromotionDAL _modelDAL;
 
-        private readonly ILogger<TransactionController> _logger;
+        private readonly ILogger<PromotionController> _logger;
 
-        public TransactionController(ILogger<TransactionController> logger, ITransactionDAL transactionDAL)
+        public PromotionController(ILogger<PromotionController> logger, IPromotionDAL modelDAL)
         {
             _logger = logger;
-            _transactionDAL = transactionDAL;
+            _modelDAL = modelDAL;
         }
 
         [HttpPost("add"), Authorize()]
-        public ActionResult<TransactionResponse> Add(TransactionDTO request)
+        public ActionResult<PromotionResponse> Add(PromotionDTO request)
         {
-            var response = new TransactionResponse();
+            var response = new PromotionResponse();
             try
             {
-                if (request.User_Id <= 0)
+                if (request.Establishment_Id <= 0)
                 {
-                    response.Message = "Required User_Id.";
+                    response.Message = "Required Establishment Id.";
                     response.Status = "Failed";
 
                     return BadRequest(response);
                 }
 
-                var transaction = new Transaction
+                var model = new Promotion
                 {
-                    User_Id = request.User_Id,
-                    Transaction_Type = request.Transaction_Type,
-                    Type = request.Type,
-                    Status = request.Status,
-                    Created_Date = request.Created_Date
+                    Establishment_Id = request.Establishment_Id,
+                    Promotion_Details = request.Promotion_Details,
+                    Date_Start = request.Date_Start,
+                    Date_End = request.Date_End,
                 };
 
-                var result = _transactionDAL.Add(transaction);
+                var result = _modelDAL.Add(model);
 
-                response.Transaction = result;
+                response.Promotion = result;
                 response.Message = "Successfully added.";
                 return Ok(response);
             }
@@ -60,30 +59,29 @@ namespace choapi.Controllers
         }
 
         [HttpPost("update"), Authorize()]
-        public ActionResult<TransactionResponse> Update(TransactionDTO request)
+        public ActionResult<PromotionResponse> Update(PromotionDTO request)
         {
-            var response = new TransactionResponse();
+            var response = new PromotionResponse();
             try
             {
-                var transaction = _transactionDAL.Get(request.Transaction_Id);
+                var model = _modelDAL.Get(request.Promotion_Id);
 
-                if (transaction != null)
+                if (model != null)
                 {
-                    transaction.User_Id = request.User_Id;
-                    transaction.Transaction_Type = request.Transaction_Type;
-                    transaction.Type = request.Type;
-                    transaction.Status = request.Status;
-                    transaction.Created_Date = request.Created_Date;
+                    model.Establishment_Id = request.Establishment_Id;
+                    model.Promotion_Details = request.Promotion_Details;
+                    model.Date_Start = request.Date_Start;
+                    model.Date_End = request.Date_End;
 
-                    var result = _transactionDAL.Update(transaction);
+                    var result = _modelDAL.Update(model);
 
-                    response.Transaction = result;
+                    response.Promotion = result;
                     response.Message = "Successfully updated.";
                     return Ok(response);
                 }
                 else
                 {
-                    response.Message = $"No transaction found by id: {request.Transaction_Id}";
+                    response.Message = $"No promotion found by id: {request.Promotion_Id}";
                     response.Status = "Failed";
                     return BadRequest(response);
                 }
@@ -97,25 +95,25 @@ namespace choapi.Controllers
         }
 
         [HttpPost("delete/{id}"), Authorize()]
-        public ActionResult<TransactionResponse> Delete(int id)
+        public ActionResult<PromotionResponse> Delete(int id)
         {
-            var response = new TransactionResponse();
+            var response = new PromotionResponse();
             try
             {
-                var transaction = _transactionDAL.Get(id);
+                var model = _modelDAL.Get(id);
 
-                if (transaction != null)
+                if (model != null)
                 {
-                    transaction.Is_Deleted = true;
+                    model.Is_Deleted = true;
 
-                    var result = _transactionDAL.Delete(transaction);
+                    var result = _modelDAL.Delete(model);
 
                     response.Message = "Successfully deleted.";
                     return Ok(response);
                 }
                 else
                 {
-                    response.Message = $"No transaction found by id: {id}";
+                    response.Message = $"No promotion found by id: {id}";
                     response.Status = "Failed";
                     return BadRequest(response);
                 }
@@ -130,22 +128,22 @@ namespace choapi.Controllers
         }
 
         [HttpGet("{id}"), Authorize()]
-        public ActionResult<TransactionResponse> GetTransaction(int id)
+        public ActionResult<PromotionResponse> GetPromotion(int id)
         {
-            var response = new TransactionResponse();
+            var response = new PromotionResponse();
             try
             {
-                var result = _transactionDAL.Get(id);
+                var result = _modelDAL.Get(id);
 
                 if (result != null)
                 {
-                    response.Transaction = result;
-                    response.Message = "Successfully get Transaction.";
+                    response.Promotion = result;
+                    response.Message = "Successfully get promotion.";
                     return Ok(response);
                 }
                 else
                 {
-                    response.Message = $"No transaction found by id: {id}";
+                    response.Message = $"No promotion found by id: {id}";
                     response.Status = "Failed";
                     return BadRequest(response);
                 }
@@ -159,23 +157,23 @@ namespace choapi.Controllers
             }
         }
 
-        [HttpGet("transactions/{id}"), Authorize()]
-        public ActionResult<TransactionsResponse> GetTransactionByUserId(int id)
+        [HttpGet("establishment/{id}"), Authorize()]
+        public ActionResult<PromotionsResponse> GetManagerByRestaurantId(int id)
         {
-            var response = new TransactionsResponse();
+            var response = new PromotionsResponse();
             try
             {
-                var result = _transactionDAL.GetByUserId(id);
+                var result = _modelDAL.GetByEstablishmentId(id);
 
                 if (result != null && result.Count > 0)
                 {
-                    response.Transactions = result;
-                    response.Message = "Successfully get Transactions.";
+                    response.Promotions = result;
+                    response.Message = "Successfully get Promotions.";
                     return Ok(response);
                 }
                 else
                 {
-                    response.Message = $"No Transaction found by user id: {id}";
+                    response.Message = $"No Promotion found by establishment id: {id}";
                     response.Status = "Failed";
                     return BadRequest(response);
                 }
@@ -188,5 +186,6 @@ namespace choapi.Controllers
                 return BadRequest(response);
             }
         }
+
     }
 }
