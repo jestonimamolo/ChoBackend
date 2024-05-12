@@ -45,7 +45,7 @@ namespace choapi.DAL
 
         public List<Manager>? GetByRestaurantId(int id)
         {
-            return _context.Manager.Where(m => m.Restaurant_Id == id).ToList();
+            return _context.Manager.Where(m => m.Restaurant_Id == id && m.Is_Deleted != true).ToList();
         }        
     }
 }

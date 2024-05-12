@@ -45,7 +45,7 @@ namespace choapi.DAL
 
         public List<Credits>? GetCredits(int id)
         {
-            return _context.Credits.Where(c => c.Restaurant_Id == id && c.Is_Deleted != false).ToList();
+            return _context.Credits.Where(c => c.Restaurant_Id == id && c.Is_Deleted != true).ToList();
         }
     }
 }

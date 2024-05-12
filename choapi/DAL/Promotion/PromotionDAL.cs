@@ -45,7 +45,7 @@ namespace choapi.DAL
 
         public List<Promotion>? GetByEstablishmentId(int id)
         {
-            return _context.Promotion.Where(p => p.Establishment_Id == id).ToList();
+            return _context.Promotion.Where(p => p.Establishment_Id == id && p.Is_Deleted != true).ToList();
         }
     }
 }
