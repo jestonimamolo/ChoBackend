@@ -45,12 +45,12 @@ namespace choapi.DAL
 
         public List<Bookings>? GetRestaurantBookings(int id)
         {
-            return _context.Bookings.Where(b => b.Restaurant_Id == id && r.Is_Deleted != true).ToList();
+            return _context.Bookings.Where(b => b.Restaurant_Id == id && b.Is_Deleted != true).ToList();
         }
 
         public List<Bookings>? GetUserBookings(int id)
         {
-            return _context.Bookings.Where(b => b.User_Id == id && r.Is_Deleted != true).ToList();
+            return _context.Bookings.Where(b => b.User_Id == id && b.Is_Deleted != true).ToList();
         }
 
 
