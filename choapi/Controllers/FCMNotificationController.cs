@@ -30,9 +30,9 @@ namespace choapi.Controllers
             var response = new FCMNotificationResponse();
             try
             {
-                if (request.FCMNotification_Id <= 0)
+                if (request.User_Id <= 0)
                 {
-                    response.Message = $"Required {_entityName} Id.";
+                    response.Message = $"Required User Id.";
                     response.Status = "Failed";
 
                     return BadRequest(response);

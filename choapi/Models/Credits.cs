@@ -7,9 +7,9 @@ namespace choapi.Models
         [Key]
         public int Credit_Id { get; set; }
 
-        public int Restaurant_Id { get; set; }
+        public int Establishment_Id { get; set; }
 
-        public double? Amount { get; set; } = null;
+        public int? Amount { get; set; } = null;
 
         public string? Transaction_Type { get; set; } = null;
 

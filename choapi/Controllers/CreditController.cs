@@ -13,13 +13,17 @@ namespace choapi.Controllers
     public class CreditController : ControllerBase
     {
         private readonly ICreditDAL _creditDAL;
+        private readonly IRestaurantDAL _restaurantDAL;
 
         private readonly ILogger<CreditController> _logger;
 
-        public CreditController(ILogger<CreditController> logger, ICreditDAL creditDAL)
+        private const string _entityName = "Credit";
+
+        public CreditController(ILogger<CreditController> logger, ICreditDAL creditDAL, IRestaurantDAL restaurantDAL)
         {
             _logger = logger;
             _creditDAL = creditDAL;
+            _restaurantDAL = restaurantDAL;
         }
 
         [HttpPost("add"), Authorize()]
@@ -28,9 +32,9 @@ namespace choapi.Controllers
             var response = new CreditResponse();
             try
             {
-                if (request.Restaurant_Id <= 0)
+                if (request.Establishment_Id <= 0)
                 {
-                    response.Message = "Required Restaurant_Id.";
+                    response.Message = "Required Establishment Id.";
                     response.Status = "Failed";
 
                     return BadRequest(response);
@@ -38,13 +42,26 @@ namespace choapi.Controllers
 
                 var credit = new Credits
                 {
-                    Restaurant_Id = request.Restaurant_Id,
+                    Establishment_Id = request.Establishment_Id,
                     Amount = request.Amount,
                     Transaction_Type = request.Transaction_Type,
                     Transaction_Date = request.Transaction_Date
                 };
 
                 var result = _creditDAL.Add(credit);
+
+                // upate credit of establishment
+                var restaurant = _restaurantDAL.GetRestaurant(credit.Establishment_Id);
+                if (restaurant != null && credit.Amount != null)
+                {
+                    if (restaurant.Credits != null)
+                        restaurant.Credits += credit.Amount;
+                    else
+                        restaurant.Credits = credit.Amount;
+
+                    // save changes
+                    var resultUpdateCredit = _restaurantDAL.Update(restaurant);
+                }
 
                 response.Credit = result;
                 response.Message = "Successfully added.";
@@ -68,12 +85,40 @@ namespace choapi.Controllers
 
                 if (credit != null)
                 {
-                    credit.Restaurant_Id = request.Restaurant_Id;
+                    // undo first the added credit
+                    var restaurant = _restaurantDAL.GetRestaurant(credit.Establishment_Id);
+                    if (restaurant != null && request.Amount != null)
+                    {
+                        if (restaurant.Credits != null)
+                            restaurant.Credits = restaurant.Credits - credit.Amount;
+                        else
+                            restaurant.Credits = 0 - credit.Amount;
+
+                        // save changes
+                        var resultUpdateCredit = _restaurantDAL.Update(restaurant);
+                    }
+
+
+                    credit.Establishment_Id = request.Establishment_Id;
                     credit.Amount = request.Amount;
                     credit.Transaction_Type = request.Transaction_Type;
                     credit.Transaction_Date = request.Transaction_Date;
 
                     var result = _creditDAL.Update(credit);
+
+
+                    // upate credit of establishment
+                    var updatedRestaurant = _restaurantDAL.GetRestaurant(credit.Establishment_Id);
+                    if (updatedRestaurant != null && credit.Amount != null)
+                    {
+                        if (updatedRestaurant.Credits != null)
+                            updatedRestaurant.Credits += credit.Amount;
+                        else
+                            updatedRestaurant.Credits = credit.Amount;
+
+                        // save changes
+                        var resultUpdateCredit = _restaurantDAL.Update(restaurant);
+                    }
 
                     response.Credit = result;
                     response.Message = "Successfully updated.";
@@ -107,6 +152,20 @@ namespace choapi.Controllers
                     credit.Is_Deleted = true;
 
                     var result =  _creditDAL.Update(credit);
+
+                    // upate credit of establishment
+                    var restaurant = _restaurantDAL.GetRestaurant(credit.Establishment_Id);
+                    if (restaurant != null && credit.Amount != null)
+                    {
+                        if (restaurant.Credits != null)
+                            restaurant.Credits = restaurant.Credits - credit.Amount;
+                        else
+                            restaurant.Credits = 0 - credit.Amount;
+
+                        // save changes
+                        var resultUpdateCredit = _restaurantDAL.Update(restaurant);
+                    }
+
 
                     response.Message = "Successfully deleted.";
                     return Ok(response);
@@ -157,7 +216,7 @@ namespace choapi.Controllers
             }
         }
 
-        [HttpGet("restaurant/{id}"), Authorize()]
+        [HttpGet("establishment/{id}"), Authorize()]
         public ActionResult<CreditsResponse> GetRestaurantCredits(int id)
         {
             var response = new CreditsResponse();
@@ -173,7 +232,7 @@ namespace choapi.Controllers
                 }
                 else
                 {
-                    response.Message = $"No Credit found by restaurant id: {id}";
+                    response.Message = $"No Credit found by establishment id: {id}";
                     response.Status = "Failed";
                     return BadRequest(response);
                 }
