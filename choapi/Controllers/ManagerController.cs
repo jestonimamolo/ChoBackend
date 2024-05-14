@@ -28,9 +28,9 @@ namespace choapi.Controllers
             var response = new ManagerResponse();
             try
             {
-                if (request.Restaurant_Id <= 0)
+                if (request.Establishment_Id <= 0)
                 {
-                    response.Message = "Required Restaurant_Id.";
+                    response.Message = "Required Establishment Id.";
                     response.Status = "Failed";
 
                     return BadRequest(response);
@@ -38,7 +38,7 @@ namespace choapi.Controllers
 
                 var manager = new Manager
                 {
-                    Restaurant_Id = request.Restaurant_Id,
+                    Establishment_Id = request.Establishment_Id,
                     Created_By = request.Created_By,
                     Created_Date = request.Created_Date
                 };
@@ -67,7 +67,7 @@ namespace choapi.Controllers
 
                 if (manager != null)
                 {
-                    manager.Restaurant_Id = request.Restaurant_Id;
+                    manager.Establishment_Id = request.Establishment_Id;
                     manager.Created_By = request.Created_By;
                     manager.Created_Date = request.Created_Date;
 
@@ -161,7 +161,7 @@ namespace choapi.Controllers
             var response = new ManagersResponse();
             try
             {
-                var result = _managerDAL.GetByRestaurantId(id);
+                var result = _managerDAL.GetByEstablishmentId(id);
 
                 if (result != null && result.Count > 0)
                 {

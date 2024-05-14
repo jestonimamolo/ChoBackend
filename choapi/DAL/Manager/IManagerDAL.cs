@@ -12,6 +12,6 @@ namespace choapi.DAL
 
         Manager? Get(int id);
 
-        List<Manager>? GetByRestaurantId(int id);
+        List<Manager>? GetByEstablishmentId(int id);
     }
 }
