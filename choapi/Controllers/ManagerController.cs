@@ -155,8 +155,8 @@ namespace choapi.Controllers
             }
         }
 
-        [HttpGet("restaurant/{id}"), Authorize()]
-        public ActionResult<ManagersResponse> GetManagerByRestaurantId(int id)
+        [HttpGet("establishment/{id}"), Authorize()]
+        public ActionResult<ManagersResponse> GetManagerByEstablishmentId(int id)
         {
             var response = new ManagersResponse();
             try
@@ -171,7 +171,7 @@ namespace choapi.Controllers
                 }
                 else
                 {
-                    response.Message = $"No Manager found by restaurant id: {id}";
+                    response.Message = $"No Manager found by establishment id: {id}";
                     response.Status = "Failed";
                     return BadRequest(response);
                 }
