@@ -13,13 +13,15 @@ namespace choapi.Controllers
     public class ManagerController : ControllerBase
     {
         private readonly IManagerDAL _managerDAL;
+        private readonly IUserDAL _userDAL;
 
         private readonly ILogger<ManagerController> _logger;
 
-        public ManagerController(ILogger<ManagerController> logger, IManagerDAL managerDAL)
+        public ManagerController(ILogger<ManagerController> logger, IManagerDAL managerDAL, IUserDAL userDAL)
         {
             _logger = logger;
             _managerDAL = managerDAL;
+            _userDAL = userDAL;
         }
 
         [HttpPost("add"), Authorize()]
@@ -126,16 +128,35 @@ namespace choapi.Controllers
         }
 
         [HttpGet("{id}"), Authorize()]
-        public ActionResult<ManagerResponse> GetManager(int id)
+        public ActionResult<ManagerUserResponse> GetManager(int id)
         {
-            var response = new ManagerResponse();
+            var response = new ManagerUserResponse();
             try
             {
                 var result = _managerDAL.Get(id);
 
                 if (result != null)
                 {
+                    var userResult = _userDAL.GetUser(result.Manager_Id);
+
+                    var user = new UserResponse();
+
+                    if (userResult != null)
+                    {
+                        user.User_Id = userResult.User_Id;
+                        user.Username = userResult.Username;
+                        user.Email = userResult.Email;
+                        user.Phone = userResult.Phone;
+                        user.Role_Id = userResult.Role_Id;
+                        user.Is_Active = userResult.Is_Active;
+                        user.Display_Name = userResult.Display_Name;
+                        user.Photo_Url = userResult.Photo_Url;
+                        user.Latitude = userResult.Latitude;
+                        user.Longitude = userResult.Longitude;
+                    }
+
                     response.Manager = result;
+                    response.User = user;
                     response.Message = "Successfully get manager.";
                     return Ok(response);
                 }
@@ -156,16 +177,43 @@ namespace choapi.Controllers
         }
 
         [HttpGet("establishment/{id}"), Authorize()]
-        public ActionResult<ManagersResponse> GetManagerByEstablishmentId(int id)
+        public ActionResult<ManagersUserResponse> GetManagerByEstablishmentId(int id)
         {
-            var response = new ManagersResponse();
+            var response = new ManagersUserResponse();
             try
             {
                 var result = _managerDAL.GetByEstablishmentId(id);
 
                 if (result != null && result.Count > 0)
                 {
-                    response.Managers = result;
+                    foreach(var manager in result)
+                    {
+                        var managerEstablishment = new ManagerEstablishmentResponse();
+
+                        var userResult = _userDAL.GetUser(manager.Manager_Id);
+
+                        var user = new UserResponse();
+
+                        if (userResult != null)
+                        {
+                            user.User_Id = userResult.User_Id;
+                            user.Username = userResult.Username;
+                            user.Email = userResult.Email;
+                            user.Phone = userResult.Phone;
+                            user.Role_Id = userResult.Role_Id;
+                            user.Is_Active = userResult.Is_Active;
+                            user.Display_Name = userResult.Display_Name;
+                            user.Photo_Url = userResult.Photo_Url;
+                            user.Latitude = userResult.Latitude;
+                            user.Longitude = userResult.Longitude;
+                        }
+                        managerEstablishment.Manager = manager;
+                        managerEstablishment.User = user;
+
+                        response.Managers.Add(managerEstablishment);
+
+                    }
+
                     response.Message = "Successfully get Managers.";
                     return Ok(response);
                 }

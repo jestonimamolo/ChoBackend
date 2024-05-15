@@ -606,7 +606,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "choapi.Messages.ManagerResponse",
+        "Type": "choapi.Messages.ManagerUserResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -684,7 +684,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "choapi.Messages.ManagersResponse",
+        "Type": "choapi.Messages.ManagersUserResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
