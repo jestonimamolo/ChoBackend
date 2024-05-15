@@ -333,7 +333,7 @@
   {
     "ContainingType": "choapi.Controllers.CreditController",
     "Method": "GetRestaurantCredits",
-    "RelativePath": "api/Credit/restaurant/{id}",
+    "RelativePath": "api/Credit/establishment/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -670,8 +670,8 @@
   },
   {
     "ContainingType": "choapi.Controllers.ManagerController",
-    "Method": "GetManagerByRestaurantId",
-    "RelativePath": "api/Manager/restaurant/{id}",
+    "Method": "GetManagerByEstablishmentId",
+    "RelativePath": "api/Manager/establishment/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -1957,6 +1957,136 @@
     "ReturnTypes": [
       {
         "Type": "choapi.Messages.RestaurantTableResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.SaveEstablishmentController",
+    "Method": "Get",
+    "RelativePath": "api/SaveEstablishment/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.SaveEstablishmentResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.SaveEstablishmentController",
+    "Method": "Add",
+    "RelativePath": "api/SaveEstablishment/add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "choapi.DTOs.SaveEstablishmentDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.SaveEstablishmentResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.SaveEstablishmentController",
+    "Method": "Delete",
+    "RelativePath": "api/SaveEstablishment/delete/{id}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.SaveEstablishmentResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.SaveEstablishmentController",
+    "Method": "Update",
+    "RelativePath": "api/SaveEstablishment/update",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "choapi.DTOs.SaveEstablishmentDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.SaveEstablishmentResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.SaveEstablishmentController",
+    "Method": "GetByUser",
+    "RelativePath": "api/SaveEstablishment/user/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.SaveEstablishmentsResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",

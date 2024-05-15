@@ -11,7 +11,7 @@ namespace choapi.Models
 
         public string? FCM_Id { get; set; } = null;
 
-        public DateTime? Date_Addd { get; set; } = null;
+        public DateTime? Date_Added { get; set; } = null;
 
         public bool? Is_Active { get; set; } = null;
     }

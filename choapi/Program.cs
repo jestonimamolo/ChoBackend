@@ -49,6 +49,7 @@ builder.Services.AddScoped<ITransactionDAL, TransactionDAL>();
 builder.Services.AddScoped<IManagerDAL, ManagerDAL>();
 builder.Services.AddScoped<IPromotionDAL, PromotionDAL>();
 builder.Services.AddScoped<IFCMNotificationDAL, FCMNoticationDAL>();
+builder.Services.AddScoped<ISaveEstablishmentDAL, SaveEstablishmentDAL>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

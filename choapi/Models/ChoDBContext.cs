@@ -38,6 +38,8 @@ namespace choapi.Models
 
         public virtual DbSet<FCMNotification> FCMNotification { get; set; }
 
+        public virtual DbSet<SaveEstablishment> SaveEstablishment { get; set; }
+
         public virtual DbSet<Payment> Payment { get; set; }
 
 

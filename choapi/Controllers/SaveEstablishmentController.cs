@@ -9,24 +9,24 @@ namespace choapi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class FCMNotificationController : ControllerBase
+    public class SaveEstablishmentController : ControllerBase
     {
-        private readonly IFCMNotificationDAL _modelDAL;
+        private readonly ISaveEstablishmentDAL _modelDAL;
 
-        private readonly ILogger<FCMNotificationController> _logger;
+        private readonly ILogger<SaveEstablishmentController> _logger;
 
-        private const string _entityName = "FCMNotication";
+        private const string _entityName = "Save Establishment";
 
-        public FCMNotificationController(ILogger<FCMNotificationController> logger, IFCMNotificationDAL modelDAL)
+        public SaveEstablishmentController(ILogger<SaveEstablishmentController> logger, ISaveEstablishmentDAL modelDAL)
         {
             _logger = logger;
             _modelDAL = modelDAL;
         }
 
         [HttpPost("add"), Authorize()]
-        public ActionResult<FCMNotificationResponse> Add(FCMNotificationDTO request)
+        public ActionResult<SaveEstablishmentResponse> Add(SaveEstablishmentDTO request)
         {
-            var response = new FCMNotificationResponse();
+            var response = new SaveEstablishmentResponse();
             try
             {
                 if (request.User_Id <= 0)
@@ -37,16 +37,24 @@ namespace choapi.Controllers
                     return BadRequest(response);
                 }
 
-                var model = new FCMNotification
+                if (request.Establishment_Id <= 0)
                 {
+                    response.Message = $"Required Establishment Id.";
+                    response.Status = "Failed";
+
+                    return BadRequest(response);
+                }
+
+                var model = new SaveEstablishment
+                {
+                    Establishment_Id = request.Establishment_Id,
                     User_Id = request.User_Id,
-                    FCM_Id = request.FCM_Id,
-                    Date_Added = DateTime.Now
+                    Date_Added = request.Date_Added
                 };
 
                 var result = _modelDAL.Add(model);
 
-                response.FCMNotification = result;
+                response.SaveEstablishment = result;
                 response.Message = "Successfully added.";
                 return Ok(response);
             }
@@ -59,27 +67,27 @@ namespace choapi.Controllers
         }
 
         [HttpPost("update"), Authorize()]
-        public ActionResult<FCMNotificationResponse> Update(FCMNotificationDTO request)
+        public ActionResult<SaveEstablishmentResponse> Update(SaveEstablishmentDTO request)
         {
-            var response = new FCMNotificationResponse();
+            var response = new SaveEstablishmentResponse();
             try
             {
-                var model = _modelDAL.Get(request.FCMNotification_Id);
+                var model = _modelDAL.Get(request.SaveEstablishment_Id);
 
                 if (model != null)
                 {
-                    model.FCM_Id = request.FCM_Id;
+                    model.Establishment_Id = request.Establishment_Id;
                     model.User_Id = request.User_Id;
 
                     var result = _modelDAL.Update(model);
 
-                    response.FCMNotification = result;
+                    response.SaveEstablishment = result;
                     response.Message = "Successfully updated.";
                     return Ok(response);
                 }
                 else
                 {
-                    response.Message = $"No {_entityName} found by id: {request.FCMNotification_Id}";
+                    response.Message = $"No {_entityName} found by id: {request.SaveEstablishment_Id}";
                     response.Status = "Failed";
                     return BadRequest(response);
                 }
@@ -93,16 +101,16 @@ namespace choapi.Controllers
         }
 
         [HttpPost("delete/{id}"), Authorize()]
-        public ActionResult<FCMNotificationResponse> Delete(int id)
+        public ActionResult<SaveEstablishmentResponse> Delete(int id)
         {
-            var response = new FCMNotificationResponse();
+            var response = new SaveEstablishmentResponse();
             try
             {
                 var model = _modelDAL.Get(id);
 
                 if (model != null)
                 {
-                    model.Is_Active = false;
+                    model.Is_Deleted = true;
 
                     var result = _modelDAL.Delete(model);
 
@@ -126,16 +134,16 @@ namespace choapi.Controllers
         }
 
         [HttpGet("{id}"), Authorize()]
-        public ActionResult<FCMNotificationResponse> Get(int id)
+        public ActionResult<SaveEstablishmentResponse> Get(int id)
         {
-            var response = new FCMNotificationResponse();
+            var response = new SaveEstablishmentResponse();
             try
             {
                 var result = _modelDAL.Get(id);
 
                 if (result != null)
                 {
-                    response.FCMNotification = result;
+                    response.SaveEstablishment = result;
                     response.Message = $"Successfully get {_entityName}.";
                     return Ok(response);
                 }
@@ -156,52 +164,22 @@ namespace choapi.Controllers
         }
 
         [HttpGet("user/{id}"), Authorize()]
-        public ActionResult<FCMNotificationsResponse> GetByUser(int id)
+        public ActionResult<SaveEstablishmentsResponse> GetByUser(int id)
         {
-            var response = new FCMNotificationsResponse();
+            var response = new SaveEstablishmentsResponse();
             try
             {
                 var result = _modelDAL.GetByUserId(id);
 
                 if (result != null && result.Count > 0)
                 {
-                    response.FCMNotifications = result;
+                    response.SaveEstablishments = result;
                     response.Message = $"Successfully get ${_entityName}s.";
                     return Ok(response);
                 }
                 else
                 {
                     response.Message = $"No ${_entityName} found by user id: {id}";
-                    response.Status = "Failed";
-                    return BadRequest(response);
-                }
-            }
-            catch (Exception ex)
-            {
-                response.Message = ex.Message;
-                response.Status = "Failed";
-
-                return BadRequest(response);
-            }
-        }
-
-        [HttpGet(), Authorize()]
-        public ActionResult<FCMNotificationResponse> GetFCMId(string fcmId)
-        {
-            var response = new FCMNotificationResponse();
-            try
-            {
-                var result = _modelDAL.GetByFCMId(fcmId);
-
-                if (result != null)
-                {
-                    response.FCMNotification = result;
-                    response.Message = $"Successfully get ${_entityName}.";
-                    return Ok(response);
-                }
-                else
-                {
-                    response.Message = $"No ${_entityName} found by fcm id: {fcmId}";
                     response.Status = "Failed";
                     return BadRequest(response);
                 }
