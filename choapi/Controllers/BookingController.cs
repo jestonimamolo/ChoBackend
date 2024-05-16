@@ -1,13 +1,9 @@
-﻿using Azure.Core;
-using choapi.DAL;
+﻿using choapi.DAL;
 using choapi.DTOs;
 using choapi.Messages;
 using choapi.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.Design.Serialization;
 
 namespace choapi.Controllers
 {
@@ -52,6 +48,26 @@ namespace choapi.Controllers
 
                 var result = _bookingDAL.Add(booking);
 
+                var user = _userDAL.GetUser(result.User_Id);
+                var userResponse = new UserResponse();
+                if (user != null)
+                {
+                    userResponse.User_Id = user.User_Id;
+                    userResponse.Username = user.Username;
+                    userResponse.Email = user.Email;
+                    userResponse.Phone = user.Phone;
+                    userResponse.Role_Id = user.Role_Id;
+                    userResponse.Is_Active = user.Is_Active;
+                    userResponse.Display_Name = user.Display_Name;
+                    userResponse.Photo_Url = user.Photo_Url;
+                    userResponse.Latitude = user.Latitude;
+                    userResponse.Longitude = user.Longitude;
+                }
+
+                var establishment = _restaurantDAL.GetRestaurant(result.Restaurant_Id);
+
+                response.User = userResponse;
+                response.Restaurant = establishment;
                 response.Booking = result;
                 response.Message = "Successfully added.";
                 return Ok(response);
@@ -262,6 +278,26 @@ namespace choapi.Controllers
 
                 if (result != null)
                 {
+                    var user = _userDAL.GetUser(result.User_Id);
+                    var userResponse = new UserResponse();
+                    if (user != null)
+                    {
+                        userResponse.User_Id = user.User_Id;
+                        userResponse.Username = user.Username;
+                        userResponse.Email = user.Email;
+                        userResponse.Phone = user.Phone;
+                        userResponse.Role_Id = user.Role_Id;
+                        userResponse.Is_Active = user.Is_Active;
+                        userResponse.Display_Name = user.Display_Name;
+                        userResponse.Photo_Url = user.Photo_Url;
+                        userResponse.Latitude = user.Latitude;
+                        userResponse.Longitude = user.Longitude;
+                    }
+
+                    var establishment = _restaurantDAL.GetRestaurant(result.Restaurant_Id);
+
+                    response.User = userResponse;
+                    response.Restaurant = establishment;
                     response.Booking = result;
                     response.Message = "Successfully get booking.";
 

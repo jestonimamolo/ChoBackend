@@ -98,7 +98,6 @@ namespace choapi.Controllers
                         var resultUpdateCredit = _restaurantDAL.Update(restaurant);
                     }
 
-
                     credit.Establishment_Id = request.Establishment_Id;
                     credit.Amount = request.Amount;
                     credit.Transaction_Type = request.Transaction_Type;
@@ -106,8 +105,7 @@ namespace choapi.Controllers
 
                     var result = _creditDAL.Update(credit);
 
-
-                    // upate credit of establishment
+                    // update credit of establishment
                     var updatedRestaurant = _restaurantDAL.GetRestaurant(credit.Establishment_Id);
                     if (updatedRestaurant != null && credit.Amount != null)
                     {
@@ -117,7 +115,7 @@ namespace choapi.Controllers
                             updatedRestaurant.Credits = credit.Amount;
 
                         // save changes
-                        var resultUpdateCredit = _restaurantDAL.Update(restaurant);
+                        var resultUpdateCredit = _restaurantDAL.Update(updatedRestaurant);
                     }
 
                     response.Credit = result;
