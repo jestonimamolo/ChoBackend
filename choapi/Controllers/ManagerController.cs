@@ -24,7 +24,7 @@ namespace choapi.Controllers
             _userDAL = userDAL;
         }
 
-        [HttpPost("add"), Authorize()]
+        [HttpPost("add")]
         public ActionResult<ManagerResponse> Add(ManagerDTO request)
         {
             var response = new ManagerResponse();
