@@ -40,6 +40,8 @@ namespace choapi.Models
 
         public virtual DbSet<SaveEstablishment> SaveEstablishment { get; set; }
 
+        public virtual DbSet<Review> Review { get; set; }
+
         public virtual DbSet<Payment> Payment { get; set; }
 
 

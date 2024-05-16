@@ -46,6 +46,6 @@ namespace choapi.DAL
         public List<SaveEstablishment>? GetByUserId(int id)
         {
             return _context.SaveEstablishment.Where(s => s.User_Id  == id && s.Is_Deleted != true).ToList();
-        }        
+        }
     }
 }
