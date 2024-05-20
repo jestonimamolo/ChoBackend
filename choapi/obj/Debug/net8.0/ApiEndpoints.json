@@ -878,14 +878,14 @@
   },
   {
     "ContainingType": "choapi.Controllers.RestaurantController",
-    "Method": "GetAvailabilityByRestaurantId",
+    "Method": "GetAvailabilityByEstablishmentId",
     "RelativePath": "api/Restaurant/availabilities",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "restaurantId",
+        "Name": "establishmentId",
         "Type": "System.Int32",
         "IsRequired": false
       }
@@ -1145,7 +1145,7 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "restaurantId",
+        "Name": "establishmentId",
         "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "IsRequired": false
       }
@@ -1611,7 +1611,7 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "restaurantId",
+        "Name": "establishmentId",
         "Type": "System.Int32",
         "IsRequired": false
       }
@@ -2468,6 +2468,16 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.WooCommerceController",
+    "Method": "GetEstablishments",
+    "RelativePath": "api/WooCommerce/establishments/restaurant",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "choapi.Controllers.WooCommerceController",

@@ -1,8 +1,8 @@
 ﻿using choapi.DAL;
 using choapi.Messages;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+using choapi.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace choapi.Controllers
 {
@@ -58,6 +58,40 @@ namespace choapi.Controllers
                 else
                 {
                     response.Message = $"No restaurant found.";
+                    response.Status = "Failed";
+                    return BadRequest(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+                return BadRequest(response);
+            }
+        }
+
+        [HttpGet("establishment/restaurants")]
+        public ActionResult GetEstablishments()
+        {
+            var response = new RestuarantUserIdResponnse();
+
+            try
+            {
+                var resultEstablishment = _restaurantDAL.GetRestaurants(null);
+
+                if (resultEstablishment != null && resultEstablishment.Count > 0)
+                {
+                    var establishments = (List<Restaurants>) resultEstablishment;
+
+                    return new JsonResult(establishments, new JsonSerializerOptions
+                    {
+                        ReferenceHandler = null,
+                        WriteIndented = true,
+                    });
+                }
+                else
+                {
+                    response.Message = $"No establishment of restaurant found.";
                     response.Status = "Failed";
                     return BadRequest(response);
                 }
