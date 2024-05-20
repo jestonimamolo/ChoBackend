@@ -7,10 +7,10 @@ namespace choapi.Models
         [Key]
         public int NonOperatingHours_Id { get; set; }
 
-        public int Restaurant_Id { get; set; }
-
-        public DateTime? Date { get; set; } = null;
+        public int Establishment_Id { get; set; }
 
         public string? Title { get; set; } = null;
+
+        public DateTime? Date { get; set; } = null;
     }
 }

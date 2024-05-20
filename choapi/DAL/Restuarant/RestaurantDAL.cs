@@ -191,9 +191,9 @@ namespace choapi.DAL
             return _context.NonOperatingHours.FirstOrDefault(n => n.NonOperatingHours_Id == id);
         }
 
-        public List<NonOperatingHours>? GetNonOperatingHoursByRestaurantId(int id)
+        public List<NonOperatingHours>? GetNonOperatingHoursByEstablishmentId(int id)
         {
-            return _context.NonOperatingHours.Where(n => n.Restaurant_Id == id).ToList();
+            return _context.NonOperatingHours.Where(n => n.Establishment_Id == id).ToList();
         }
 
         public RestaurantCuisines Add(RestaurantCuisines model)

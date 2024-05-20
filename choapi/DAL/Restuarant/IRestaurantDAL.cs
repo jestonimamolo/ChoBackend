@@ -52,7 +52,7 @@ namespace choapi.DAL
 
         NonOperatingHours? GetNonOperatingHours(int id);
 
-        List<NonOperatingHours>? GetNonOperatingHoursByRestaurantId(int id);
+        List<NonOperatingHours>? GetNonOperatingHoursByEstablishmentId(int id);
 
         RestaurantCuisines Add(RestaurantCuisines model);
 

@@ -869,7 +869,7 @@ namespace choapi.Controllers
             {
                 var nonOperatingHours = new NonOperatingHours
                 {
-                    Restaurant_Id = request.Restaurant_Id,
+                    Establishment_Id = request.Establishment_Id,
                     Date = request.Date,
                     Title = request.Title
                 };
@@ -901,7 +901,7 @@ namespace choapi.Controllers
 
                 if (nonOperatingHours != null)
                 {
-                    nonOperatingHours.Restaurant_Id = request.Restaurant_Id;
+                    nonOperatingHours.Establishment_Id = request.Establishment_Id;
                     nonOperatingHours.Date = request.Date;
                     nonOperatingHours.Title = request.Title;
 
@@ -991,12 +991,12 @@ namespace choapi.Controllers
         }
 
         [HttpGet("nonoperatinghours"), Authorize()]
-        public ActionResult<NonOperatingHoursResponse> GetNonOperatingHoursByRestaurantId(int restaurantId)
+        public ActionResult<NonOperatingHoursResponse> GetNonOperatingHoursByRestaurantId(int establishmentId)
         {
             var response = new NonOperatingHoursResponse();
             try
             {
-                var result = _restaurantDAL.GetNonOperatingHoursByRestaurantId(restaurantId);
+                var result = _restaurantDAL.GetNonOperatingHoursByEstablishmentId(establishmentId);
 
                 if (result != null && result.Count > 0)
                 {
@@ -1006,7 +1006,7 @@ namespace choapi.Controllers
                 }
                 else
                 {
-                    response.Message = $"No Non Operating Hours found by restaurant id: {restaurantId}";
+                    response.Message = $"No Non Operating Hours found by restaurant id: {establishmentId}";
                     response.Status = "Failed";
                     return BadRequest(response);
                 }

@@ -4,7 +4,7 @@
     {
         public int NonOperatingHours_Id { get; set; }
 
-        public int Restaurant_Id { get; set; }
+        public int Establishment_Id { get; set; }
 
         public DateTime? Date { get; set; } = null;
 
