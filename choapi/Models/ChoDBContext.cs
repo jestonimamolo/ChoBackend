@@ -14,7 +14,7 @@ namespace choapi.Models
 
         public virtual DbSet<Menus> Menus { get; set; }
 
-        public virtual DbSet<RestaurantAvailability> RestaurantAvailability { get; set; }
+        public virtual DbSet<Availability> Availability { get; set; }
 
         public virtual DbSet<NonOperatingHours> NonOperatingHours { get; set; }
 

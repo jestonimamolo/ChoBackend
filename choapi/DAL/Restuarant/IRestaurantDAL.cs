@@ -34,15 +34,15 @@ namespace choapi.DAL
 
         void DeleteMenu(Menus model);
 
-        RestaurantAvailability Add(RestaurantAvailability model);
+        Availability Add(Availability model);
 
-        RestaurantAvailability? GetAvailability(int id);
+        Availability? GetAvailability(int id);
 
-        void DeleteAvailability(RestaurantAvailability model);
+        void DeleteAvailability(Availability model);
 
-        RestaurantAvailability UpdateAvailability(RestaurantAvailability model);
+        Availability UpdateAvailability(Availability model);
 
-        List<RestaurantAvailability>? GetAvailabilities(int restaurantId);
+        List<Availability>? GetAvailabilities(int establishmentId);
 
         NonOperatingHours Add(NonOperatingHours model);
 

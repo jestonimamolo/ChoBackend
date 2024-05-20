@@ -2,9 +2,9 @@
 {
     public class RestaurantAvailabilityDTO
     {
-        public int RestaurantAvailability_Id { get; set; }
+        public int Availability_Id { get; set; }
 
-        public int Restaurant_Id { get; set; }
+        public int Establishment_Id { get; set; }
 
         public string? Day { get; set; } = null;
 

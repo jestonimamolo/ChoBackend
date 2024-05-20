@@ -699,9 +699,9 @@ namespace choapi.Controllers
             var response = new RestaurantAvailabilityResponse();
             try
             {
-                var availability = new RestaurantAvailability
+                var availability = new Availability
                 {
-                    Restaurant_Id = request.Restaurant_Id,
+                    Establishment_Id = request.Establishment_Id,
                     Day = request.Day,
                     Time_Start = request.Time_Start,
                     Time_End = request.Time_End
@@ -730,11 +730,11 @@ namespace choapi.Controllers
             var response = new RestaurantAvailabilityResponse();
             try
             {
-                var availability = _restaurantDAL.GetAvailability(request.RestaurantAvailability_Id);
+                var availability = _restaurantDAL.GetAvailability(request.Availability_Id);
 
                 if (availability != null)
                 {
-                    availability.Restaurant_Id = request.Restaurant_Id;
+                    availability.Establishment_Id = request.Establishment_Id;
                     availability.Day = request.Day;
                     availability.Time_Start = request.Time_Start;
                     availability.Time_End = request.Time_End;
@@ -748,7 +748,7 @@ namespace choapi.Controllers
                 else
                 {
                     response.Status = "Failed";
-                    response.Message = $"No found Availability id: {request.RestaurantAvailability_Id}";
+                    response.Message = $"No found Availability id: {request.Availability_Id}";
 
                     return Ok(response);
                 }
@@ -774,7 +774,7 @@ namespace choapi.Controllers
                 {
                     _restaurantDAL.DeleteAvailability(availability);
 
-                    response.Availability = new RestaurantAvailability();
+                    response.Availability = new Availability();
                     response.Message = "Successfully deleted.";
                     return Ok(response);
                 }
@@ -829,12 +829,12 @@ namespace choapi.Controllers
         }
 
         [HttpGet("availabilities"), Authorize()]
-        public ActionResult<RestaurantAvailabilitiesResponse> GetAvailabilityByRestaurantId(int restaurantId)
+        public ActionResult<RestaurantAvailabilitiesResponse> GetAvailabilityByEstablishmentId(int establishmentId)
         {
             var response = new RestaurantAvailabilitiesResponse();
             try
             {
-                var result = _restaurantDAL.GetAvailabilities(restaurantId);
+                var result = _restaurantDAL.GetAvailabilities(establishmentId);
 
                 if(result != null && result.Count > 0)
                 {
@@ -846,7 +846,7 @@ namespace choapi.Controllers
                 }
                 else
                 {
-                    response.Message = $"No Restaurant Availability found by restaurant id: {restaurantId}";
+                    response.Message = $"No Restaurant Availability found by establishment id: {establishmentId}";
                     response.Status = "Failed";
 
                     return BadRequest(response);
@@ -1006,7 +1006,7 @@ namespace choapi.Controllers
                 }
                 else
                 {
-                    response.Message = $"No Non Operating Hours found by restaurant id: {establishmentId}";
+                    response.Message = $"No Non Operating Hours found by establishment id: {establishmentId}";
                     response.Status = "Failed";
                     return BadRequest(response);
                 }

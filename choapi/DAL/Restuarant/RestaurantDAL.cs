@@ -126,39 +126,39 @@ namespace choapi.DAL
             _context.SaveChanges();
         }
 
-        public RestaurantAvailability Add(RestaurantAvailability model)
+        public Availability Add(Availability model)
         {
-            _context.RestaurantAvailability.Add(model);
+            _context.Availability.Add(model);
 
             _context.SaveChanges();
 
             return model;
         }
 
-        public RestaurantAvailability? GetAvailability(int id)
+        public Availability? GetAvailability(int id)
         {
-            return _context.RestaurantAvailability.FirstOrDefault(a => a.RestaurantAvailability_Id == id);
+            return _context.Availability.FirstOrDefault(a => a.Availability_Id == id);
         }
 
-        public void DeleteAvailability(RestaurantAvailability model)
+        public void DeleteAvailability(Availability model)
         {
-            _context.RestaurantAvailability.Remove(model);
+            _context.Availability.Remove(model);
 
             _context.SaveChanges();
         }
 
-        public RestaurantAvailability UpdateAvailability(RestaurantAvailability model)
+        public Availability UpdateAvailability(Availability model)
         {
-            _context.RestaurantAvailability.Update(model);
+            _context.Availability.Update(model);
 
             _context.SaveChanges();
 
             return model;
         }
 
-        public List<RestaurantAvailability>? GetAvailabilities(int restaurantId)
+        public List<Availability>? GetAvailabilities(int establishmentId)
         {
-            return _context.RestaurantAvailability.Where(a => a.Restaurant_Id == restaurantId).ToList();
+            return _context.Availability.Where(a => a.Establishment_Id == establishmentId).ToList();
         }
 
         public NonOperatingHours Add(NonOperatingHours model)

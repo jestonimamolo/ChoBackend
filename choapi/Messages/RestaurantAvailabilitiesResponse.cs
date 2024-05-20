@@ -4,6 +4,6 @@ namespace choapi.Messages
 {
     public class RestaurantAvailabilitiesResponse : ResponseBase
     {
-        public List<RestaurantAvailability> Availabilities { get; set; } = new List<RestaurantAvailability>();
+        public List<Availability> Availabilities { get; set; } = new List<Availability>();
     }
 }
