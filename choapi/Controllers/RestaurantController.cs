@@ -1025,9 +1025,9 @@ namespace choapi.Controllers
             var response = new RestaurantCuisineResponse();
             try
             {
-                var restaurantCuisine = new RestaurantCuisines
+                var restaurantCuisine = new EstablishmentCuisines
                 {
-                    Restaurant_Id = request.Restaurant_Id,
+                    Establishment_Id = request.Establishment_Id,
                     Name = request.Name
                 };
 
@@ -1054,11 +1054,11 @@ namespace choapi.Controllers
             var response = new RestaurantCuisineResponse();
             try
             {
-                var cuisine = _restaurantDAL.GetRestaurantCuisine(request.RestaurantCuisine_Id);
+                var cuisine = _restaurantDAL.GetEstablishmentCuisine(request.EstablishmentCuisine_Id);
 
                 if (cuisine != null)
                 {
-                    cuisine.Restaurant_Id = request.Restaurant_Id;
+                    cuisine.Establishment_Id = request.Establishment_Id;
                     cuisine.Name = request.Name;
 
                     var result = _restaurantDAL.UpdateCuisine(cuisine);
@@ -1070,7 +1070,7 @@ namespace choapi.Controllers
                 else
                 {
                     response.Status = "Failed";
-                    response.Message = $"No found Cuisine id: {request.RestaurantCuisine_Id}";
+                    response.Message = $"No found Cuisine id: {request.EstablishmentCuisine_Id}";
 
                     return Ok(response);
                 }
@@ -1090,13 +1090,13 @@ namespace choapi.Controllers
             var response = new RestaurantCuisineResponse();
             try
             {
-                var cuisine = _restaurantDAL.GetRestaurantCuisine(id);
+                var cuisine = _restaurantDAL.GetEstablishmentCuisine(id);
 
                 if (cuisine != null)
                 {
                     _restaurantDAL.DeleteCuisine(cuisine);
 
-                    response.RestaurantCuisine = new RestaurantCuisines();
+                    response.RestaurantCuisine = new EstablishmentCuisines();
                     response.Message = "Successfully deleted.";
                     return Ok(response);
                 }
@@ -1123,18 +1123,18 @@ namespace choapi.Controllers
             var response = new RestaurantCuisineResponse();
             try
             {
-                var result = _restaurantDAL.GetRestaurantCuisine(id);
+                var result = _restaurantDAL.GetEstablishmentCuisine(id);
 
                 if (result != null)
                 {
                     response.RestaurantCuisine = result;
-                    response.Message = "Successfully get Restaurant Cuisine.";
+                    response.Message = "Successfully get Establishment Cuisine.";
 
                     return Ok(response);
                 }
                 else
                 {
-                    response.Message = $"No Restaurant Cuicine found by id: {id}";
+                    response.Message = $"No Establishment Cuicine found by id: {id}";
                     response.Status = "Failed";
 
                     return BadRequest(response);
@@ -1150,23 +1150,23 @@ namespace choapi.Controllers
         }
 
         [HttpGet("cuicines"), Authorize()]
-        public ActionResult<RestaurantCuisinesResponse> GetCuicines(int? restaurantId)
+        public ActionResult<RestaurantCuisinesResponse> GetCuicines(int? establishmentId)
         {
             var response = new RestaurantCuisinesResponse();
             try
             {
-                var result = _restaurantDAL.GetRestaurantCuisines(restaurantId);
+                var result = _restaurantDAL.GetEstablishmentCuisines(establishmentId);
 
                 if (result != null && result.Count > 0)
                 {
                     response.RestaurantCuisines = result;
-                    response.Message = "Successfully get Restaurant Cuisines.";
+                    response.Message = "Successfully get Establishment Cuisines.";
 
                     return Ok(response);
                 }
                 else
                 {
-                    response.Message = $"No Restaurant Cuicine found by restaurant id: {restaurantId}";
+                    response.Message = $"No Establishment Cuicine found by establishment id: {establishmentId}";
                     response.Status = "Failed";
 
                     return BadRequest(response);

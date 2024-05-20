@@ -196,45 +196,45 @@ namespace choapi.DAL
             return _context.NonOperatingHours.Where(n => n.Establishment_Id == id).ToList();
         }
 
-        public RestaurantCuisines Add(RestaurantCuisines model)
+        public EstablishmentCuisines Add(EstablishmentCuisines model)
         {
-            _context.RestaurantCuisines.Add(model);
+            _context.EstablishmentCuisines.Add(model);
 
             _context.SaveChanges();
 
             return model;
         }
 
-        public RestaurantCuisines UpdateCuisine(RestaurantCuisines model)
+        public EstablishmentCuisines UpdateCuisine(EstablishmentCuisines model)
         {
-            _context.RestaurantCuisines.Update(model);
+            _context.EstablishmentCuisines.Update(model);
 
             _context.SaveChanges();
 
             return model;
         }
 
-        public void DeleteCuisine(RestaurantCuisines model)
+        public void DeleteCuisine(EstablishmentCuisines model)
         {
-            _context.RestaurantCuisines.Remove(model);
+            _context.EstablishmentCuisines.Remove(model);
 
             _context.SaveChanges();
         }
 
-        public RestaurantCuisines? GetRestaurantCuisine(int id)
+        public EstablishmentCuisines? GetEstablishmentCuisine(int id)
         {
-            return _context.RestaurantCuisines.FirstOrDefault(c => c.RestaurantCuisine_Id == id);
+            return _context.EstablishmentCuisines.FirstOrDefault(c => c.EstablishmentCuisine_Id == id);
         }
 
-        public List<RestaurantCuisines>? GetRestaurantCuisines(int? restaurantId)
+        public List<EstablishmentCuisines>? GetEstablishmentCuisines(int? establishment)
         {
-            if (restaurantId == null)
+            if (establishment == null)
             {
-                return _context.RestaurantCuisines.ToList();
+                return _context.EstablishmentCuisines.ToList();
             }
             else
             {
-                return _context.RestaurantCuisines.Where(c => c.Restaurant_Id == restaurantId).ToList();
+                return _context.EstablishmentCuisines.Where(c => c.Establishment_Id == establishment).ToList();
             }
         }
 

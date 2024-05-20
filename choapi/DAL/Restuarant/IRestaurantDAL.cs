@@ -54,15 +54,15 @@ namespace choapi.DAL
 
         List<NonOperatingHours>? GetNonOperatingHoursByEstablishmentId(int id);
 
-        RestaurantCuisines Add(RestaurantCuisines model);
+        EstablishmentCuisines Add(EstablishmentCuisines model);
 
-        RestaurantCuisines UpdateCuisine(RestaurantCuisines model);
+        EstablishmentCuisines UpdateCuisine(EstablishmentCuisines model);
 
-        void DeleteCuisine(RestaurantCuisines model);
+        void DeleteCuisine(EstablishmentCuisines model);
 
-        RestaurantCuisines? GetRestaurantCuisine(int id);
+        EstablishmentCuisines? GetEstablishmentCuisine(int id);
 
-        List<RestaurantCuisines>? GetRestaurantCuisines(int? restaurantId);
+        List<EstablishmentCuisines>? GetEstablishmentCuisines(int? restaurantId);
 
         RestaurantBookType Add(RestaurantBookType model);
 

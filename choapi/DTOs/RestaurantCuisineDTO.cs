@@ -4,9 +4,9 @@ namespace choapi.DTOs
 {
     public class RestaurantCuisineDTO
     {
-        public int RestaurantCuisine_Id { get; set; }
+        public int EstablishmentCuisine_Id { get; set; }
 
-        public int Restaurant_Id { get; set; }
+        public int Establishment_Id { get; set; }
 
         public required string Name { get; set; }
     }
