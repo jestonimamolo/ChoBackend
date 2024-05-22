@@ -3,7 +3,6 @@ using choapi.DTOs;
 using choapi.Messages;
 using choapi.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace choapi.Controllers
@@ -116,7 +115,7 @@ namespace choapi.Controllers
         }
 
         [HttpGet("{id}"), Authorize()]
-        public ActionResult<CategoryResponse> GetPromotion(int id)
+        public ActionResult<CategoryResponse> GetCategory(int id)
         {
             var response = new CategoryResponse();
             try
