@@ -8,8 +8,8 @@
 
         public string? Promotion_Details { get; set; } = null;
 
-        public DateTime? Date_Start { get; set; } = null;
+        public DateTime? Date_Promoted { get; set; } = null;
 
-        public DateTime? Date_End { get; set; } = null;
+        public bool? Is_Active { get; set; } = null;
     }
 }

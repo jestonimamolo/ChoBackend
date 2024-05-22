@@ -40,8 +40,8 @@ namespace choapi.Controllers
                 {
                     Establishment_Id = request.Establishment_Id,
                     Promotion_Details = request.Promotion_Details,
-                    Date_Start = request.Date_Start,
-                    Date_End = request.Date_End,
+                    Date_Promoted = request.Date_Promoted,
+                    Is_Active = request.Is_Active,
                 };
 
                 var result = _modelDAL.Add(model);
@@ -70,8 +70,8 @@ namespace choapi.Controllers
                 {
                     model.Establishment_Id = request.Establishment_Id;
                     model.Promotion_Details = request.Promotion_Details;
-                    model.Date_Start = request.Date_Start;
-                    model.Date_End = request.Date_End;
+                    model.Date_Promoted = request.Date_Promoted;
+                    model.Is_Active = request.Is_Active;
 
                     var result = _modelDAL.Update(model);
 
