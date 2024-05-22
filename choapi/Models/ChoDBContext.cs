@@ -6,6 +6,8 @@ namespace choapi.Models
     {
         public ChoDBContext(DbContextOptions<ChoDBContext> options) : base(options) { }
 
+        public virtual DbSet<Category> Category { get; set; }
+
         public virtual DbSet<Users> Users { get; set; }
 
         public virtual DbSet<Restaurants> Restaurants { get; set; }
