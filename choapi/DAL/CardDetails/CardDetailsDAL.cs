@@ -40,17 +40,17 @@ namespace choapi.DAL
 
         public CardDetails? Get(int id)
         {
-            return _context.CardDetails.FirstOrDefault(c => c.CardDetails_Id == id);
+            return _context.CardDetails.FirstOrDefault(c => c.CardDetails_Id == id c.Is_Deleted != true);
         }
 
         public CardDetails? GetByEstablishmentId(int id)
         {
-            return _context.CardDetails.FirstOrDefault(c => c.Establishment_Id == id);
+            return _context.CardDetails.FirstOrDefault(c => c.Establishment_Id == id c.Is_Deleted != true);
         }
 
         public CardDetails? GetByUserId(int id)
         {
-            return _context.CardDetails.FirstOrDefault(c => c.User_Id == id);
+            return _context.CardDetails.FirstOrDefault(c => c.User_Id == id && c.Is_Deleted != true);
         }
 
         public CardDetails Update(CardDetails model)
