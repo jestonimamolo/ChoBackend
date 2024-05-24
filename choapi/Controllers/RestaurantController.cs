@@ -1182,14 +1182,14 @@ namespace choapi.Controllers
         }
 
         [HttpPost("booktype/add"), Authorize()]
-        public ActionResult<RestaurantBookTypeResponse> BookTypeAdd(RestaurantBookTypeDTO request)
+        public ActionResult<EstablishmentBookTypeResponse> BookTypeAdd(EstablishmentBookTypeDTO request)
         {
-            var response = new RestaurantBookTypeResponse();
+            var response = new EstablishmentBookTypeResponse();
             try
             {
-                var bookType = new RestaurantBookType
+                var bookType = new EstablishmentBookType
                 {
-                    Restaurant_Id = request.Restaurant_Id,
+                    Establishment_Id = request.Establishment_Id,
                     Is_Payable = request.Is_Payable,
                     Name = request.Name,
                     Currency = request.Currency,
@@ -1215,16 +1215,16 @@ namespace choapi.Controllers
         }
 
         [HttpPost("booktype/update"), Authorize()]
-        public ActionResult<RestaurantBookTypeResponse> BookTypeUpdate(RestaurantBookTypeDTO request)
+        public ActionResult<EstablishmentBookTypeResponse> BookTypeUpdate(EstablishmentBookTypeDTO request)
         {
-            var response = new RestaurantBookTypeResponse();
+            var response = new EstablishmentBookTypeResponse();
             try
             {
-                var bookType = _restaurantDAL.GetBookType(request.RestaurantBookType_Id);
+                var bookType = _restaurantDAL.GetBookType(request.EstablishmentBookType_Id);
 
                 if (bookType != null)
                 {
-                    bookType.Restaurant_Id = request.Restaurant_Id;
+                    bookType.Establishment_Id = request.Establishment_Id;
                     bookType.Is_Payable = request.Is_Payable;
                     bookType.Name = request.Name;
                     bookType.Currency = request.Currency;
@@ -1239,7 +1239,7 @@ namespace choapi.Controllers
                 else
                 {
                     response.Status = "Failed";
-                    response.Message = $"No found BookType id: {request.RestaurantBookType_Id}";
+                    response.Message = $"No found BookType id: {request.EstablishmentBookType_Id}";
 
                     return Ok(response);
                 }
@@ -1254,9 +1254,9 @@ namespace choapi.Controllers
         }
 
         [HttpPost("booktype/delete/{id}"), Authorize()]
-        public ActionResult<RestaurantBookTypeResponse> BookTypeDelete(int id)
+        public ActionResult<EstablishmentBookTypeResponse> BookTypeDelete(int id)
         {
-            var response = new RestaurantBookTypeResponse();
+            var response = new EstablishmentBookTypeResponse();
             try
             {
                 var bookType = _restaurantDAL.GetBookType(id);
@@ -1267,7 +1267,7 @@ namespace choapi.Controllers
 
                     var result = _restaurantDAL.UpdateBookType(bookType);
 
-                    response.BookType = new RestaurantBookType();
+                    response.BookType = new EstablishmentBookType();
                     response.Message = "Successfully deleted.";
                     return Ok(response);
                 }
@@ -1289,9 +1289,9 @@ namespace choapi.Controllers
         }
 
         [HttpGet("booktype"), Authorize()]
-        public ActionResult<RestaurantBookTypesResponse> GetBookTypes(int? restaurantId)
+        public ActionResult<EstablishmentBookTypesResponse> GetBookTypes(int? restaurantId)
         {
-            var response = new RestaurantBookTypesResponse();
+            var response = new EstablishmentBookTypesResponse();
             try
             {
                 var result = _restaurantDAL.GetBookTypes(restaurantId);
@@ -1321,9 +1321,9 @@ namespace choapi.Controllers
         }
 
         [HttpGet("booktype/{id}"), Authorize()]
-        public ActionResult<RestaurantBookTypeResponse> GetBookTypes(int id)
+        public ActionResult<EstablishmentBookTypeResponse> GetBookTypes(int id)
         {
-            var response = new RestaurantBookTypeResponse();
+            var response = new EstablishmentBookTypeResponse();
             try
             {
                 var result = _restaurantDAL.GetBookType(id);

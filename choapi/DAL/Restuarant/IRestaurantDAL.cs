@@ -64,12 +64,12 @@ namespace choapi.DAL
 
         List<EstablishmentCuisines>? GetEstablishmentCuisines(int? restaurantId);
 
-        RestaurantBookType Add(RestaurantBookType model);
+        EstablishmentBookType Add(EstablishmentBookType model);
 
-        List<RestaurantBookType>? GetBookTypes(int? restaurantId);
+        List<EstablishmentBookType>? GetBookTypes(int? restaurantId);
 
-        RestaurantBookType? GetBookType(int id);
+        EstablishmentBookType? GetBookType(int id);
 
-        RestaurantBookType UpdateBookType(RestaurantBookType model);
+        EstablishmentBookType UpdateBookType(EstablishmentBookType model);
     }
 }

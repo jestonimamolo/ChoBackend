@@ -153,7 +153,7 @@ namespace choapi.Controllers
             }
         }
 
-        [HttpGet("bookings/restaurant/{id}"), Authorize()]
+        [HttpGet("bookings/establishment/{id}"), Authorize()]
         public ActionResult<BookingBookingsResponse> RestaurantBookings(int id)
         {
             var response = new BookingBookingsResponse();

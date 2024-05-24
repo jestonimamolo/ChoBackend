@@ -1,10 +1,10 @@
 ﻿namespace choapi.DTOs
 {
-    public class RestaurantBookTypeDTO
+    public class EstablishmentBookTypeDTO
     {
-        public int RestaurantBookType_Id { get; set; }
+        public int EstablishmentBookType_Id { get; set; }
 
-        public int Restaurant_Id { get; set; }
+        public int Establishment_Id { get; set; }
 
         public bool? Is_Payable { get; set; } = null;
 

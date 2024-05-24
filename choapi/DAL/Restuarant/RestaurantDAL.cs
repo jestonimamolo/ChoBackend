@@ -238,7 +238,7 @@ namespace choapi.DAL
             }
         }
 
-        public RestaurantBookType Add(RestaurantBookType model)
+        public EstablishmentBookType Add(EstablishmentBookType model)
         {
             _context.RestaurantBookType.Add(model);
 
@@ -247,7 +247,7 @@ namespace choapi.DAL
             return model;
         }
 
-        public List<RestaurantBookType>? GetBookTypes(int? restaurantId)
+        public List<EstablishmentBookType>? GetBookTypes(int? restaurantId)
         {
             if (restaurantId == null)
             {
@@ -255,16 +255,16 @@ namespace choapi.DAL
             }
             else
             {
-                return _context.RestaurantBookType.Where(c => c.Restaurant_Id == restaurantId && c.Is_Deleted != true).ToList();
+                return _context.RestaurantBookType.Where(c => c.Establishment_Id == restaurantId && c.Is_Deleted != true).ToList();
             }
         }
 
-        public RestaurantBookType? GetBookType(int id)
+        public EstablishmentBookType? GetBookType(int id)
         {
-            return _context.RestaurantBookType.FirstOrDefault(b => b.RestaurantBookType_Id == id && b.Is_Deleted != true);
+            return _context.RestaurantBookType.FirstOrDefault(b => b.EstablishmentBookType_Id == id && b.Is_Deleted != true);
         }
 
-        public RestaurantBookType UpdateBookType(RestaurantBookType model)
+        public EstablishmentBookType UpdateBookType(EstablishmentBookType model)
         {
             _context.RestaurantBookType.Update(model);
 

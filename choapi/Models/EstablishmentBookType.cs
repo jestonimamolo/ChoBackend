@@ -2,12 +2,12 @@
 
 namespace choapi.Models
 {
-    public class RestaurantBookType
+    public class EstablishmentBookType
     {
         [Key]
-        public int RestaurantBookType_Id { get; set; }
+        public int EstablishmentBookType_Id { get; set; }
 
-        public int Restaurant_Id { get; set; }
+        public int Establishment_Id { get; set; }
 
         public bool? Is_Payable { get; set; } = null;
 
