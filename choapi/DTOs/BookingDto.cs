@@ -4,7 +4,7 @@
     {
         public required int User_Id { get; set; }
 
-        public required int Restaurant_Id { get; set; }
+        public required int Establishment_Id { get; set; }
 
         public DateTime? Booking_Date { get; set; } = null;
 

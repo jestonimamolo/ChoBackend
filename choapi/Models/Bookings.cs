@@ -9,7 +9,7 @@ namespace choapi.Models
 
         public int User_Id { get; set; }
 
-        public int Restaurant_Id { get; set; }
+        public int Establishment_Id { get; set; }
 
         public DateTime? Booking_Date { get; set; } = null;
 

@@ -12,7 +12,7 @@ namespace choapi.DAL
 
         void DeleteBooking(int id);
 
-        List<Bookings>? GetRestaurantBookings(int id);
+        List<Bookings>? GetEstablishmentBookings(int id);
 
         List<Bookings>? GetUserBookings(int id);
     }

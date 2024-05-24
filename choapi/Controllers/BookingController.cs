@@ -34,7 +34,7 @@ namespace choapi.Controllers
                 var booking = new Bookings
                 {
                     User_Id = request.User_Id,
-                    Restaurant_Id = request.Restaurant_Id,
+                    Establishment_Id = request.Establishment_Id,
                     Booking_Date = request.Booking_Date,
                     Number_Of_Seats = request.Number_Of_Seats,
                     Status = request.Status,
@@ -64,10 +64,10 @@ namespace choapi.Controllers
                     userResponse.Longitude = user.Longitude;
                 }
 
-                var establishment = _restaurantDAL.GetRestaurant(result.Restaurant_Id);
+                var establishment = _restaurantDAL.GetRestaurant(result.Establishment_Id);
 
                 response.User = userResponse;
-                response.Restaurant = establishment;
+                response.Establishment = establishment;
                 response.Booking = result;
                 response.Message = "Successfully added.";
                 return Ok(response);
@@ -159,7 +159,7 @@ namespace choapi.Controllers
             var response = new BookingBookingsResponse();
             try
             {
-                var result = _bookingDAL.GetRestaurantBookings(id);
+                var result = _bookingDAL.GetEstablishmentBookings(id);
 
                 if (result != null && result.Count > 0)
                 {
@@ -184,18 +184,18 @@ namespace choapi.Controllers
                             bookingsResponse.User.Longitude = user.Longitude;
                         }
 
-                        var restaurant = _restaurantDAL.GetRestaurant(booking.Restaurant_Id);
-                        bookingsResponse.Restaurant = restaurant;
+                        var establishment = _restaurantDAL.GetRestaurant(booking.Establishment_Id);
+                        bookingsResponse.Esablishment = establishment;
 
                         response.Bookings.Add(bookingsResponse);
                     }
 
-                    response.Message = "Successfully get Restaurant bookings.";
+                    response.Message = "Successfully get Establishment bookings.";
                     return Ok(response);
                 }
                 else
                 {
-                    response.Message = $"No Restaurant Bookings found by restaurant id: {id}";
+                    response.Message = $"No Establishment Bookings found by establishment id: {id}";
                     response.Status = "Failed";
 
                     return BadRequest(response);
@@ -241,8 +241,8 @@ namespace choapi.Controllers
                             bookingsResponse.User.Longitude = user.Longitude;
                         }
 
-                        var restaurant = _restaurantDAL.GetRestaurant(booking.Restaurant_Id);
-                        bookingsResponse.Restaurant = restaurant;
+                        var establishment = _restaurantDAL.GetRestaurant(booking.Establishment_Id);
+                        bookingsResponse.Esablishment = establishment;
 
                         response.Bookings.Add(bookingsResponse);
                     }
@@ -294,10 +294,10 @@ namespace choapi.Controllers
                         userResponse.Longitude = user.Longitude;
                     }
 
-                    var establishment = _restaurantDAL.GetRestaurant(result.Restaurant_Id);
+                    var establishment = _restaurantDAL.GetRestaurant(result.Establishment_Id);
 
                     response.User = userResponse;
-                    response.Restaurant = establishment;
+                    response.Establishment = establishment;
                     response.Booking = result;
                     response.Message = "Successfully get booking.";
 
