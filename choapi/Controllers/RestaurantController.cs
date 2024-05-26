@@ -477,7 +477,7 @@ namespace choapi.Controllers
             {
                 var menu = new Menus
                 {
-                    Restaurant_Id = request.Restaurant_Id,
+                    Establishment_Id = request.Establishment_Id,
                     Type = request.Type
                 };
 
@@ -546,7 +546,7 @@ namespace choapi.Controllers
                             menu.Path = $"{scheme}://{host}/{path}";
                         }
 
-                        menu.Restaurant_Id = request.Restaurant_Id;
+                        menu.Establishment_Id = request.Establishment_Id;
                         menu.Type = request.Type;
 
                         var updateResult = _restaurantDAL.UpdateMenu(menu);
@@ -640,13 +640,13 @@ namespace choapi.Controllers
                 if (result != null)
                 {
                     response.Menu = result;
-                    response.Message = "Successfully get Restaurant Menu.";
+                    response.Message = "Successfully get Establishment Menu.";
 
                     return Ok(response);
                 }
                 else
                 {
-                    response.Message = $"No Restaurant Menu found by restaurant id: {id}";
+                    response.Message = $"No Establishment Menu found by establishment id: {id}";
                     response.Status = "Failed";
 
                     return BadRequest(response);
@@ -662,23 +662,23 @@ namespace choapi.Controllers
         }
 
         [HttpGet("menus"), Authorize()]
-        public ActionResult<MenusResponse> GetMenus(int restaurantId)
+        public ActionResult<MenusResponse> GetMenus(int establishmentId)
         {
             var response = new MenusResponse();
             try
             {
-                var result = _restaurantDAL.GetMenus(restaurantId);
+                var result = _restaurantDAL.GetMenus(establishmentId);
 
                 if (result != null && result.Count > 0)
                 {
                     response.Menus = result;
-                    response.Message = "Successfully get Restaurant Menus.";
+                    response.Message = "Successfully get Establishment Menus.";
 
                     return Ok(response);
                 }
                 else
                 {
-                    response.Message = $"No Restaurant Menus found by restaurant id: {restaurantId}";
+                    response.Message = $"No Establishment Menus found by establishment id: {establishmentId}";
                     response.Status = "Failed";
 
                     return BadRequest(response);
@@ -1289,12 +1289,12 @@ namespace choapi.Controllers
         }
 
         [HttpGet("booktype"), Authorize()]
-        public ActionResult<EstablishmentBookTypesResponse> GetBookTypes(int? restaurantId)
+        public ActionResult<EstablishmentBookTypesResponse> GetBookTypes(int? establishmentId)
         {
             var response = new EstablishmentBookTypesResponse();
             try
             {
-                var result = _restaurantDAL.GetBookTypes(restaurantId);
+                var result = _restaurantDAL.GetBookTypes(establishmentId);
 
                 if (result != null && result.Count > 0)
                 {
@@ -1305,7 +1305,7 @@ namespace choapi.Controllers
                 }
                 else
                 {
-                    response.Message = $"No Restaurant Book Type found by restaurant id: {restaurantId}";
+                    response.Message = $"No Restaurant Book Type found by restaurant id: {establishmentId}";
                     response.Status = "Failed";
 
                     return BadRequest(response);

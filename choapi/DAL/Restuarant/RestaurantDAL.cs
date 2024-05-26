@@ -100,9 +100,9 @@ namespace choapi.DAL
             return model;
         }
 
-        public List<Menus>? GetMenus(int restaurantId)
+        public List<Menus>? GetMenus(int establishmentId)
         {
-            return _context.Menus.Where(m => m.Restaurant_Id == restaurantId).ToList();
+            return _context.Menus.Where(m => m.Establishment_Id == establishmentId).ToList();
         }
 
         public Menus? GetMenu(int id)
@@ -240,7 +240,7 @@ namespace choapi.DAL
 
         public EstablishmentBookType Add(EstablishmentBookType model)
         {
-            _context.RestaurantBookType.Add(model);
+            _context.EstablishmentBookType.Add(model);
 
             _context.SaveChanges();
 
@@ -251,22 +251,22 @@ namespace choapi.DAL
         {
             if (restaurantId == null)
             {
-                return _context.RestaurantBookType.Where(c => c.Is_Deleted != true).ToList();
+                return _context.EstablishmentBookType.Where(c => c.Is_Deleted != true).ToList();
             }
             else
             {
-                return _context.RestaurantBookType.Where(c => c.Establishment_Id == restaurantId && c.Is_Deleted != true).ToList();
+                return _context.EstablishmentBookType.Where(c => c.Establishment_Id == restaurantId && c.Is_Deleted != true).ToList();
             }
         }
 
         public EstablishmentBookType? GetBookType(int id)
         {
-            return _context.RestaurantBookType.FirstOrDefault(b => b.EstablishmentBookType_Id == id && b.Is_Deleted != true);
+            return _context.EstablishmentBookType.FirstOrDefault(b => b.EstablishmentBookType_Id == id && b.Is_Deleted != true);
         }
 
         public EstablishmentBookType UpdateBookType(EstablishmentBookType model)
         {
-            _context.RestaurantBookType.Update(model);
+            _context.EstablishmentBookType.Update(model);
 
             _context.SaveChanges();
 

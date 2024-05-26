@@ -26,7 +26,7 @@ namespace choapi.DAL
 
         Menus Add(Menus model);
 
-        List<Menus>? GetMenus(int restaurantId);
+        List<Menus>? GetMenus(int establishmentId);
 
         Menus? GetMenu(int id);
 

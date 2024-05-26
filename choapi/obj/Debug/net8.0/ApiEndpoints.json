@@ -151,7 +151,7 @@
   {
     "ContainingType": "choapi.Controllers.BookingController",
     "Method": "RestaurantBookings",
-    "RelativePath": "api/Booking/bookings/restaurant/{id}",
+    "RelativePath": "api/Booking/bookings/establishment/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -1301,14 +1301,14 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "restaurantId",
+        "Name": "establishmentId",
         "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "IsRequired": false
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "choapi.Messages.RestaurantBookTypesResponse",
+        "Type": "choapi.Messages.EstablishmentBookTypesResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1334,7 +1334,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "choapi.Messages.RestaurantBookTypeResponse",
+        "Type": "choapi.Messages.EstablishmentBookTypeResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1354,13 +1354,13 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "choapi.DTOs.RestaurantBookTypeDTO",
+        "Type": "choapi.DTOs.EstablishmentBookTypeDTO",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "choapi.Messages.RestaurantBookTypeResponse",
+        "Type": "choapi.Messages.EstablishmentBookTypeResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1386,7 +1386,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "choapi.Messages.RestaurantBookTypeResponse",
+        "Type": "choapi.Messages.EstablishmentBookTypeResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1406,13 +1406,13 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "choapi.DTOs.RestaurantBookTypeDTO",
+        "Type": "choapi.DTOs.EstablishmentBookTypeDTO",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "choapi.Messages.RestaurantBookTypeResponse",
+        "Type": "choapi.Messages.EstablishmentBookTypeResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1737,7 +1737,7 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "restaurantId",
+        "Name": "establishmentId",
         "Type": "System.Int32",
         "IsRequired": false
       }
@@ -1794,7 +1794,7 @@
         "IsRequired": false
       },
       {
-        "Name": "Restaurant_Id",
+        "Name": "Establishment_Id",
         "Type": "System.Int32",
         "IsRequired": false
       },
@@ -1861,7 +1861,7 @@
         "IsRequired": false
       },
       {
-        "Name": "Restaurant_Id",
+        "Name": "Establishment_Id",
         "Type": "System.Int32",
         "IsRequired": false
       },
