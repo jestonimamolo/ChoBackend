@@ -29,20 +29,20 @@ namespace choapi.DAL
             return model;
         }
 
-        public RestaurantImages AddImage(RestaurantImages model)
+        public EstablishmentImages AddImage(EstablishmentImages model)
         {
-            _context.RestaurantImages.Add(model);
+            _context.EstablishmentImages.Add(model);
 
             _context.SaveChanges();
 
             return model;
         }
 
-        public List<RestaurantImages>? AddImages(List<RestaurantImages> model)
+        public List<EstablishmentImages>? AddImages(List<EstablishmentImages> model)
         {
             if (model != null)
             {
-                _context.RestaurantImages.AddRange(model);
+                _context.EstablishmentImages.AddRange(model);
 
                 _context.SaveChanges();
 
@@ -57,14 +57,14 @@ namespace choapi.DAL
             return _context.Restaurants.FirstOrDefault(r => r.Restaurant_Id == id);
         }
 
-        public RestaurantImages? GetRestaurantImage(int id)
+        public EstablishmentImages? GetEstablishmentImage(int id)
         {
-            return _context.RestaurantImages.FirstOrDefault(r => r.RestaurantImages_Id == id);
+            return _context.EstablishmentImages.FirstOrDefault(r => r.EstablishmentImage_Id == id);
         }
 
-        public List<RestaurantImages>? GetRestaurantImages(int id)
+        public List<EstablishmentImages>? GetEstablishmentImages(int id)
         {
-            return _context.RestaurantImages.Where(i => i.Restaurant_Id == id).ToList();
+            return _context.EstablishmentImages.Where(i => i.Establishment_Id == id).ToList();
         }
 
         public List<Restaurants>? GetRestaurants(int? userId)
@@ -75,18 +75,18 @@ namespace choapi.DAL
                 return _context.Restaurants.Where(r => r.User_Id == userId).ToList();
         }
 
-        public RestaurantImages UpdateImage(RestaurantImages model)
+        public EstablishmentImages UpdateImage(EstablishmentImages model)
         {
-            _context.RestaurantImages.Update(model);
+            _context.EstablishmentImages.Update(model);
 
             _context.SaveChanges();
 
             return model;
         }
 
-        public void DeleteImage(RestaurantImages model)
+        public void DeleteImage(EstablishmentImages model)
         {
-            _context.RestaurantImages.Remove(model);
+            _context.EstablishmentImages.Remove(model);
 
             _context.SaveChanges();
         }

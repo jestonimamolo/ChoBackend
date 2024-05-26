@@ -26,6 +26,6 @@ namespace choapi.Messages
 
         public string? Address { get; set;} = null;
 
-        public List<RestaurantImages>? Images { get; set; } = null;
+        public List<EstablishmentImages>? Images { get; set; } = null;
     }
 }

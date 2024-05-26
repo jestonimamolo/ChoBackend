@@ -8,21 +8,21 @@ namespace choapi.DAL
 
         Restaurants Update(Restaurants model);
 
-        RestaurantImages AddImage(RestaurantImages model);
+        EstablishmentImages AddImage(EstablishmentImages model);
 
-        List<RestaurantImages>? AddImages(List<RestaurantImages> moel);
+        List<EstablishmentImages>? AddImages(List<EstablishmentImages> moel);
 
         Restaurants? GetRestaurant(int id);
 
-        RestaurantImages? GetRestaurantImage(int id);
+        EstablishmentImages? GetEstablishmentImage(int id);
 
-        List<RestaurantImages>? GetRestaurantImages(int id);
+        List<EstablishmentImages>? GetEstablishmentImages(int id);
 
         List<Restaurants>? GetRestaurants(int? userId);
 
-        RestaurantImages UpdateImage(RestaurantImages model);
+        EstablishmentImages UpdateImage(EstablishmentImages model);
 
-        void DeleteImage(RestaurantImages model);
+        void DeleteImage(EstablishmentImages model);
 
         Menus Add(Menus model);
 

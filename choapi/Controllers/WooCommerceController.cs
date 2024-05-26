@@ -47,7 +47,7 @@ namespace choapi.Controllers
                         resultRestaurant.Address = restaurant.Address;
                         resultRestaurant.Is_Active = restaurant.Is_Active;
 
-                        resultRestaurant.Images = _restaurantDAL.GetRestaurantImages(restaurant.Restaurant_Id);
+                        resultRestaurant.Images = _restaurantDAL.GetEstablishmentImages(restaurant.Restaurant_Id);
 
                         response.Restaurants.Add(resultRestaurant);
                     }

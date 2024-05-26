@@ -6,6 +6,6 @@ namespace choapi.Messages
     {
         public Restaurants Restaurant { get; set; } = new Restaurants();
 
-        public List<RestaurantImages>? Images { get; set; } = null;
+        public List<EstablishmentImages>? Images { get; set; } = null;
     }
 }

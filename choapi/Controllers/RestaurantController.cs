@@ -4,12 +4,7 @@ using choapi.Helper;
 using choapi.Messages;
 using choapi.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
-using System.IO;
-using System.Net;
-using System.Numerics;
 
 namespace choapi.Controllers
 {
@@ -21,8 +16,8 @@ namespace choapi.Controllers
 
         private readonly ILogger<RestaurantController> _logger;
 
-        private const string _fromMenus = "restaurant-menus";
-        private const string _fromImages = "restaurant-images";
+        private const string _fromMenus = "establishment-menus";
+        private const string _fromImages = "establishment-images";
 
         public RestaurantController(ILogger<RestaurantController> logger, IRestaurantDAL restaurantDAL)
         {
@@ -177,7 +172,7 @@ namespace choapi.Controllers
                 {
                     response.Restaurant = resultRestaurant;
 
-                    response.Images = _restaurantDAL.GetRestaurantImages(resultRestaurant.Restaurant_Id);
+                    response.Images = _restaurantDAL.GetEstablishmentImages(resultRestaurant.Restaurant_Id);
 
                     response.Message = $"Successfully get restaurant.";
                     return Ok(response);
@@ -225,7 +220,7 @@ namespace choapi.Controllers
                         resultRestaurant.Address = restaurant.Address;
                         resultRestaurant.Is_Active = restaurant.Is_Active;
 
-                        resultRestaurant.Images = _restaurantDAL.GetRestaurantImages(restaurant.Restaurant_Id);
+                        resultRestaurant.Images = _restaurantDAL.GetEstablishmentImages(restaurant.Restaurant_Id);
 
                         response.Restaurants.Add(resultRestaurant);
                     }
@@ -250,19 +245,19 @@ namespace choapi.Controllers
         }
 
         [HttpPost("images/add"), Authorize()]
-        public async Task<ActionResult<RestaurantImageResponse>> AddImage(RestaurantImageDTO request)
+        public async Task<ActionResult<EstablishmentImageResponse>> AddImage(EstablishmentImageDTO request)
         {
-            var response = new RestaurantImageResponse();
+            var response = new EstablishmentImageResponse();
             try
             {
-                var image = new RestaurantImages
+                var image = new EstablishmentImages
                 {
-                    Restaurant_Id = request.Restaurant_Id
+                    Establishment_Id = request.Establishment_Id
                 };
 
                 var result = _restaurantDAL.AddImage(image);
 
-                var path = await UploadHelper.SaveFile(request.File, result.RestaurantImages_Id, _fromImages);
+                var path = await UploadHelper.SaveFile(request.File, result.EstablishmentImage_Id, _fromImages);
 
                 if (!path.Contains("Error:"))
                 {
@@ -283,7 +278,7 @@ namespace choapi.Controllers
                 {
                     _restaurantDAL.DeleteImage(result);
                     response.Status = "Failed";
-                    response.Image = new RestaurantImages();
+                    response.Image = new EstablishmentImages();
                     response.Message = path;
                     return BadRequest(response);
                 }
@@ -298,12 +293,12 @@ namespace choapi.Controllers
         }
 
         [HttpPost("images/update"), Authorize()]
-        public async Task<ActionResult<RestaurantImageResponse>> UpdateImage(RestaurantImageDTO request)
+        public async Task<ActionResult<EstablishmentImageResponse>> UpdateImage(EstablishmentImageDTO request)
         {
-            var response = new RestaurantImageResponse();
+            var response = new EstablishmentImageResponse();
             try
             {
-                var image = _restaurantDAL.GetRestaurantImage(request.RestaurantImages_Id);
+                var image = _restaurantDAL.GetEstablishmentImage(request.EstablishmentImage_Id);
 
                 if (image != null)
                 {
@@ -313,7 +308,7 @@ namespace choapi.Controllers
                         deleteFileResult = UploadHelper.DeleteFile(image.Image_Url);
                     }
 
-                    var path = await UploadHelper.SaveFile(request.File, image.RestaurantImages_Id, _fromImages);
+                    var path = await UploadHelper.SaveFile(request.File, image.EstablishmentImage_Id, _fromImages);
 
                     if (!path.Contains("Error:"))
                     {
@@ -325,7 +320,7 @@ namespace choapi.Controllers
                             image.Image_Url = $"{scheme}://{host}/{path}";
                         }
 
-                        image.Restaurant_Id = request.Restaurant_Id;
+                        image.Establishment_Id = request.Establishment_Id;
 
                         var updateResult = _restaurantDAL.UpdateImage(image);
 
@@ -343,7 +338,7 @@ namespace choapi.Controllers
                 }
                 else
                 {
-                    response.Message = $"No restaurant images found by id: {request.RestaurantImages_Id}";
+                    response.Message = $"No Establishment images found by id: {request.EstablishmentImage_Id}";
                     response.Status = "Failed";
                     return BadRequest(response);
                 }                
@@ -358,12 +353,12 @@ namespace choapi.Controllers
         }
 
         [HttpPost("images/delete/{id}"), Authorize()]
-        public ActionResult<RestaurantImageResponse> DeleteImage(int id)
+        public ActionResult<EstablishmentImageResponse> DeleteImage(int id)
         {
-            var response = new RestaurantImageResponse();
+            var response = new EstablishmentImageResponse();
             try
             {
-                var image = _restaurantDAL.GetRestaurantImage(id);
+                var image = _restaurantDAL.GetEstablishmentImage(id);
 
                 if (image != null)
                 {
@@ -377,7 +372,7 @@ namespace choapi.Controllers
                     {
                         _restaurantDAL.DeleteImage(image);
 
-                        response.Image = new RestaurantImages();
+                        response.Image = new EstablishmentImages();
                         response.Message = "Successfully deleted.";
                         return Ok(response);
                     }
@@ -391,7 +386,7 @@ namespace choapi.Controllers
                 }
                 else
                 {
-                    response.Message = $"No restaurant images found by id: {id}";
+                    response.Message = $"No Establishment images found by id: {id}";
                     response.Status = "Failed";
                     return BadRequest(response);
                 }
@@ -406,24 +401,24 @@ namespace choapi.Controllers
         }        
 
         [HttpGet("images"), Authorize()]
-        public ActionResult<RestaurantImagesResponse> GetImagesByRestaurantId(int restaurantId)
+        public ActionResult<EstablishmentImagesResponse> GetImagesByRestaurantId(int establishmentId)
         {
-            var response = new RestaurantImagesResponse();
+            var response = new EstablishmentImagesResponse();
 
             try
             {
-                var result = _restaurantDAL.GetRestaurantImages(restaurantId);
+                var result = _restaurantDAL.GetEstablishmentImages(establishmentId);
 
                 if (result != null && result.Count > 0)
                 {
                     response.Images = result;
-                    response.Message = $"Successfully get Restaurant Images.";
+                    response.Message = $"Successfully get Establishment Images.";
 
                     return Ok(response);
                 }
                 else
                 {
-                    response.Message = $"No Restaurant Images found by restaurant id: {restaurantId}";
+                    response.Message = $"No Establishment Images found by establishment id: {establishmentId}";
                     response.Status = "Failed";
                     return BadRequest(response);
                 }
@@ -438,24 +433,24 @@ namespace choapi.Controllers
         }
 
         [HttpGet("images/{id}"), Authorize()]
-        public ActionResult<RestaurantImageResponse> GetImage(int id)
+        public ActionResult<EstablishmentImageResponse> GetImage(int id)
         {
-            var response = new RestaurantImageResponse();
+            var response = new EstablishmentImageResponse();
 
             try
             {
-                var result = _restaurantDAL.GetRestaurantImage(id);
+                var result = _restaurantDAL.GetEstablishmentImage(id);
 
                 if (result != null)
                 {
                     response.Image = result;
-                    response.Message = $"Successfully get Restaurant Image.";
+                    response.Message = $"Successfully get Establishment Image.";
 
                     return Ok(response);
                 }
                 else
                 {
-                    response.Message = $"No Restaurant I mages found by id: {id}";
+                    response.Message = $"No Establishment I mages found by id: {id}";
                     response.Status = "Failed";
                     return BadRequest(response);
                 }
