@@ -42,7 +42,7 @@ builder.Services.AddScoped<ICategoryDAL, CategoryDAL>();
 builder.Services.AddScoped<IUserDAL, UserDAL>();
 builder.Services.AddScoped<IRestaurantDAL, RestaurantDAL>();
 builder.Services.AddScoped<IBookingDAL, BookingDAL>();
-builder.Services.AddScoped<IRestaurantTableDAL, RestaurantTableDAL>();
+builder.Services.AddScoped<IEstablishmentTableDAL, EstablishmentTableDAL>();
 builder.Services.AddScoped<IPaymentDAL, PaymentDAL>();
 builder.Services.AddScoped<ICuisineDAL, CuisineDAL>();
 builder.Services.AddScoped<ICreditDAL, CreditDAL>();

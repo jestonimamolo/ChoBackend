@@ -28,7 +28,7 @@ namespace choapi.Models
 
         public virtual DbSet<EstablishmentBookType> EstablishmentBookType { get; set; }
 
-        public virtual DbSet<RestaurantTable> RestaurantTable { get; set; }
+        public virtual DbSet<EstablishmentTable> EstablishmentTable { get; set; }
 
         public virtual DbSet<Credits> Credits { get; set; }
 

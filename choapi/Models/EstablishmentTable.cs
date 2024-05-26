@@ -2,12 +2,12 @@
 
 namespace choapi.Models
 {
-    public class RestaurantTable
+    public class EstablishmentTable
     {
         [Key]
-        public int RestaurantTable_Id { get; set; }
+        public int EstablishmentTable_Id { get; set; }
 
-        public int Restaurant_Id { get; set; }
+        public int Establishment_Id { get; set; }
 
         public int? Table_Number { get; set; } = null;
 
