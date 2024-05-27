@@ -1,6 +1,6 @@
 ﻿namespace choapi.DTOs
 {
-    public class RestaurantAvailabilityDTO
+    public class EstablishmentAvailabilityDTO
     {
         public int Availability_Id { get; set; }
 

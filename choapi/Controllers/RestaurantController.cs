@@ -12,26 +12,26 @@ namespace choapi.Controllers
     [ApiController]
     public class RestaurantController : ControllerBase
     {
-        private readonly IRestaurantDAL _restaurantDAL;
+        private readonly IEstablishmentDAL _establishmentDAL;
 
         private readonly ILogger<RestaurantController> _logger;
 
         private const string _fromMenus = "establishment-menus";
         private const string _fromImages = "establishment-images";
 
-        public RestaurantController(ILogger<RestaurantController> logger, IRestaurantDAL restaurantDAL)
+        public RestaurantController(ILogger<RestaurantController> logger, IEstablishmentDAL establishmentDAL)
         {
             _logger = logger;
-            _restaurantDAL = restaurantDAL;
+            _establishmentDAL = establishmentDAL;
         }
 
         [HttpPost("register"), Authorize()]
-        public ActionResult<RestaurantResponse> Register(RestaurantDTO request)
+        public ActionResult<EstablishmentResponse> Register(EstablishmentDTO request)
         {
-            var response = new RestaurantResponse();
+            var response = new EstablishmentResponse();
             try
             {
-                var restaurant = new Restaurants
+                var establishment = new Establishment
                 {
                     Name = request.Name,
                     Description = request.Description,
@@ -42,10 +42,14 @@ namespace choapi.Controllers
                     Longitude = request.Longitude,
                     Is_Promoted = request.Is_Promoted,
                     Address = request.Address,
+                    Promo_Credit = request.Promo_Credit,
+                    Promo_Type = request.Promo_Type,
+                    Payment_Card_Option = request.Payment_Card_Option,
+                    Category_Id = request.Category_Id,
                     Is_Active = true
                 };
 
-                var resultRestaurant = _restaurantDAL.Add(restaurant);
+                var resultEstablishment = _establishmentDAL.Add(establishment);
 
                 //var restaurantImages = new List<RestaurantImages>();
 
@@ -62,9 +66,9 @@ namespace choapi.Controllers
                 //    }
                 //}
 
-                //var resultRestaurantImages = _restaurantDAL.AddImages(restaurantImages);
+                //var resultRestaurantImages = _establishmentDAL.AddImages(restaurantImages);
 
-                response.Restaurant = resultRestaurant;
+                response.Establishment = resultEstablishment;
                 //response.Images = resultRestaurantImages;
                 response.Message = "Successfully added.";
 
@@ -80,36 +84,40 @@ namespace choapi.Controllers
         }
 
         [HttpPost("update"), Authorize()]
-        public ActionResult<RestaurantResponse> Update(RestaurantDTO request)
+        public ActionResult<EstablishmentResponse> Update(EstablishmentDTO request)
         {
-            var response = new RestaurantResponse();
+            var response = new EstablishmentResponse();
             try
             {
-                var restaurant = _restaurantDAL.GetRestaurant(request.Restaurant_Id);
+                var establishment = _establishmentDAL.GetEstablishment(request.Establishment_Id);
 
-                if (restaurant != null)
+                if (establishment != null)
                 {
-                    restaurant.Name = request.Name;
-                    restaurant.Description = request.Description;
-                    restaurant.User_Id = request.User_Id;
-                    restaurant.Credits = request.Credits;
-                    restaurant.Plan = request.Plan;
-                    restaurant.Latitude = request.Latitude;
-                    restaurant.Longitude = request.Longitude;
-                    restaurant.Is_Promoted = request.Is_Promoted;
-                    restaurant.Address = request.Address;
+                    establishment.Name = request.Name;
+                    establishment.Description = request.Description;
+                    establishment.User_Id = request.User_Id;
+                    establishment.Credits = request.Credits;
+                    establishment.Plan = request.Plan;
+                    establishment.Latitude = request.Latitude;
+                    establishment.Longitude = request.Longitude;
+                    establishment.Is_Promoted = request.Is_Promoted;
+                    establishment.Address = request.Address;
+                    establishment.Promo_Credit = request.Promo_Credit;
+                    establishment.Promo_Type = request.Promo_Type;
+                    establishment.Payment_Card_Option = request.Payment_Card_Option;
+                    establishment.Category_Id = request.Category_Id;
 
-                    var result = _restaurantDAL.Update(restaurant);
+                    var result = _establishmentDAL.Update(establishment);
 
-                    response.Restaurant = result;
-                    //response.Images = _restaurantDAL.GetRestaurantImages(request.Restaurant_Id);
+                    response.Establishment = result;
+                    //response.Images = _establishmentDAL.GetRestaurantImages(request.Restaurant_Id);
                     response.Message = "Successfully updated.";
 
                     return Ok(response);
                 }
                 else
                 {
-                    response.Message = $"No restaurant found by id: {request.Restaurant_Id}";
+                    response.Message = $"No Establishment found by id: {request.Establishment_Id}";
                     response.Status = "Failed";
                     return BadRequest(response);
                 }
@@ -124,20 +132,20 @@ namespace choapi.Controllers
         }
 
         [HttpPost("delete/{id}"), Authorize()]
-        public ActionResult<RestaurantResponse> Delete(int id)
+        public ActionResult<EstablishmentResponse> Delete(int id)
         {
-            var response = new RestaurantResponse();
+            var response = new EstablishmentResponse();
             try
             {
-                var restaurant = _restaurantDAL.GetRestaurant(id);
+                var establishment = _establishmentDAL.GetEstablishment(id);
 
-                if (restaurant != null)
+                if (establishment != null)
                 {
-                    restaurant.Is_Active = false;
+                    establishment.Is_Active = false;
 
-                    var result = _restaurantDAL.Update(restaurant);
+                    var result = _establishmentDAL.Update(establishment);
 
-                    response.Restaurant = new Restaurants();
+                    response.Establishment = new Establishment();
                     //response.Images = new List<RestaurantImages>();
                     response.Message = "Successfully deleted.";
 
@@ -145,7 +153,7 @@ namespace choapi.Controllers
                 }
                 else
                 {
-                    response.Message = $"No restaurant found by id: {id}";
+                    response.Message = $"No Establishment found by id: {id}";
                     response.Status = "Failed";
                     return BadRequest(response);
                 }
@@ -159,27 +167,27 @@ namespace choapi.Controllers
             }
         }
 
-        [HttpGet("restaurants/{id}"), Authorize()]
-        public ActionResult<RestaurantByIdResponse> GetRestaurant(int id)
+        [HttpGet("/{id}"), Authorize()]
+        public ActionResult<EstablishmentByIdResponse> GetEstablishment(int id)
         {
-            var response = new RestaurantByIdResponse();
+            var response = new EstablishmentByIdResponse();
 
             try
             {
-                var resultRestaurant = _restaurantDAL.GetRestaurant(id);
+                var resultEstablishment = _establishmentDAL.GetEstablishment(id);
 
-                if (resultRestaurant != null)
+                if (resultEstablishment != null)
                 {
-                    response.Restaurant = resultRestaurant;
+                    response.Establishment = resultEstablishment;
 
-                    response.Images = _restaurantDAL.GetEstablishmentImages(resultRestaurant.Restaurant_Id);
+                    response.Images = _establishmentDAL.GetEstablishmentImages(resultEstablishment.Establishment_Id);
 
-                    response.Message = $"Successfully get restaurant.";
+                    response.Message = $"Successfully get Establishment.";
                     return Ok(response);
                 }
                 else
                 {
-                    response.Message = $"No restaurant found by restaurant id: {id}";
+                    response.Message = $"No Establishment found by establishment id: {id}";
                     response.Status = "Failed";
                     return BadRequest(response);
                 }
@@ -193,44 +201,44 @@ namespace choapi.Controllers
             }
         }
 
-        [HttpGet("restaurants"), Authorize()]
-        public ActionResult<RestuarantUserIdResponnse> GetRestaurants(int? userId)
+        [HttpGet("establishments"), Authorize()]
+        public ActionResult<EstablishmentUserIdResponnse> GetEstablishments(int? userId)
         {
-            var response = new RestuarantUserIdResponnse();
+            var response = new EstablishmentUserIdResponnse();
 
             try
             {
-                var resultRestaurants = _restaurantDAL.GetRestaurants(userId);
+                var resultEstablishments = _establishmentDAL.GetEstablishments(userId);
 
-                if (resultRestaurants != null && resultRestaurants.Count > 0)
+                if (resultEstablishments != null && resultEstablishments.Count > 0)
                 {
-                    foreach (var restaurant in resultRestaurants)
+                    foreach (var establishment in resultEstablishments)
                     {
-                        var resultRestaurant = new RestaurantsReponse();
+                        var resultEstablishment = new EstablishmentReponse();
 
-                        resultRestaurant.Restaurant_Id = restaurant.Restaurant_Id;
-                        resultRestaurant.Name = restaurant.Name;
-                        resultRestaurant.Description = restaurant.Description;
-                        resultRestaurant.User_Id = restaurant.User_Id;
-                        resultRestaurant.Credits = restaurant.Credits;
-                        resultRestaurant.Plan = restaurant.Plan;
-                        resultRestaurant.Latitude = restaurant.Latitude;
-                        resultRestaurant.Longitude = restaurant.Longitude;
-                        resultRestaurant.Is_Promoted = restaurant.Is_Promoted;
-                        resultRestaurant.Address = restaurant.Address;
-                        resultRestaurant.Is_Active = restaurant.Is_Active;
+                        resultEstablishment.Establishment_Id = establishment.Establishment_Id;
+                        resultEstablishment.Name = establishment.Name;
+                        resultEstablishment.Description = establishment.Description;
+                        resultEstablishment.User_Id = establishment.User_Id;
+                        resultEstablishment.Credits = establishment.Credits;
+                        resultEstablishment.Plan = establishment.Plan;
+                        resultEstablishment.Latitude = establishment.Latitude;
+                        resultEstablishment.Longitude = establishment.Longitude;
+                        resultEstablishment.Is_Promoted = establishment.Is_Promoted;
+                        resultEstablishment.Address = establishment.Address;
+                        resultEstablishment.Is_Active = establishment.Is_Active;
 
-                        resultRestaurant.Images = _restaurantDAL.GetEstablishmentImages(restaurant.Restaurant_Id);
+                        resultEstablishment.Images = _establishmentDAL.GetEstablishmentImages(establishment.Establishment_Id);
 
-                        response.Restaurants.Add(resultRestaurant);
+                        response.Establishments.Add(resultEstablishment);
                     }
-                    response.Message = $"Successfully get restaurants.";
+                    response.Message = $"Successfully get Establishments.";
 
                     return Ok(response);
                 }
                 else
                 {
-                    response.Message = $"No restaurant found by user id: {userId}";
+                    response.Message = $"No Establishment found by user id: {userId}";
                     response.Status = "Failed";
                     return BadRequest(response);
                 }
@@ -255,7 +263,7 @@ namespace choapi.Controllers
                     Establishment_Id = request.Establishment_Id
                 };
 
-                var result = _restaurantDAL.AddImage(image);
+                var result = _establishmentDAL.AddImage(image);
 
                 var path = await UploadHelper.SaveFile(request.File, result.EstablishmentImage_Id, _fromImages);
 
@@ -267,7 +275,7 @@ namespace choapi.Controllers
                         var scheme = Request.Scheme;
 
                         result.Image_Url = $"{scheme}://{host}/{path}";
-                        var updateResult = _restaurantDAL.UpdateImage(result);
+                        var updateResult = _establishmentDAL.UpdateImage(result);
                     }
 
                     response.Image = result;
@@ -276,7 +284,7 @@ namespace choapi.Controllers
                 }
                 else
                 {
-                    _restaurantDAL.DeleteImage(result);
+                    _establishmentDAL.DeleteImage(result);
                     response.Status = "Failed";
                     response.Image = new EstablishmentImages();
                     response.Message = path;
@@ -298,7 +306,7 @@ namespace choapi.Controllers
             var response = new EstablishmentImageResponse();
             try
             {
-                var image = _restaurantDAL.GetEstablishmentImage(request.EstablishmentImage_Id);
+                var image = _establishmentDAL.GetEstablishmentImage(request.EstablishmentImage_Id);
 
                 if (image != null)
                 {
@@ -322,7 +330,7 @@ namespace choapi.Controllers
 
                         image.Establishment_Id = request.Establishment_Id;
 
-                        var updateResult = _restaurantDAL.UpdateImage(image);
+                        var updateResult = _establishmentDAL.UpdateImage(image);
 
                         response.Image = updateResult;
                         response.Message = "Successfully updated.";
@@ -358,7 +366,7 @@ namespace choapi.Controllers
             var response = new EstablishmentImageResponse();
             try
             {
-                var image = _restaurantDAL.GetEstablishmentImage(id);
+                var image = _establishmentDAL.GetEstablishmentImage(id);
 
                 if (image != null)
                 {
@@ -370,7 +378,7 @@ namespace choapi.Controllers
 
                     if (!deleteFileResult.Contains("Error:"))
                     {
-                        _restaurantDAL.DeleteImage(image);
+                        _establishmentDAL.DeleteImage(image);
 
                         response.Image = new EstablishmentImages();
                         response.Message = "Successfully deleted.";
@@ -401,13 +409,13 @@ namespace choapi.Controllers
         }        
 
         [HttpGet("images"), Authorize()]
-        public ActionResult<EstablishmentImagesResponse> GetImagesByRestaurantId(int establishmentId)
+        public ActionResult<EstablishmentImagesResponse> GetImagesByEstablishmentId(int establishmentId)
         {
             var response = new EstablishmentImagesResponse();
 
             try
             {
-                var result = _restaurantDAL.GetEstablishmentImages(establishmentId);
+                var result = _establishmentDAL.GetEstablishmentImages(establishmentId);
 
                 if (result != null && result.Count > 0)
                 {
@@ -439,7 +447,7 @@ namespace choapi.Controllers
 
             try
             {
-                var result = _restaurantDAL.GetEstablishmentImage(id);
+                var result = _establishmentDAL.GetEstablishmentImage(id);
 
                 if (result != null)
                 {
@@ -476,7 +484,7 @@ namespace choapi.Controllers
                     Type = request.Type
                 };
 
-                var result = _restaurantDAL.Add(menu);
+                var result = _establishmentDAL.Add(menu);
 
                 var path = await UploadHelper.SaveFile(request.File, result.Menu_Id, _fromMenus);
 
@@ -488,7 +496,7 @@ namespace choapi.Controllers
                         var scheme = Request.Scheme;
 
                         result.Path = $"{scheme}://{host}/{path}";
-                        var updateResult = _restaurantDAL.UpdateMenu(result);
+                        var updateResult = _establishmentDAL.UpdateMenu(result);
                     }
 
                     response.Menu = result;
@@ -497,7 +505,7 @@ namespace choapi.Controllers
                 }
                 else
                 {
-                    _restaurantDAL.DeleteMenu(result);
+                    _establishmentDAL.DeleteMenu(result);
                     response.Status = "Failed";
                     response.Menu = new Menus();
                     response.Message = path;
@@ -519,7 +527,7 @@ namespace choapi.Controllers
             var response = new MenuResponse();
             try
             {
-                var menu = _restaurantDAL.GetMenu(request.Menu_Id);
+                var menu = _establishmentDAL.GetMenu(request.Menu_Id);
 
                 if (menu != null)
                 {
@@ -544,7 +552,7 @@ namespace choapi.Controllers
                         menu.Establishment_Id = request.Establishment_Id;
                         menu.Type = request.Type;
 
-                        var updateResult = _restaurantDAL.UpdateMenu(menu);
+                        var updateResult = _establishmentDAL.UpdateMenu(menu);
 
                         response.Menu = updateResult;
                         response.Message = "Successfully updated.";
@@ -581,7 +589,7 @@ namespace choapi.Controllers
             var response = new MenuResponse();
             try
             {
-                var menu = _restaurantDAL.GetMenu(id);
+                var menu = _establishmentDAL.GetMenu(id);
 
                 if (menu != null)
                 {
@@ -593,7 +601,7 @@ namespace choapi.Controllers
 
                     if (!deleteFileResult.Contains("Error:"))
                     {
-                        _restaurantDAL.DeleteMenu(menu);
+                        _establishmentDAL.DeleteMenu(menu);
 
                         response.Menu = new Menus();
                         response.Message = "Successfully deleted.";
@@ -630,7 +638,7 @@ namespace choapi.Controllers
             var response = new MenuResponse();
             try
             {
-                var result = _restaurantDAL.GetMenu(id);
+                var result = _establishmentDAL.GetMenu(id);
 
                 if (result != null)
                 {
@@ -662,7 +670,7 @@ namespace choapi.Controllers
             var response = new MenusResponse();
             try
             {
-                var result = _restaurantDAL.GetMenus(establishmentId);
+                var result = _establishmentDAL.GetMenus(establishmentId);
 
                 if (result != null && result.Count > 0)
                 {
@@ -689,9 +697,9 @@ namespace choapi.Controllers
         }
 
         [HttpPost("availability/add"), Authorize()]
-        public ActionResult<RestaurantAvailabilityResponse> AvailabilityAdd(RestaurantAvailabilityDTO request)
+        public ActionResult<EstablishmentAvailabilityResponse> AvailabilityAdd(EstablishmentAvailabilityDTO request)
         {
-            var response = new RestaurantAvailabilityResponse();
+            var response = new EstablishmentAvailabilityResponse();
             try
             {
                 var availability = new Availability
@@ -702,7 +710,7 @@ namespace choapi.Controllers
                     Time_End = request.Time_End
                 };
 
-                var result = _restaurantDAL.Add(availability);
+                var result = _establishmentDAL.Add(availability);
 
                 response.Availability = result;
 
@@ -720,12 +728,12 @@ namespace choapi.Controllers
         }
 
         [HttpPost("availability/update"), Authorize()]
-        public ActionResult<RestaurantAvailabilityResponse> AvailabilityUpdate(RestaurantAvailabilityDTO request)
+        public ActionResult<EstablishmentAvailabilityResponse> AvailabilityUpdate(EstablishmentAvailabilityDTO request)
         {
-            var response = new RestaurantAvailabilityResponse();
+            var response = new EstablishmentAvailabilityResponse();
             try
             {
-                var availability = _restaurantDAL.GetAvailability(request.Availability_Id);
+                var availability = _establishmentDAL.GetAvailability(request.Availability_Id);
 
                 if (availability != null)
                 {
@@ -734,7 +742,7 @@ namespace choapi.Controllers
                     availability.Time_Start = request.Time_Start;
                     availability.Time_End = request.Time_End;
 
-                    var result = _restaurantDAL.UpdateAvailability(availability);
+                    var result = _establishmentDAL.UpdateAvailability(availability);
 
                     response.Availability = result;
                     response.Message = "Successfully updated.";
@@ -758,16 +766,16 @@ namespace choapi.Controllers
         }
 
         [HttpPost("availability/delete/{id}"), Authorize()]
-        public ActionResult<RestaurantAvailabilityResponse> AvailabilityDelete(int id)
+        public ActionResult<EstablishmentAvailabilityResponse> AvailabilityDelete(int id)
         {
-            var response = new RestaurantAvailabilityResponse();
+            var response = new EstablishmentAvailabilityResponse();
             try
             {
-                var availability = _restaurantDAL.GetAvailability(id);
+                var availability = _establishmentDAL.GetAvailability(id);
 
                 if (availability != null)
                 {
-                    _restaurantDAL.DeleteAvailability(availability);
+                    _establishmentDAL.DeleteAvailability(availability);
 
                     response.Availability = new Availability();
                     response.Message = "Successfully deleted.";
@@ -791,24 +799,24 @@ namespace choapi.Controllers
         }
 
         [HttpGet("availabilities/{id}"), Authorize()]
-        public ActionResult<RestaurantAvailabilityResponse> GetAvailability(int id)
+        public ActionResult<EstablishmentAvailabilityResponse> GetAvailability(int id)
         {
-            var response = new RestaurantAvailabilityResponse();
+            var response = new EstablishmentAvailabilityResponse();
             try
             {
-                var result = _restaurantDAL.GetAvailability(id);
+                var result = _establishmentDAL.GetAvailability(id);
 
                 if (result != null)
                 {
                     response.Availability = result;
 
-                    response.Message = "Successfully get Restaurant Availability.";
+                    response.Message = "Successfully get Establishment Availability.";
 
                     return Ok(response);
                 }
                 else
                 {
-                    response.Message = $"No Restaurant Availability found by id: {id}";
+                    response.Message = $"No Establishment Availability found by id: {id}";
                     response.Status = "Failed";
 
                     return BadRequest(response);
@@ -824,24 +832,24 @@ namespace choapi.Controllers
         }
 
         [HttpGet("availabilities"), Authorize()]
-        public ActionResult<RestaurantAvailabilitiesResponse> GetAvailabilityByEstablishmentId(int establishmentId)
+        public ActionResult<EstablishmentAvailabilitiesResponse> GetAvailabilityByEstablishmentId(int establishmentId)
         {
-            var response = new RestaurantAvailabilitiesResponse();
+            var response = new EstablishmentAvailabilitiesResponse();
             try
             {
-                var result = _restaurantDAL.GetAvailabilities(establishmentId);
+                var result = _establishmentDAL.GetAvailabilities(establishmentId);
 
                 if(result != null && result.Count > 0)
                 {
                     response.Availabilities = result;
 
-                    response.Message = "Successfully get Restaurant Availabilities.";
+                    response.Message = "Successfully get Establishment Availabilities.";
 
                     return Ok(response);
                 }
                 else
                 {
-                    response.Message = $"No Restaurant Availability found by establishment id: {establishmentId}";
+                    response.Message = $"No Establishment Availability found by establishment id: {establishmentId}";
                     response.Status = "Failed";
 
                     return BadRequest(response);
@@ -869,7 +877,7 @@ namespace choapi.Controllers
                     Title = request.Title
                 };
 
-                var result = _restaurantDAL.Add(nonOperatingHours);
+                var result = _establishmentDAL.Add(nonOperatingHours);
 
                 response.NonOperatingHours = result;
 
@@ -892,7 +900,7 @@ namespace choapi.Controllers
             var response = new NonOperatingHourResponse();
             try
             {
-                var nonOperatingHours = _restaurantDAL.GetNonOperatingHours(request.NonOperatingHours_Id);
+                var nonOperatingHours = _establishmentDAL.GetNonOperatingHours(request.NonOperatingHours_Id);
 
                 if (nonOperatingHours != null)
                 {
@@ -900,7 +908,7 @@ namespace choapi.Controllers
                     nonOperatingHours.Date = request.Date;
                     nonOperatingHours.Title = request.Title;
 
-                    var result = _restaurantDAL.Update(nonOperatingHours);
+                    var result = _establishmentDAL.Update(nonOperatingHours);
 
                     response.NonOperatingHours = result;
                     response.Message = "Successfully updated.";
@@ -929,11 +937,11 @@ namespace choapi.Controllers
             var response = new NonOperatingHourResponse();
             try
             {
-                var nonOperatingHours = _restaurantDAL.GetNonOperatingHours(id);
+                var nonOperatingHours = _establishmentDAL.GetNonOperatingHours(id);
 
                 if (nonOperatingHours != null)
                 {
-                    _restaurantDAL.Delete(nonOperatingHours);
+                    _establishmentDAL.Delete(nonOperatingHours);
 
                     response.NonOperatingHours = new NonOperatingHours();
                     response.Message = "Successfully deleted.";
@@ -962,7 +970,7 @@ namespace choapi.Controllers
             var response = new NonOperatingHourResponse();
             try
             {
-                var result = _restaurantDAL.GetNonOperatingHours(id);
+                var result = _establishmentDAL.GetNonOperatingHours(id);
 
                 if (result != null)
                 {
@@ -986,12 +994,12 @@ namespace choapi.Controllers
         }
 
         [HttpGet("nonoperatinghours"), Authorize()]
-        public ActionResult<NonOperatingHoursResponse> GetNonOperatingHoursByRestaurantId(int establishmentId)
+        public ActionResult<NonOperatingHoursResponse> GetNonOperatingHoursByEstablishmentId(int establishmentId)
         {
             var response = new NonOperatingHoursResponse();
             try
             {
-                var result = _restaurantDAL.GetNonOperatingHoursByEstablishmentId(establishmentId);
+                var result = _establishmentDAL.GetNonOperatingHoursByEstablishmentId(establishmentId);
 
                 if (result != null && result.Count > 0)
                 {
@@ -1015,20 +1023,20 @@ namespace choapi.Controllers
         }
 
         [HttpPost("cuisines/add"), Authorize()]
-        public ActionResult<RestaurantCuisineResponse> CuisinesAdd(RestaurantCuisineDTO request)
+        public ActionResult<EstablishmentCuisineResponse> CuisinesAdd(EstablishmentCuisineDTO request)
         {
-            var response = new RestaurantCuisineResponse();
+            var response = new EstablishmentCuisineResponse();
             try
             {
-                var restaurantCuisine = new EstablishmentCuisines
+                var establishmentCuisine = new EstablishmentCuisines
                 {
                     Establishment_Id = request.Establishment_Id,
                     Name = request.Name
                 };
 
-                var result = _restaurantDAL.Add(restaurantCuisine);
+                var result = _establishmentDAL.Add(establishmentCuisine);
 
-                response.RestaurantCuisine = result;
+                response.EstablishmentCuisine = result;
 
                 response.Message = "Successfully added.";
 
@@ -1044,21 +1052,21 @@ namespace choapi.Controllers
         }
 
         [HttpPost("cuisines/update"), Authorize()]
-        public ActionResult<RestaurantCuisineResponse> CuisineUpdate(RestaurantCuisineDTO request)
+        public ActionResult<EstablishmentCuisineResponse> CuisineUpdate(EstablishmentCuisineDTO request)
         {
-            var response = new RestaurantCuisineResponse();
+            var response = new EstablishmentCuisineResponse();
             try
             {
-                var cuisine = _restaurantDAL.GetEstablishmentCuisine(request.EstablishmentCuisine_Id);
+                var cuisine = _establishmentDAL.GetEstablishmentCuisine(request.EstablishmentCuisine_Id);
 
                 if (cuisine != null)
                 {
                     cuisine.Establishment_Id = request.Establishment_Id;
                     cuisine.Name = request.Name;
 
-                    var result = _restaurantDAL.UpdateCuisine(cuisine);
+                    var result = _establishmentDAL.UpdateCuisine(cuisine);
 
-                    response.RestaurantCuisine = result;
+                    response.EstablishmentCuisine = result;
                     response.Message = "Successfully updated.";
                     return Ok(response);
                 }
@@ -1080,18 +1088,18 @@ namespace choapi.Controllers
         }
 
         [HttpPost("cuisines/delete/{id}"), Authorize()]
-        public ActionResult<RestaurantCuisineResponse> CuisineDelete(int id)
+        public ActionResult<EstablishmentCuisineResponse> CuisineDelete(int id)
         {
-            var response = new RestaurantCuisineResponse();
+            var response = new EstablishmentCuisineResponse();
             try
             {
-                var cuisine = _restaurantDAL.GetEstablishmentCuisine(id);
+                var cuisine = _establishmentDAL.GetEstablishmentCuisine(id);
 
                 if (cuisine != null)
                 {
-                    _restaurantDAL.DeleteCuisine(cuisine);
+                    _establishmentDAL.DeleteCuisine(cuisine);
 
-                    response.RestaurantCuisine = new EstablishmentCuisines();
+                    response.EstablishmentCuisine = new EstablishmentCuisines();
                     response.Message = "Successfully deleted.";
                     return Ok(response);
                 }
@@ -1113,16 +1121,16 @@ namespace choapi.Controllers
         }
 
         [HttpGet("cuicines/{id}"), Authorize()]
-        public ActionResult<RestaurantCuisineResponse> GetCuicine(int id)
+        public ActionResult<EstablishmentCuisineResponse> GetCuicine(int id)
         {
-            var response = new RestaurantCuisineResponse();
+            var response = new EstablishmentCuisineResponse();
             try
             {
-                var result = _restaurantDAL.GetEstablishmentCuisine(id);
+                var result = _establishmentDAL.GetEstablishmentCuisine(id);
 
                 if (result != null)
                 {
-                    response.RestaurantCuisine = result;
+                    response.EstablishmentCuisine = result;
                     response.Message = "Successfully get Establishment Cuisine.";
 
                     return Ok(response);
@@ -1145,16 +1153,16 @@ namespace choapi.Controllers
         }
 
         [HttpGet("cuicines"), Authorize()]
-        public ActionResult<RestaurantCuisinesResponse> GetCuicines(int? establishmentId)
+        public ActionResult<EstablishmentCuisinesResponse> GetCuicines(int? establishmentId)
         {
-            var response = new RestaurantCuisinesResponse();
+            var response = new EstablishmentCuisinesResponse();
             try
             {
-                var result = _restaurantDAL.GetEstablishmentCuisines(establishmentId);
+                var result = _establishmentDAL.GetEstablishmentCuisines(establishmentId);
 
                 if (result != null && result.Count > 0)
                 {
-                    response.RestaurantCuisines = result;
+                    response.EstablishmentCuisines = result;
                     response.Message = "Successfully get Establishment Cuisines.";
 
                     return Ok(response);
@@ -1192,7 +1200,7 @@ namespace choapi.Controllers
                     Is_Deleted = false
                 };
 
-                var result = _restaurantDAL.Add(bookType);
+                var result = _establishmentDAL.Add(bookType);
 
                 response.BookType = result;
 
@@ -1215,7 +1223,7 @@ namespace choapi.Controllers
             var response = new EstablishmentBookTypeResponse();
             try
             {
-                var bookType = _restaurantDAL.GetBookType(request.EstablishmentBookType_Id);
+                var bookType = _establishmentDAL.GetBookType(request.EstablishmentBookType_Id);
 
                 if (bookType != null)
                 {
@@ -1225,7 +1233,7 @@ namespace choapi.Controllers
                     bookType.Currency = request.Currency;
                     bookType.Price = request.Price;
 
-                    var result = _restaurantDAL.UpdateBookType(bookType);
+                    var result = _establishmentDAL.UpdateBookType(bookType);
 
                     response.BookType = result;
                     response.Message = "Successfully updated.";
@@ -1254,13 +1262,13 @@ namespace choapi.Controllers
             var response = new EstablishmentBookTypeResponse();
             try
             {
-                var bookType = _restaurantDAL.GetBookType(id);
+                var bookType = _establishmentDAL.GetBookType(id);
 
                 if (bookType != null)
                 {
                     bookType.Is_Deleted = true;
 
-                    var result = _restaurantDAL.UpdateBookType(bookType);
+                    var result = _establishmentDAL.UpdateBookType(bookType);
 
                     response.BookType = new EstablishmentBookType();
                     response.Message = "Successfully deleted.";
@@ -1289,18 +1297,18 @@ namespace choapi.Controllers
             var response = new EstablishmentBookTypesResponse();
             try
             {
-                var result = _restaurantDAL.GetBookTypes(establishmentId);
+                var result = _establishmentDAL.GetBookTypes(establishmentId);
 
                 if (result != null && result.Count > 0)
                 {
                     response.BookTypes = result;
-                    response.Message = "Successfully get Restaurant Book types.";
+                    response.Message = "Successfully get Establishment Book types.";
 
                     return Ok(response);
                 }
                 else
                 {
-                    response.Message = $"No Restaurant Book Type found by restaurant id: {establishmentId}";
+                    response.Message = $"No Establishment Book Type found by establishment id: {establishmentId}";
                     response.Status = "Failed";
 
                     return BadRequest(response);
@@ -1321,18 +1329,18 @@ namespace choapi.Controllers
             var response = new EstablishmentBookTypeResponse();
             try
             {
-                var result = _restaurantDAL.GetBookType(id);
+                var result = _establishmentDAL.GetBookType(id);
 
                 if (result != null)
                 {
                     response.BookType = result;
-                    response.Message = "Successfully get Restaurant Book type.";
+                    response.Message = "Successfully get Establishment Book type.";
 
                     return Ok(response);
                 }
                 else
                 {
-                    response.Message = $"No Restaurant Book Type found by id: {id}";
+                    response.Message = $"No Establishment Book Type found by id: {id}";
                     response.Status = "Failed";
 
                     return BadRequest(response);

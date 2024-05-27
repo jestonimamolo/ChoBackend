@@ -2,23 +2,23 @@
 
 namespace choapi.DAL
 {
-    public interface IRestaurantDAL
+    public interface IEstablishmentDAL
     {
-        Restaurants Add(Restaurants model);
+        Establishment Add(Establishment model);
 
-        Restaurants Update(Restaurants model);
+        Establishment Update(Establishment model);
 
         EstablishmentImages AddImage(EstablishmentImages model);
 
         List<EstablishmentImages>? AddImages(List<EstablishmentImages> moel);
 
-        Restaurants? GetRestaurant(int id);
+        Establishment? GetEstablishment(int id);
 
         EstablishmentImages? GetEstablishmentImage(int id);
 
         List<EstablishmentImages>? GetEstablishmentImages(int id);
 
-        List<Restaurants>? GetRestaurants(int? userId);
+        List<Establishment>? GetEstablishments(int? userId);
 
         EstablishmentImages UpdateImage(EstablishmentImages model);
 

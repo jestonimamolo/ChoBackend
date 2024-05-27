@@ -40,7 +40,7 @@ builder.Services.AddDbContext<ChoDBContext>(options =>
 // DI
 builder.Services.AddScoped<ICategoryDAL, CategoryDAL>();
 builder.Services.AddScoped<IUserDAL, UserDAL>();
-builder.Services.AddScoped<IRestaurantDAL, RestaurantDAL>();
+builder.Services.AddScoped<IEstablishmentDAL, EstablishmentDAL>();
 builder.Services.AddScoped<IBookingDAL, BookingDAL>();
 builder.Services.AddScoped<IEstablishmentTableDAL, EstablishmentTableDAL>();
 builder.Services.AddScoped<IPaymentDAL, PaymentDAL>();

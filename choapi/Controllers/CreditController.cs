@@ -13,17 +13,17 @@ namespace choapi.Controllers
     public class CreditController : ControllerBase
     {
         private readonly ICreditDAL _creditDAL;
-        private readonly IRestaurantDAL _restaurantDAL;
+        private readonly IEstablishmentDAL _establishmentDAL;
 
         private readonly ILogger<CreditController> _logger;
 
         private const string _entityName = "Credit";
 
-        public CreditController(ILogger<CreditController> logger, ICreditDAL creditDAL, IRestaurantDAL restaurantDAL)
+        public CreditController(ILogger<CreditController> logger, ICreditDAL creditDAL, IEstablishmentDAL establishmentDAL)
         {
             _logger = logger;
             _creditDAL = creditDAL;
-            _restaurantDAL = restaurantDAL;
+            _establishmentDAL = establishmentDAL;
         }
 
         [HttpPost("add"), Authorize()]
@@ -51,16 +51,16 @@ namespace choapi.Controllers
                 var result = _creditDAL.Add(credit);
 
                 // upate credit of establishment
-                var restaurant = _restaurantDAL.GetRestaurant(credit.Establishment_Id);
-                if (restaurant != null && credit.Amount != null)
+                var establishment = _establishmentDAL.GetEstablishment(credit.Establishment_Id);
+                if (establishment != null && credit.Amount != null)
                 {
-                    if (restaurant.Credits != null)
-                        restaurant.Credits += credit.Amount;
+                    if (establishment.Credits != null)
+                        establishment.Credits += credit.Amount;
                     else
-                        restaurant.Credits = credit.Amount;
+                        establishment.Credits = credit.Amount;
 
                     // save changes
-                    var resultUpdateCredit = _restaurantDAL.Update(restaurant);
+                    var resultUpdateCredit = _establishmentDAL.Update(establishment);
                 }
 
                 response.Credit = result;
@@ -86,16 +86,16 @@ namespace choapi.Controllers
                 if (credit != null)
                 {
                     // undo first the added credit
-                    var restaurant = _restaurantDAL.GetRestaurant(credit.Establishment_Id);
-                    if (restaurant != null && request.Amount != null)
+                    var establishment = _establishmentDAL.GetEstablishment(credit.Establishment_Id);
+                    if (establishment != null && request.Amount != null)
                     {
-                        if (restaurant.Credits != null)
-                            restaurant.Credits = restaurant.Credits - credit.Amount;
+                        if (establishment.Credits != null)
+                            establishment.Credits = establishment.Credits - credit.Amount;
                         else
-                            restaurant.Credits = 0 - credit.Amount;
+                            establishment.Credits = 0 - credit.Amount;
 
                         // save changes
-                        var resultUpdateCredit = _restaurantDAL.Update(restaurant);
+                        var resultUpdateCredit = _establishmentDAL.Update(establishment);
                     }
 
                     credit.Establishment_Id = request.Establishment_Id;
@@ -106,16 +106,16 @@ namespace choapi.Controllers
                     var result = _creditDAL.Update(credit);
 
                     // update credit of establishment
-                    var updatedRestaurant = _restaurantDAL.GetRestaurant(credit.Establishment_Id);
-                    if (updatedRestaurant != null && credit.Amount != null)
+                    var updatedEstablishment = _establishmentDAL.GetEstablishment(credit.Establishment_Id);
+                    if (updatedEstablishment != null && credit.Amount != null)
                     {
-                        if (updatedRestaurant.Credits != null)
-                            updatedRestaurant.Credits += credit.Amount;
+                        if (updatedEstablishment.Credits != null)
+                            updatedEstablishment.Credits += credit.Amount;
                         else
-                            updatedRestaurant.Credits = credit.Amount;
+                            updatedEstablishment.Credits = credit.Amount;
 
                         // save changes
-                        var resultUpdateCredit = _restaurantDAL.Update(updatedRestaurant);
+                        var resultUpdateCredit = _establishmentDAL.Update(updatedEstablishment);
                     }
 
                     response.Credit = result;
@@ -152,16 +152,16 @@ namespace choapi.Controllers
                     var result =  _creditDAL.Update(credit);
 
                     // upate credit of establishment
-                    var restaurant = _restaurantDAL.GetRestaurant(credit.Establishment_Id);
-                    if (restaurant != null && credit.Amount != null)
+                    var establishment = _establishmentDAL.GetEstablishment(credit.Establishment_Id);
+                    if (establishment != null && credit.Amount != null)
                     {
-                        if (restaurant.Credits != null)
-                            restaurant.Credits = restaurant.Credits - credit.Amount;
+                        if (establishment.Credits != null)
+                            establishment.Credits = establishment.Credits - credit.Amount;
                         else
-                            restaurant.Credits = 0 - credit.Amount;
+                            establishment.Credits = 0 - credit.Amount;
 
                         // save changes
-                        var resultUpdateCredit = _restaurantDAL.Update(restaurant);
+                        var resultUpdateCredit = _establishmentDAL.Update(establishment);
                     }
 
 
@@ -215,7 +215,7 @@ namespace choapi.Controllers
         }
 
         [HttpGet("establishment/{id}"), Authorize()]
-        public ActionResult<CreditsResponse> GetRestaurantCredits(int id)
+        public ActionResult<CreditsResponse> GetEstablishmentCredits(int id)
         {
             var response = new CreditsResponse();
             try

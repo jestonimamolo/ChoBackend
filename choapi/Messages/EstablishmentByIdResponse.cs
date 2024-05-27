@@ -2,9 +2,9 @@
 
 namespace choapi.Messages
 {
-    public class RestaurantByIdResponse : ResponseBase
+    public class EstablishmentByIdResponse : ResponseBase
     {
-        public Restaurants Restaurant { get; set; } = new Restaurants();
+        public Establishment Establishment { get; set; } = new Establishment();
 
         public List<EstablishmentImages>? Images { get; set; } = null;
     }

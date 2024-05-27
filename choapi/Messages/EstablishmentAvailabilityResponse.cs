@@ -2,7 +2,7 @@
 
 namespace choapi.Messages
 {
-    public class RestaurantAvailabilityResponse : ResponseBase
+    public class EstablishmentAvailabilityResponse : ResponseBase
     {
         public Availability Availability { get; set; } = new Availability();
     }

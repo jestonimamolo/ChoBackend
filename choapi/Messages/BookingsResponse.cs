@@ -8,6 +8,6 @@ namespace choapi.Messages
 
         public UserResponse User { get; set; } = new UserResponse();
 
-        public Restaurants? Esablishment { get; set; } = new Restaurants();
+        public Establishment? Esablishment { get; set; } = new Establishment();
     }
 }

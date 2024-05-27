@@ -1,8 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace choapi.DTOs
+﻿namespace choapi.DTOs
 {
-    public class RestaurantCuisineDTO
+    public class EstablishmentCuisineDTO
     {
         public int EstablishmentCuisine_Id { get; set; }
 

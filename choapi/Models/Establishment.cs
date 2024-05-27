@@ -1,10 +1,11 @@
-﻿using choapi.Models;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace choapi.Messages
+namespace choapi.Models
 {
-    public class RestaurantsReponse
+    public class Establishment
     {
-        public int Restaurant_Id { get; set; }
+        [Key]
+        public int Establishment_Id { get; set; }
 
         public string Name { get; set; } = string.Empty;
 
@@ -22,10 +23,16 @@ namespace choapi.Messages
 
         public bool? Is_Promoted { get; set; } = null;
 
-        public bool? Is_Active { get; set; } = null;
-
         public string? Address { get; set;} = null;
 
-        public List<EstablishmentImages>? Images { get; set; } = null;
+        public bool? Is_Active { get; set; } = null;
+
+        public int? Promo_Credit { get; set; } = null;
+
+        public string? Promo_Type { get; set; } = null;
+
+        public string? Payment_Card_Option { get; set; } = null;
+
+        public int? Category_Id { get; set; } = null;
     }
 }

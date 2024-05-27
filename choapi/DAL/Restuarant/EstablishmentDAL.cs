@@ -2,27 +2,27 @@
 
 namespace choapi.DAL
 {
-    public class RestaurantDAL : IRestaurantDAL
+    public class EstablishmentDAL : IEstablishmentDAL
     {
         private readonly ChoDBContext _context;
 
-        public RestaurantDAL(ChoDBContext choDBContext)
+        public EstablishmentDAL(ChoDBContext choDBContext)
         {
             _context = choDBContext;
         }
 
-        public Restaurants Add(Restaurants model)
+        public Establishment Add(Establishment model)
         {
-            _context.Restaurants.Add(model);
+            _context.Establishment.Add(model);
 
             _context.SaveChanges();
 
             return model;
         }
 
-        public Restaurants Update(Restaurants model)
+        public Establishment Update(Establishment model)
         {
-            _context.Restaurants.Update(model);
+            _context.Establishment.Update(model);
 
             _context.SaveChanges();
 
@@ -52,9 +52,9 @@ namespace choapi.DAL
             return null;
         }
 
-        public Restaurants? GetRestaurant(int id)
+        public Establishment? GetEstablishment(int id)
         {
-            return _context.Restaurants.FirstOrDefault(r => r.Restaurant_Id == id);
+            return _context.Establishment.FirstOrDefault(r => r.Establishment_Id == id);
         }
 
         public EstablishmentImages? GetEstablishmentImage(int id)
@@ -67,12 +67,12 @@ namespace choapi.DAL
             return _context.EstablishmentImages.Where(i => i.Establishment_Id == id).ToList();
         }
 
-        public List<Restaurants>? GetRestaurants(int? userId)
+        public List<Establishment>? GetEstablishments(int? userId)
         {
             if (userId == null)
-                return _context.Restaurants.ToList();
+                return _context.Establishment.ToList();
             else
-                return _context.Restaurants.Where(r => r.User_Id == userId).ToList();
+                return _context.Establishment.Where(r => r.User_Id == userId).ToList();
         }
 
         public EstablishmentImages UpdateImage(EstablishmentImages model)
@@ -247,15 +247,15 @@ namespace choapi.DAL
             return model;
         }
 
-        public List<EstablishmentBookType>? GetBookTypes(int? restaurantId)
+        public List<EstablishmentBookType>? GetBookTypes(int? establishmentId)
         {
-            if (restaurantId == null)
+            if (establishmentId == null)
             {
                 return _context.EstablishmentBookType.Where(c => c.Is_Deleted != true).ToList();
             }
             else
             {
-                return _context.EstablishmentBookType.Where(c => c.Establishment_Id == restaurantId && c.Is_Deleted != true).ToList();
+                return _context.EstablishmentBookType.Where(c => c.Establishment_Id == establishmentId && c.Is_Deleted != true).ToList();
             }
         }
 

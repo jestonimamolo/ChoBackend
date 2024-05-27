@@ -1,8 +1,8 @@
 ﻿namespace choapi.DTOs
 {
-    public class RestaurantDTO
+    public class EstablishmentDTO
     {
-        public int Restaurant_Id { get; set; }
+        public int Establishment_Id { get; set; }
 
         public required string Name { get; set; } = string.Empty;
 
@@ -21,6 +21,14 @@
         public bool? Is_Promoted { get; set; } = null;
 
         public string? Address { get; set; } = null;
+
+        public int? Promo_Credit { get; set; } = null;
+
+        public string? Promo_Type { get; set; } = null;
+
+        public string? Payment_Card_Option { get; set; } = null;
+
+        public int? Category_Id { get; set; } = null;
 
         //public List<RestaurantImageDTO>? Images { get; set; } = null;
     }

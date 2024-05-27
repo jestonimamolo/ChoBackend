@@ -13,16 +13,16 @@ namespace choapi.Controllers
     {
         private readonly IBookingDAL _bookingDAL;
         private readonly IUserDAL _userDAL;
-        private readonly IRestaurantDAL _restaurantDAL;
+        private readonly IEstablishmentDAL _establishmentDAL;
 
         private readonly ILogger<BookingController> _logger;
 
-        public BookingController(ILogger<BookingController> logger, IBookingDAL bookingDAL, IUserDAL userDAL, IRestaurantDAL restaurantDAL)
+        public BookingController(ILogger<BookingController> logger, IBookingDAL bookingDAL, IUserDAL userDAL, IEstablishmentDAL establishmentDAL)
         {
             _logger = logger;
             _bookingDAL = bookingDAL;
             _userDAL = userDAL;
-            _restaurantDAL = restaurantDAL;
+            _establishmentDAL = establishmentDAL;
         }
 
         [HttpPost("add"), Authorize()]
@@ -64,7 +64,7 @@ namespace choapi.Controllers
                     userResponse.Longitude = user.Longitude;
                 }
 
-                var establishment = _restaurantDAL.GetRestaurant(result.Establishment_Id);
+                var establishment = _establishmentDAL.GetEstablishment(result.Establishment_Id);
 
                 response.User = userResponse;
                 response.Establishment = establishment;
@@ -154,7 +154,7 @@ namespace choapi.Controllers
         }
 
         [HttpGet("bookings/establishment/{id}"), Authorize()]
-        public ActionResult<BookingBookingsResponse> RestaurantBookings(int id)
+        public ActionResult<BookingBookingsResponse> EstatablishmentBookings(int id)
         {
             var response = new BookingBookingsResponse();
             try
@@ -184,7 +184,7 @@ namespace choapi.Controllers
                             bookingsResponse.User.Longitude = user.Longitude;
                         }
 
-                        var establishment = _restaurantDAL.GetRestaurant(booking.Establishment_Id);
+                        var establishment = _establishmentDAL.GetEstablishment(booking.Establishment_Id);
                         bookingsResponse.Esablishment = establishment;
 
                         response.Bookings.Add(bookingsResponse);
@@ -241,7 +241,7 @@ namespace choapi.Controllers
                             bookingsResponse.User.Longitude = user.Longitude;
                         }
 
-                        var establishment = _restaurantDAL.GetRestaurant(booking.Establishment_Id);
+                        var establishment = _establishmentDAL.GetEstablishment(booking.Establishment_Id);
                         bookingsResponse.Esablishment = establishment;
 
                         response.Bookings.Add(bookingsResponse);
@@ -294,7 +294,7 @@ namespace choapi.Controllers
                         userResponse.Longitude = user.Longitude;
                     }
 
-                    var establishment = _restaurantDAL.GetRestaurant(result.Establishment_Id);
+                    var establishment = _establishmentDAL.GetEstablishment(result.Establishment_Id);
 
                     response.User = userResponse;
                     response.Establishment = establishment;

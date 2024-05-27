@@ -10,7 +10,7 @@ namespace choapi.Models
 
         public virtual DbSet<Users> Users { get; set; }
 
-        public virtual DbSet<Restaurants> Restaurants { get; set; }
+        public virtual DbSet<Establishment> Establishment { get; set; }
 
         public virtual DbSet<EstablishmentImages> EstablishmentImages { get; set; }
 
