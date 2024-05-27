@@ -10,14 +10,14 @@ namespace choapi.Controllers
     [ApiController]
     public class WooCommerceController : ControllerBase
     {
-        private readonly IEstablishmentDAL _restaurantDAL;
+        private readonly IEstablishmentDAL _establishmentDAL;
 
         private readonly ILogger<WooCommerceController> _logger;
 
-        public WooCommerceController(ILogger<WooCommerceController> logger, IEstablishmentDAL restaurantDAL)
+        public WooCommerceController(ILogger<WooCommerceController> logger, IEstablishmentDAL establishmentDAL)
         {
             _logger = logger;
-            _restaurantDAL = restaurantDAL;
+            _establishmentDAL = establishmentDAL;
         }
 
         [HttpGet("restaurants")]
@@ -27,7 +27,7 @@ namespace choapi.Controllers
 
             try
             {
-                var resultEstablishments = _restaurantDAL.GetEstablishments(null);
+                var resultEstablishments = _establishmentDAL.GetEstablishments(null);
 
                 if (resultEstablishments != null && resultEstablishments.Count > 0)
                 {
@@ -47,7 +47,7 @@ namespace choapi.Controllers
                         resultEstablishment.Address = establishment.Address;
                         resultEstablishment.Is_Active = establishment.Is_Active;
 
-                        resultEstablishment.Images = _restaurantDAL.GetEstablishmentImages(establishment.Establishment_Id);
+                        resultEstablishment.Images = _establishmentDAL.GetEstablishmentImages(establishment.Establishment_Id);
 
                         response.Establishments.Add(resultEstablishment);
                     }
@@ -77,7 +77,7 @@ namespace choapi.Controllers
 
             try
             {
-                var resultEstablishment = _restaurantDAL.GetEstablishments(null);
+                var resultEstablishment = _establishmentDAL.GetEstablishments(null);
 
                 if (resultEstablishment != null && resultEstablishment.Count > 0)
                 {

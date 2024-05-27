@@ -158,7 +158,7 @@ namespace choapi.Controllers
         }
 
         [HttpGet("establishment/{id}"), Authorize()]
-        public ActionResult<PromotionsResponse> GetManagerByRestaurantId(int id)
+        public ActionResult<PromotionsResponse> GetManagerByEstablishmentId(int id)
         {
             var response = new PromotionsResponse();
             try

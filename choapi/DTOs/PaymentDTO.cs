@@ -6,7 +6,7 @@ namespace choapi.DTOs
     {
         public required int User_Id { get; set; }
 
-        public required int Restaurant_id { get; set; }
+        public required int Establishment_Id { get; set; }
 
         public float? Amount { get; set; } = null;
 

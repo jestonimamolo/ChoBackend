@@ -226,15 +226,15 @@ namespace choapi.DAL
             return _context.EstablishmentCuisines.FirstOrDefault(c => c.EstablishmentCuisine_Id == id);
         }
 
-        public List<EstablishmentCuisines>? GetEstablishmentCuisines(int? establishment)
+        public List<EstablishmentCuisines>? GetEstablishmentCuisines(int? establishmentId)
         {
-            if (establishment == null)
+            if (establishmentId == null)
             {
                 return _context.EstablishmentCuisines.ToList();
             }
             else
             {
-                return _context.EstablishmentCuisines.Where(c => c.Establishment_Id == establishment).ToList();
+                return _context.EstablishmentCuisines.Where(c => c.Establishment_Id == establishmentId).ToList();
             }
         }
 

@@ -27,7 +27,7 @@ namespace choapi.Controllers
             var payment = new Payment
             {
                 User_Id = request.User_Id,
-                Restaurant_id = request.Restaurant_id,
+                Establishment_Id = request.Establishment_Id,
                 Amount = request.Amount,
                 Payment_date = request.Payment_date,
                 Payment_Method = request.Payment_Method,
