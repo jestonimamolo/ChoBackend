@@ -10,16 +10,16 @@ namespace choapi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RestaurantController : ControllerBase
+    public class EstablishmentController : ControllerBase
     {
         private readonly IEstablishmentDAL _establishmentDAL;
 
-        private readonly ILogger<RestaurantController> _logger;
+        private readonly ILogger<EstablishmentController> _logger;
 
         private const string _fromMenus = "establishment-menus";
         private const string _fromImages = "establishment-images";
 
-        public RestaurantController(ILogger<RestaurantController> logger, IEstablishmentDAL establishmentDAL)
+        public EstablishmentController(ILogger<EstablishmentController> logger, IEstablishmentDAL establishmentDAL)
         {
             _logger = logger;
             _establishmentDAL = establishmentDAL;

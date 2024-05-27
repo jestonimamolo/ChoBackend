@@ -12,9 +12,9 @@ namespace choapi.Controllers
     {
         private readonly IEstablishmentDAL _restaurantDAL;
 
-        private readonly ILogger<RestaurantController> _logger;
+        private readonly ILogger<WooCommerceController> _logger;
 
-        public WooCommerceController(ILogger<RestaurantController> logger, IEstablishmentDAL restaurantDAL)
+        public WooCommerceController(ILogger<WooCommerceController> logger, IEstablishmentDAL restaurantDAL)
         {
             _logger = logger;
             _restaurantDAL = restaurantDAL;
