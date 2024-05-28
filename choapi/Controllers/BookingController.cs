@@ -153,13 +153,13 @@ namespace choapi.Controllers
             }
         }
 
-        [HttpGet("bookings/establishment/{id}"), Authorize()]
-        public ActionResult<BookingBookingsResponse> EstatablishmentBookings(int id)
+        [HttpGet("bookings"), Authorize()]
+        public ActionResult<BookingBookingsResponse> EstatablishmentBookings(int establishmentId)
         {
             var response = new BookingBookingsResponse();
             try
             {
-                var result = _bookingDAL.GetEstablishmentBookings(id);
+                var result = _bookingDAL.GetEstablishmentBookings(establishmentId);
 
                 if (result != null && result.Count > 0)
                 {
@@ -195,7 +195,7 @@ namespace choapi.Controllers
                 }
                 else
                 {
-                    response.Message = $"No Establishment Bookings found by establishment id: {id}";
+                    response.Message = $"No Establishment Bookings found by establishment id: {establishmentId}";
                     response.Status = "Failed";
 
                     return BadRequest(response);
