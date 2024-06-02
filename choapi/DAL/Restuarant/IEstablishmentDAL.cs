@@ -20,6 +20,8 @@ namespace choapi.DAL
 
         List<Establishment>? GetEstablishments(int? userId);
 
+        List<Establishment>? GetEstablishmentsByCategoryId(int id);
+
         EstablishmentImages UpdateImage(EstablishmentImages model);
 
         void DeleteImage(EstablishmentImages model);

@@ -25,6 +25,11 @@ namespace choapi.DAL
             return _context.Category.FirstOrDefault(c => c.Category_Id == id);
         }
 
+        public Category? GetByName(string name)
+        {
+            return _context.Category.FirstOrDefault(c => c.Name == name);
+        }
+
         public Category Update(Category model)
         {
             _context.Category.Update(model);

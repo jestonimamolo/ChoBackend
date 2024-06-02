@@ -75,6 +75,11 @@ namespace choapi.DAL
                 return _context.Establishment.Where(r => r.User_Id == userId).ToList();
         }
 
+        public List<Establishment>? GetEstablishmentsByCategoryId(int id)
+        {
+            return _context.Establishment.Where(r => r.Category_Id == id).ToList();
+        }
+
         public EstablishmentImages UpdateImage(EstablishmentImages model)
         {
             _context.EstablishmentImages.Update(model);

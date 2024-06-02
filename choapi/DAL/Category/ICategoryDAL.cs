@@ -9,5 +9,7 @@ namespace choapi.DAL
         Category Update(Category model);
 
         Category? Get(int id);
+
+        Category? GetByName(string name);
     }
 }

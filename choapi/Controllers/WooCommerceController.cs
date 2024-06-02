@@ -11,13 +11,15 @@ namespace choapi.Controllers
     public class WooCommerceController : ControllerBase
     {
         private readonly IEstablishmentDAL _establishmentDAL;
+        private readonly ICategoryDAL _categoryDAL;
 
         private readonly ILogger<WooCommerceController> _logger;
 
-        public WooCommerceController(ILogger<WooCommerceController> logger, IEstablishmentDAL establishmentDAL)
+        public WooCommerceController(ILogger<WooCommerceController> logger, IEstablishmentDAL establishmentDAL, ICategoryDAL categoryDAL)
         {
             _logger = logger;
             _establishmentDAL = establishmentDAL;
+            _categoryDAL = categoryDAL;
         }
 
         [HttpGet("restaurants")]
@@ -77,7 +79,15 @@ namespace choapi.Controllers
 
             try
             {
-                var resultEstablishment = _establishmentDAL.GetEstablishments(null);
+                var restaurantCategory = _categoryDAL.GetByName("Restaurant");
+                if (restaurantCategory == null)
+                {
+                    response.Message = $"Category of restaurant no found.";
+                    response.Status = "Failed";
+                    return BadRequest(response);
+                }
+
+                var resultEstablishment = _establishmentDAL.GetEstablishmentsByCategoryId(restaurantCategory.Category_Id);
 
                 if (resultEstablishment != null && resultEstablishment.Count > 0)
                 {
