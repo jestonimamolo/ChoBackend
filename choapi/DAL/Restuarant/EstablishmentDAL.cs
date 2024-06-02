@@ -277,5 +277,18 @@ namespace choapi.DAL
 
             return model;
         }
+
+        public Establishment? GetRestaurant(int categoryId, int id)
+        {
+            return _context.Establishment.FirstOrDefault(r => r.Establishment_Id == id && r.Category_Id == categoryId);
+        }
+
+        public List<Establishment>? GetRestaurants(int categoryId, int? userId)
+        {
+            if (userId == null)
+                return _context.Establishment.Where(r => r.Category_Id == categoryId).ToList();
+            else
+                return _context.Establishment.Where(r => r.User_Id == userId && r.Category_Id == categoryId).ToList();
+        }
     }
 }

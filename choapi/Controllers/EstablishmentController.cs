@@ -13,16 +13,18 @@ namespace choapi.Controllers
     public class EstablishmentController : ControllerBase
     {
         private readonly IEstablishmentDAL _establishmentDAL;
+        private readonly ICategoryDAL _categoryDAL;
 
         private readonly ILogger<EstablishmentController> _logger;
 
         private const string _fromMenus = "establishment-menus";
         private const string _fromImages = "establishment-images";
 
-        public EstablishmentController(ILogger<EstablishmentController> logger, IEstablishmentDAL establishmentDAL)
+        public EstablishmentController(ILogger<EstablishmentController> logger, IEstablishmentDAL establishmentDAL, ICategoryDAL categoryDAL)
         {
             _logger = logger;
             _establishmentDAL = establishmentDAL;
+            _categoryDAL = categoryDAL;
         }
 
         [HttpPost("register"), Authorize()]
@@ -1351,6 +1353,107 @@ namespace choapi.Controllers
                     response.Message = $"No Establishment Book Type found by id: {id}";
                     response.Status = "Failed";
 
+                    return BadRequest(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
+
+        [HttpGet("/restaurant/{id}"), Authorize()]
+        public ActionResult<EstablishmentByIdResponse> GetRestaurant(int id)
+        {
+            var response = new EstablishmentByIdResponse();
+
+            try
+            {
+                var restaurantCategory = _categoryDAL.GetByName("Restaurant");
+                if (restaurantCategory == null)
+                {
+                    response.Message = $"Category of restaurant no found.";
+                    response.Status = "Failed";
+                    return BadRequest(response);
+                }
+
+                var resultEstablishment = _establishmentDAL.GetRestaurant(restaurantCategory.Category_Id, id);
+
+                if (resultEstablishment != null)
+                {
+                    response.Establishment = resultEstablishment;
+
+                    response.Images = _establishmentDAL.GetEstablishmentImages(resultEstablishment.Establishment_Id);
+
+                    response.Message = $"Successfully get Restaurant.";
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Message = $"No Restaurant found by restaurant id: {id}";
+                    response.Status = "Failed";
+                    return BadRequest(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
+
+        [HttpGet("restaurants"), Authorize()]
+        public ActionResult<EstablishmentUserIdResponnse> GetRestaurants(int? userId)
+        {
+            var response = new EstablishmentUserIdResponnse();
+
+            try
+            {
+                var restaurantCategory = _categoryDAL.GetByName("Restaurant");
+                if (restaurantCategory == null)
+                {
+                    response.Message = $"Category of restaurant no found.";
+                    response.Status = "Failed";
+                    return BadRequest(response);
+                }
+
+                var resultEstablishments = _establishmentDAL.GetRestaurants(restaurantCategory.Category_Id, userId);
+
+                if (resultEstablishments != null && resultEstablishments.Count > 0)
+                {
+                    foreach (var establishment in resultEstablishments)
+                    {
+                        var resultEstablishment = new EstablishmentReponse();
+
+                        resultEstablishment.Establishment_Id = establishment.Establishment_Id;
+                        resultEstablishment.Name = establishment.Name;
+                        resultEstablishment.Description = establishment.Description;
+                        resultEstablishment.User_Id = establishment.User_Id;
+                        resultEstablishment.Credits = establishment.Credits;
+                        resultEstablishment.Plan = establishment.Plan;
+                        resultEstablishment.Latitude = establishment.Latitude;
+                        resultEstablishment.Longitude = establishment.Longitude;
+                        resultEstablishment.Is_Promoted = establishment.Is_Promoted;
+                        resultEstablishment.Address = establishment.Address;
+                        resultEstablishment.Is_Active = establishment.Is_Active;
+
+                        resultEstablishment.Images = _establishmentDAL.GetEstablishmentImages(establishment.Establishment_Id);
+
+                        response.Establishments.Add(resultEstablishment);
+                    }
+                    response.Message = $"Successfully get Restaurants.";
+
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Message = $"No Restaurant found by user id: {userId}";
+                    response.Status = "Failed";
                     return BadRequest(response);
                 }
             }

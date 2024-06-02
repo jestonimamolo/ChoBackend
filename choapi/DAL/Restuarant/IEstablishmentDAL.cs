@@ -73,5 +73,9 @@ namespace choapi.DAL
         EstablishmentBookType? GetBookType(int id);
 
         EstablishmentBookType UpdateBookType(EstablishmentBookType model);
+
+        Establishment? GetRestaurant(int categoryId, int id);
+
+        List<Establishment>? GetRestaurants(int categoryId, int? userId);
     }
 }
