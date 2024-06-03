@@ -79,5 +79,7 @@ namespace choapi.DAL
         List<Establishment>? GetRestaurants(int categoryId, int? userId);
 
         List<Establishment>? GetEstablishmentsPromotedByCategoryId(int categoryId, bool isPromoted);
+
+        List<Establishment>? GetRestaurantsSearch(int categoryId, string keywords);
     }
 }

@@ -295,5 +295,10 @@ namespace choapi.DAL
         {
             return _context.Establishment.Where(r => r.Category_Id == categoryId && r.Is_Promoted == isPromoted).ToList();
         }
+
+        public List<Establishment>? GetRestaurantsSearch(int categoryId, string keywords)
+        {
+            return _context.Establishment.Where(r => r.Category_Id == categoryId && (r.Name.Contains(keywords) || (r.Address != null ? r.Address : "").Contains(keywords))).ToList();
+        }
     }
 }
