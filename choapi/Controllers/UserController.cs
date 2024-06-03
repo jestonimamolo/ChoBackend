@@ -2,6 +2,7 @@
 using choapi.DTOs;
 using choapi.Helper;
 using choapi.Messages;
+using choapi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -179,6 +180,41 @@ namespace choapi.Controllers
 
                     response.User = user;
                     response.Message = "Successfully get User.";
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Message = $"No User found by id: {id}";
+                    response.Status = "Failed";
+                    return BadRequest(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
+
+        [HttpPost("delete/{id}"), Authorize()]
+        public ActionResult<UserByIdResponse> Delete(int id)
+        {
+            var response = new UserByIdResponse();
+            try
+            {
+                var user = _userDAL.GetUser(id);
+
+                if (user != null)
+                {
+                    user.Is_Active = false;
+
+                    var result = _userDAL.Update(user);
+
+                    response.User = new UserResponse();
+                    response.Message = "Successfully deleted.";
+
                     return Ok(response);
                 }
                 else
