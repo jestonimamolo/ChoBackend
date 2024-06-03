@@ -75,9 +75,9 @@ namespace choapi.DAL
                 return _context.Establishment.Where(r => r.User_Id == userId).ToList();
         }
 
-        public List<Establishment>? GetEstablishmentsByCategoryId(int id)
+        public List<Establishment>? GetEstablishmentsByCategoryId(int categoryId)
         {
-            return _context.Establishment.Where(r => r.Category_Id == id).ToList();
+            return _context.Establishment.Where(r => r.Category_Id == categoryId).ToList();
         }
 
         public EstablishmentImages UpdateImage(EstablishmentImages model)
@@ -289,6 +289,11 @@ namespace choapi.DAL
                 return _context.Establishment.Where(r => r.Category_Id == categoryId).ToList();
             else
                 return _context.Establishment.Where(r => r.User_Id == userId && r.Category_Id == categoryId).ToList();
+        }
+
+        public List<Establishment>? GetEstablishmentsPromotedByCategoryId(int categoryId, bool isPromoted)
+        {
+            return _context.Establishment.Where(r => r.Category_Id == categoryId && r.Is_Promoted == isPromoted).ToList();
         }
     }
 }

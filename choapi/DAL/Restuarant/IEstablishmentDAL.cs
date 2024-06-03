@@ -20,7 +20,7 @@ namespace choapi.DAL
 
         List<Establishment>? GetEstablishments(int? userId);
 
-        List<Establishment>? GetEstablishmentsByCategoryId(int id);
+        List<Establishment>? GetEstablishmentsByCategoryId(int categoryId);
 
         EstablishmentImages UpdateImage(EstablishmentImages model);
 
@@ -77,5 +77,7 @@ namespace choapi.DAL
         Establishment? GetRestaurant(int categoryId, int id);
 
         List<Establishment>? GetRestaurants(int categoryId, int? userId);
+
+        List<Establishment>? GetEstablishmentsPromotedByCategoryId(int categoryId, bool isPromoted);
     }
 }
