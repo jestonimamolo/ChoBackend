@@ -1717,6 +1717,65 @@ namespace choapi.Controllers
             }
         }
 
+        [HttpGet("restaurants/manager/{id}"), Authorize()]
+        public ActionResult<EstablishmentUserIdResponnse> GetRestaurantsByManager(int id)
+        {
+            var response = new EstablishmentUserIdResponnse();
+
+            try
+            {
+                var restaurantCategory = _categoryDAL.GetByName("Restaurant");
+                if (restaurantCategory == null)
+                {
+                    response.Message = $"Category of restaurant no found.";
+                    response.Status = "Failed";
+                    return BadRequest(response);
+                }
+
+                var resultEstablishments = _establishmentDAL.GetRestaurants(restaurantCategory.Category_Id, id);
+
+                if (resultEstablishments != null && resultEstablishments.Count > 0)
+                {
+                    foreach (var establishment in resultEstablishments)
+                    {
+                        var resultEstablishment = new EstablishmentReponse();
+
+                        resultEstablishment.Establishment_Id = establishment.Establishment_Id;
+                        resultEstablishment.Name = establishment.Name;
+                        resultEstablishment.Description = establishment.Description;
+                        resultEstablishment.User_Id = establishment.User_Id;
+                        resultEstablishment.Credits = establishment.Credits;
+                        resultEstablishment.Plan = establishment.Plan;
+                        resultEstablishment.Latitude = establishment.Latitude;
+                        resultEstablishment.Longitude = establishment.Longitude;
+                        resultEstablishment.Is_Promoted = establishment.Is_Promoted;
+                        resultEstablishment.Address = establishment.Address;
+                        resultEstablishment.Is_Active = establishment.Is_Active;
+
+                        resultEstablishment.Images = _establishmentDAL.GetEstablishmentImages(establishment.Establishment_Id);
+
+                        response.Establishments.Add(resultEstablishment);
+                    }
+                    response.Message = $"Successfully get Restaurants.";
+
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Message = $"No Restaurant found by manager id: {id}";
+                    response.Status = "Failed";
+                    return BadRequest(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
+
         private double CalculateDistance(double userLatitude, double userLongitude, double establishmentLatitude, double establishmentLongitude)
         {
             var d1 = userLatitude * (Math.PI / 180.0);
