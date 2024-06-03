@@ -18,7 +18,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
         policy =>
         {
-            policy.WithOrigins("https://cho-web-bm7qsb.flutterflow.app", "https://sama-all.com")
+            policy.WithOrigins("https://cho-web-bm7qsb.flutterflow.app", "https://sama-all.com", "https://cho-mobile-48qrmh.flutterflow.app")
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });
