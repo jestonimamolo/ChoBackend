@@ -16,9 +16,9 @@ namespace choapi.Messages
 
         public string? Plan { get; set; } = null;
 
-        public decimal? Latitude { get; set; } = null;
+        public double? Latitude { get; set; } = null;
 
-        public decimal? Longitude { get; set; } = null;
+        public double? Longitude { get; set; } = null;
 
         public bool? Is_Promoted { get; set; } = null;
 
@@ -31,6 +31,8 @@ namespace choapi.Messages
         public string? Promo_Type { get; set; } = null;
 
         public string? Payment_Card_Option { get; set; } = null;
+
+        public double? Distance { get; set; } = null;
 
         public List<EstablishmentImages>? Images { get; set; } = null;
     }

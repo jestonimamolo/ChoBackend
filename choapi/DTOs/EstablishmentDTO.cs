@@ -14,9 +14,9 @@
 
         public string? Plan { get; set; } = null;
 
-        public decimal? Latitude { get; set; } = null;
+        public double? Latitude { get; set; } = null;
 
-        public decimal? Longitude { get; set; } = null;
+        public double? Longitude { get; set; } = null;
 
         public bool? Is_Promoted { get; set; } = null;
 

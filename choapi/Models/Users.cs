@@ -24,8 +24,8 @@ namespace choapi.Models
 
         public string? Photo_Url { get; set; } = null;
 
-        public decimal? Latitude { get; set; } = null;
+        public double? Latitude { get; set; } = null;
 
-        public decimal? Longitude { get; set; } = null;
+        public double? Longitude { get; set; } = null;
     }
 }
