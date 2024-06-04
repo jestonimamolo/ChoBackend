@@ -1777,7 +1777,7 @@ namespace choapi.Controllers
         }
 
         [HttpGet("restaurants/search"), Authorize()]
-        public ActionResult<EstablishmentUserIdResponnse> GetRestaurantsByManager(string keywords)
+        public ActionResult<EstablishmentUserIdResponnse> GetRestaurantsSearch(string keywords)
         {
             var response = new EstablishmentUserIdResponnse();
 
