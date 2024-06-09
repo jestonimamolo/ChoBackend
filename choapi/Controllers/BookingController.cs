@@ -509,7 +509,7 @@ namespace choapi.Controllers
             }
         }
 
-        [HttpGet("restaurants/Report/Monthly"), Authorize()]
+        [HttpGet("restaurants/report/monthly"), Authorize()]
         public ActionResult<BookingBookingsResponse> RestaurantsBookingReportMonthly(string month, int year)
         {
             var response = new BookingBookingsResponse();
@@ -534,6 +534,91 @@ namespace choapi.Controllers
                     foreach (var restaurant in resultEstablishment)
                     {
                         var result = _bookingDAL.GetEstablishmentBookingsByMonthlyReport(restaurant.Establishment_Id, intMonth, year);
+
+                        if (result != null && result.Count > 0)
+                        {
+                            foreach (var booking in result)
+                            {
+                                bookingsResponse.Booking = booking;
+
+                                var user = _userDAL.GetUser(booking.User_Id);
+                                if (user != null)
+                                {
+                                    bookingsResponse.User.User_Id = user.User_Id;
+                                    bookingsResponse.User.Username = user.Username;
+                                    bookingsResponse.User.Email = user.Email;
+                                    bookingsResponse.User.Phone = user.Phone;
+                                    bookingsResponse.User.Role_Id = user.Role_Id;
+                                    bookingsResponse.User.Is_Active = user.Is_Active;
+                                    bookingsResponse.User.Display_Name = user.Display_Name;
+                                    bookingsResponse.User.Photo_Url = user.Photo_Url;
+                                    bookingsResponse.User.Latitude = user.Latitude;
+                                    bookingsResponse.User.Longitude = user.Longitude;
+                                }
+
+                                var establishment = _establishmentDAL.GetEstablishment(booking.Establishment_Id);
+                                bookingsResponse.Esablishment = establishment;
+
+                                response.Bookings.Add(bookingsResponse);
+                            }
+                        }
+                    }
+
+                    if (response.Bookings.Count == 0)
+                    {
+                        response.Message = $"No Bookings found for restaurant establishment by monthly filter";
+                        response.Status = "Failed";
+
+                        return BadRequest(response);
+                    }
+                    else
+                    {
+                        response.Message = "Successfully get Restaurants bookings.";
+                        return Ok(response);
+                    }
+
+                }
+                else
+                {
+                    response.Message = $"No establishment of restaurant found.";
+                    response.Status = "Failed";
+                    return BadRequest(response);
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
+
+        [HttpGet("restaurants/filter"), Authorize()]
+        public ActionResult<BookingBookingsResponse> RestaurantsBookingReportMonthly(DateTime date)
+        {
+            var response = new BookingBookingsResponse();
+            try
+            {
+                var restaurantCategory = _categoryDAL.GetByName("Restaurant");
+                if (restaurantCategory == null)
+                {
+                    response.Message = $"Category of restaurant no found.";
+                    response.Status = "Failed";
+                    return BadRequest(response);
+                }
+
+                var resultEstablishment = _establishmentDAL.GetEstablishmentsByCategoryId(restaurantCategory.Category_Id);
+
+                if (resultEstablishment != null && resultEstablishment.Count > 0)
+                {
+                    var bookingsResponse = new BookingsResponse();
+
+                    foreach (var restaurant in resultEstablishment)
+                    {
+                        var result = _bookingDAL.GetEstablishmentBookingsByDateFilter(restaurant.Establishment_Id, date);
 
                         if (result != null && result.Count > 0)
                         {

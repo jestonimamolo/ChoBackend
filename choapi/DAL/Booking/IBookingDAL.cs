@@ -19,5 +19,7 @@ namespace choapi.DAL
         List<Bookings>? GetEstablishmentBookingsByDateCreated(int id, DateTime from, DateTime to);
 
         List<Bookings>? GetEstablishmentBookingsByMonthlyReport(int id, int month, int year);
+
+        List<Bookings>? GetEstablishmentBookingsByDateFilter(int id, DateTime date);
     }
 }
