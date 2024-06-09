@@ -21,7 +21,7 @@ namespace choapi.Models
 
         public string? Reason_For_Rejection { get; set; } = null;
 
-        public DateTime? Created_Date { get; set; } = null;
+        public DateTime Created_Date { get; set; } = DateTime.Now;
 
         public string? Payment_Status { get; set; } = null;
 

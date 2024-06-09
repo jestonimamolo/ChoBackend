@@ -6,7 +6,7 @@
 
         public required int Establishment_Id { get; set; }
 
-        public DateTime? Booking_Date { get; set; } = null;
+        public DateTime Booking_Date { get; set; } = DateTime.Now;
 
         public int? Number_Of_Seats { get; set; } = null;
 
@@ -16,7 +16,7 @@
 
         public string? Reason_For_Rejection { get; set; } = null;
 
-        public DateTime? Created_Date { get; set; } = null;
+        public DateTime Created_Date { get; set; } = DateTime.Now;
 
         public string? Payment_Status { get; set; } = null;
 

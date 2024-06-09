@@ -57,5 +57,10 @@ namespace choapi.DAL
         {
             return _context.Bookings.Where(b => b.Establishment_Id == id && b.Is_Deleted != true && b.Created_Date >= from && b.Created_Date <= to).ToList();
         }
+
+        public List<Bookings>? GetEstablishmentBookingsByMonthlyReport(int id, int month, int year)
+        {
+            return _context.Bookings.Where(b => b.Establishment_Id == id && b.Is_Deleted != true && b.Created_Date.Month == month && b.Created_Date.Year == year).ToList();
+        }
     }
 }
