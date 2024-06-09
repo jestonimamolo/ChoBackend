@@ -71,6 +71,56 @@ namespace choapi.Controllers
             }
         }
 
+        [HttpPost("profile/update"), Authorize()]
+        public ActionResult<UserUpdateResponse> UpdateProfile(UserProfileDTO request)
+        {
+            var response = new UserUpdateResponse();
+            try
+            {
+                var user = _userDAL.GetUser(request.User_id);
+
+                if (user != null)
+                {
+                    user.Email = request.Email;
+                    user.Phone = request.Phone;
+                    user.Role_Id = request.Role_Id;
+                    user.Display_Name = request.Display_Name;
+                    user.Latitude = request.Latitude;
+                    user.Longitude = request.Longitude;
+
+                    var updateResult = _userDAL.Update(user);
+
+                    response.User.User_Id = updateResult.User_Id;
+                    response.User.Username = updateResult.Username;
+                    response.User.Email = updateResult.Email;
+                    response.User.Phone = updateResult.Phone;
+                    response.User.Role_Id = updateResult.Role_Id;
+                    response.User.Is_Active = updateResult.Is_Active;
+                    response.User.Display_Name = updateResult.Display_Name;
+                    response.User.Photo_Url = updateResult.Photo_Url;
+                    response.User.Latitude = updateResult.Latitude;
+                    response.User.Longitude = updateResult.Longitude;
+
+                    response.Message = "Successfully updated.";
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Status = "Failed";
+                    response.Message = $"No found User id: {request.User_id}";
+
+                    return Ok(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
+
         [HttpPost("update"), Authorize()]
         public async Task<ActionResult<UserUpdateResponse>> Update(UserUpdateDTO request)
         {
