@@ -46,6 +46,8 @@ namespace choapi.Models
         
         public virtual DbSet<CardDetails> CardDetails { get; set; }
 
+        public virtual DbSet<AppInfo> AppInfo { get; set; }
+
         public virtual DbSet<Payment> Payment { get; set; }
 
 

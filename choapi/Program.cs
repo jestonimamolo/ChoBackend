@@ -53,6 +53,7 @@ builder.Services.AddScoped<IFCMNotificationDAL, FCMNoticationDAL>();
 builder.Services.AddScoped<ISaveEstablishmentDAL, SaveEstablishmentDAL>();
 builder.Services.AddScoped<IReviewDAL, ReviewDAL>();
 builder.Services.AddScoped<ICardDetailsDAL, CardDetailsDAL>();
+builder.Services.AddScoped<IAppInfoDAL, AppInfoDAL>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
