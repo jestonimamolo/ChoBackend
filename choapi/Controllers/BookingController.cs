@@ -4,6 +4,7 @@ using choapi.Messages;
 using choapi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace choapi.Controllers
 {
@@ -14,15 +15,17 @@ namespace choapi.Controllers
         private readonly IBookingDAL _bookingDAL;
         private readonly IUserDAL _userDAL;
         private readonly IEstablishmentDAL _establishmentDAL;
+        private readonly ICategoryDAL _categoryDAL;
 
         private readonly ILogger<BookingController> _logger;
 
-        public BookingController(ILogger<BookingController> logger, IBookingDAL bookingDAL, IUserDAL userDAL, IEstablishmentDAL establishmentDAL)
+        public BookingController(ILogger<BookingController> logger, IBookingDAL bookingDAL, IUserDAL userDAL, IEstablishmentDAL establishmentDAL, ICategoryDAL categoryDAL)
         {
             _logger = logger;
             _bookingDAL = bookingDAL;
             _userDAL = userDAL;
             _establishmentDAL = establishmentDAL;
+            _categoryDAL = categoryDAL;
         }
 
         [HttpPost("add"), Authorize()]
@@ -310,6 +313,90 @@ namespace choapi.Controllers
 
                     return BadRequest(response);
                 }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
+
+        [HttpGet("restaurants"), Authorize()]
+        public ActionResult<BookingBookingsResponse> RestaurantsBooking()
+        {
+            var response = new BookingBookingsResponse();
+            try
+            {
+                var restaurantCategory = _categoryDAL.GetByName("Restaurant");
+                if (restaurantCategory == null)
+                {
+                    response.Message = $"Category of restaurant no found.";
+                    response.Status = "Failed";
+                    return BadRequest(response);
+                }
+
+                var resultEstablishment = _establishmentDAL.GetEstablishmentsByCategoryId(restaurantCategory.Category_Id);
+
+                if (resultEstablishment != null && resultEstablishment.Count > 0)
+                {
+                    var bookingsResponse = new BookingsResponse();
+                    foreach (var restaurant in resultEstablishment)
+                    {
+                        var result = _bookingDAL.GetEstablishmentBookings(restaurant.Establishment_Id);
+
+                        if (result != null && result.Count > 0)
+                        {
+                            foreach (var booking in result)
+                            {
+                                bookingsResponse.Booking = booking;
+
+                                var user = _userDAL.GetUser(booking.User_Id);
+                                if (user != null)
+                                {
+                                    bookingsResponse.User.User_Id = user.User_Id;
+                                    bookingsResponse.User.Username = user.Username;
+                                    bookingsResponse.User.Email = user.Email;
+                                    bookingsResponse.User.Phone = user.Phone;
+                                    bookingsResponse.User.Role_Id = user.Role_Id;
+                                    bookingsResponse.User.Is_Active = user.Is_Active;
+                                    bookingsResponse.User.Display_Name = user.Display_Name;
+                                    bookingsResponse.User.Photo_Url = user.Photo_Url;
+                                    bookingsResponse.User.Latitude = user.Latitude;
+                                    bookingsResponse.User.Longitude = user.Longitude;
+                                }
+
+                                var establishment = _establishmentDAL.GetEstablishment(booking.Establishment_Id);
+                                bookingsResponse.Esablishment = establishment;
+
+                                response.Bookings.Add(bookingsResponse);
+                            }                            
+                        }
+                    }
+
+                    if (response.Bookings.Count == 0)
+                    {
+                        response.Message = $"No Bookings found for restaurant establishment";
+                        response.Status = "Failed";
+
+                        return BadRequest(response);
+                    }
+                    else
+                    {
+                        response.Message = "Successfully get User bookings.";
+                        return Ok(response);
+                    }
+                    
+                }
+                else
+                {
+                    response.Message = $"No establishment of restaurant found.";
+                    response.Status = "Failed";
+                    return BadRequest(response);
+                }
+
+                
             }
             catch (Exception ex)
             {
