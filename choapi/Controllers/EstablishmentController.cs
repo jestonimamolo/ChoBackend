@@ -1468,6 +1468,74 @@ namespace choapi.Controllers
             }
         }
 
+        [HttpGet("distance/restaurants/device/location"), Authorize()]
+        public ActionResult<EstablishmentUserIdResponnse> GetDistanceRestaurantsUser(double latitude, double longitude)
+        {
+            var response = new EstablishmentUserIdResponnse();
+
+            try
+            {
+                var restaurantCategory = _categoryDAL.GetByName("Restaurant");
+                if (restaurantCategory == null)
+                {
+                    response.Message = $"Category of restaurant no found.";
+                    response.Status = "Failed";
+                    return BadRequest(response);
+                }
+
+                var resultEstablishments = _establishmentDAL.GetEstablishmentsByCategoryId(restaurantCategory.Category_Id);
+
+                if (resultEstablishments != null && resultEstablishments.Count > 0)
+                {
+                    foreach (var establishment in resultEstablishments)
+                    {
+                        var resultEstablishment = new EstablishmentReponse();
+
+                        resultEstablishment.Establishment_Id = establishment.Establishment_Id;
+                        resultEstablishment.Name = establishment.Name;
+                        resultEstablishment.Description = establishment.Description;
+                        resultEstablishment.User_Id = establishment.User_Id;
+                        resultEstablishment.Credits = establishment.Credits;
+                        resultEstablishment.Plan = establishment.Plan;
+                        resultEstablishment.Latitude = establishment.Latitude;
+                        resultEstablishment.Longitude = establishment.Longitude;
+                        resultEstablishment.Is_Promoted = establishment.Is_Promoted;
+                        resultEstablishment.Address = establishment.Address;
+                        resultEstablishment.Is_Active = establishment.Is_Active;
+
+                        if (establishment.Latitude != null || establishment.Longitude != null)
+                        {
+                            double userLat = latitude;
+                            double userLong = longitude;
+                            double establishmentLat = (double)(establishment.Latitude == null ? 0 : establishment.Latitude);
+                            double establishmentLong = (double)(establishment.Longitude == null ? 0 : establishment.Longitude);
+                            resultEstablishment.Distance = CalculateDistance(userLat, userLong, establishmentLat, establishmentLong);
+                        }
+
+                        resultEstablishment.Images = _establishmentDAL.GetEstablishmentImages(establishment.Establishment_Id);
+
+                        response.Establishments.Add(resultEstablishment);
+                    }
+                    response.Message = $"Successfully get Restaurants.";
+
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Message = $"No Restaurants found";
+                    response.Status = "Failed";
+                    return BadRequest(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
+
         [HttpGet("distance/restaurants/user/{id}"), Authorize()]
         public ActionResult<EstablishmentUserIdResponnse> GetDistanceRestaurantsUser(int id)
         {

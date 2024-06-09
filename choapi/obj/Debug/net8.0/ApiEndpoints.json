@@ -352,6 +352,94 @@
   },
   {
     "ContainingType": "choapi.Controllers.BookingController",
+    "Method": "RestaurantsBookingDate",
+    "RelativePath": "api/Booking/restaurants/Date",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "from",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "to",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.BookingBookingsResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.BookingController",
+    "Method": "RestaurantsBookingReportMonthly",
+    "RelativePath": "api/Booking/restaurants/filter",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "date",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.BookingBookingsResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.BookingController",
+    "Method": "RestaurantsBookingReportMonthly",
+    "RelativePath": "api/Booking/restaurants/report/monthly",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "month",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "year",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.BookingBookingsResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.BookingController",
     "Method": "Update",
     "RelativePath": "api/Booking/update",
     "HttpMethod": "POST",
@@ -1277,6 +1365,37 @@
     "ReturnTypes": [
       {
         "Type": "choapi.Messages.EstablishmentResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.EstablishmentController",
+    "Method": "GetDistanceRestaurantsUser",
+    "RelativePath": "api/Establishment/distance/restaurants/device/location",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "latitude",
+        "Type": "System.Double",
+        "IsRequired": false
+      },
+      {
+        "Name": "longitude",
+        "Type": "System.Double",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.EstablishmentUserIdResponnse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -3011,6 +3130,32 @@
       {
         "Name": "request",
         "Type": "choapi.DTOs.LocationDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.UserUpdateResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.UserController",
+    "Method": "UpdateProfile",
+    "RelativePath": "api/User/profile/update",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "choapi.DTOs.UserProfileDTO",
         "IsRequired": true
       }
     ],
