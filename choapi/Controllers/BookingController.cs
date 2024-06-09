@@ -1,4 +1,5 @@
-﻿using choapi.DAL;
+﻿using Azure.Core;
+using choapi.DAL;
 using choapi.DTOs;
 using choapi.Messages;
 using choapi.Models;
@@ -34,6 +35,22 @@ namespace choapi.Controllers
             var response = new BookingResponse();
             try
             {
+                if (request.User_Id <= 0)
+                {
+                    response.Message = $"Required User Id.";
+                    response.Status = "Failed";
+
+                    return BadRequest(response);
+                }
+
+                if (request.Establishment_Id <= 0)
+                {
+                    response.Message = $"Required Establishment Id.";
+                    response.Status = "Failed";
+
+                    return BadRequest(response);
+                }
+
                 var booking = new Bookings
                 {
                     User_Id = request.User_Id,
@@ -384,7 +401,7 @@ namespace choapi.Controllers
                     }
                     else
                     {
-                        response.Message = "Successfully get User bookings.";
+                        response.Message = "Successfully get Restaurants bookings.";
                         return Ok(response);
                     }
                     
@@ -397,6 +414,90 @@ namespace choapi.Controllers
                 }
 
                 
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
+
+        [HttpGet("restaurants/Date"), Authorize()]
+        public ActionResult<BookingBookingsResponse> RestaurantsBookingDate(DateTime from, DateTime to)
+        {
+            var response = new BookingBookingsResponse();
+            try
+            {
+                var restaurantCategory = _categoryDAL.GetByName("Restaurant");
+                if (restaurantCategory == null)
+                {
+                    response.Message = $"Category of restaurant no found.";
+                    response.Status = "Failed";
+                    return BadRequest(response);
+                }
+
+                var resultEstablishment = _establishmentDAL.GetEstablishmentsByCategoryId(restaurantCategory.Category_Id);
+
+                if (resultEstablishment != null && resultEstablishment.Count > 0)
+                {
+                    var bookingsResponse = new BookingsResponse();
+                    foreach (var restaurant in resultEstablishment)
+                    {
+                        var result = _bookingDAL.GetEstablishmentBookingsByDateCreated(restaurant.Establishment_Id, from, to);
+
+                        if (result != null && result.Count > 0)
+                        {
+                            foreach (var booking in result)
+                            {
+                                bookingsResponse.Booking = booking;
+
+                                var user = _userDAL.GetUser(booking.User_Id);
+                                if (user != null)
+                                {
+                                    bookingsResponse.User.User_Id = user.User_Id;
+                                    bookingsResponse.User.Username = user.Username;
+                                    bookingsResponse.User.Email = user.Email;
+                                    bookingsResponse.User.Phone = user.Phone;
+                                    bookingsResponse.User.Role_Id = user.Role_Id;
+                                    bookingsResponse.User.Is_Active = user.Is_Active;
+                                    bookingsResponse.User.Display_Name = user.Display_Name;
+                                    bookingsResponse.User.Photo_Url = user.Photo_Url;
+                                    bookingsResponse.User.Latitude = user.Latitude;
+                                    bookingsResponse.User.Longitude = user.Longitude;
+                                }
+
+                                var establishment = _establishmentDAL.GetEstablishment(booking.Establishment_Id);
+                                bookingsResponse.Esablishment = establishment;
+
+                                response.Bookings.Add(bookingsResponse);
+                            }
+                        }
+                    }
+
+                    if (response.Bookings.Count == 0)
+                    {
+                        response.Message = $"No Bookings found for restaurant establishment by date filter";
+                        response.Status = "Failed";
+
+                        return BadRequest(response);
+                    }
+                    else
+                    {
+                        response.Message = "Successfully get Restaurants bookings.";
+                        return Ok(response);
+                    }
+
+                }
+                else
+                {
+                    response.Message = $"No establishment of restaurant found.";
+                    response.Status = "Failed";
+                    return BadRequest(response);
+                }
+
+
             }
             catch (Exception ex)
             {

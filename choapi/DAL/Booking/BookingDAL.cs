@@ -53,6 +53,9 @@ namespace choapi.DAL
             return _context.Bookings.Where(b => b.User_Id == id && b.Is_Deleted != true).ToList();
         }
 
-
+        public List<Bookings>? GetEstablishmentBookingsByDateCreated(int id, DateTime from, DateTime to)
+        {
+            return _context.Bookings.Where(b => b.Establishment_Id == id && b.Is_Deleted != true && b.Created_Date >= from && b.Created_Date <= to).ToList();
+        }
     }
 }
