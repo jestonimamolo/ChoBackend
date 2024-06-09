@@ -3244,6 +3244,22 @@
   },
   {
     "ContainingType": "choapi.Controllers.WooCommerceController",
+    "Method": "GetRestaurantSearch",
+    "RelativePath": "api/WooCommerce/establishment/restaurants/search",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "keywords",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "choapi.Controllers.WooCommerceController",
     "Method": "GetRestaurants",
     "RelativePath": "api/WooCommerce/restaurants",
     "HttpMethod": "GET",

@@ -113,5 +113,44 @@ namespace choapi.Controllers
                 return BadRequest(response);
             }
         }
+
+        [HttpGet("establishment/restaurants/search")]
+        public ActionResult GetRestaurantSearch(string keywords)
+        {
+            var response = new EstablishmentUserIdResponnse();
+
+            try
+            {
+                var restaurantCategory = _categoryDAL.GetByName("Restaurant");
+                if (restaurantCategory == null)
+                {
+                    response.Message = $"Category of restaurant no found.";
+                    response.Status = "Failed";
+                    return BadRequest(response);
+                }
+                var resultEstablishments = _establishmentDAL.GetRestaurantsSearch(restaurantCategory.Category_Id, keywords);
+
+                if (resultEstablishments != null && resultEstablishments.Count > 0)
+                {
+                    return new JsonResult(resultEstablishments, new JsonSerializerOptions
+                    {
+                        ReferenceHandler = null,
+                        WriteIndented = true,
+                    });
+                }
+                else
+                {
+                    response.Message = $"No establishment of restaurant found by search {keywords}";
+                    response.Status = "Failed";
+                    return BadRequest(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+                return BadRequest(response);
+            }
+        }
     }
 }
