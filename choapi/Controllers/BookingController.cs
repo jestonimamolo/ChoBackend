@@ -5,6 +5,7 @@ using choapi.Messages;
 using choapi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Globalization;
 using System.Text.Json;
 
@@ -103,7 +104,51 @@ namespace choapi.Controllers
         }
 
         [HttpPost("update"), Authorize()]
-        public ActionResult<BookingStatusResponse> Update(BookingStatusDTO request)
+        public ActionResult<BookingStatusResponse> Update(BookingDTO request)
+        {
+            var response = new BookingStatusResponse();
+            try
+            {
+                var booking = _bookingDAL.GetBooking(request.Booking_Id);
+
+                if (booking != null)
+                {
+                    booking.User_Id = request.User_Id;
+                    booking.Establishment_Id = request.Establishment_Id;
+                    booking.Booking_Date = request.Booking_Date;
+                    booking.Number_Of_Seats = request.Number_Of_Seats;
+                    booking.Status = request.Status;
+                    booking.Notes = request.Notes;
+                    booking.Reason_For_Rejection = request.Reason_For_Rejection;
+                    booking.Created_Date = request.Created_Date;
+                    booking.Payment_Status = request.Payment_Status;
+                    booking.Transaction_Id = request.Transaction_Id;
+
+                    var result = _bookingDAL.Update(booking);
+
+                    response.Booking = result;
+                    response.Message = "Successfully updated.";
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Status = "Failed";
+                    response.Message = $"No found Booking id: {request.Booking_Id}";
+
+                    return Ok(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
+
+        [HttpPost("/status/update"), Authorize()]
+        public ActionResult<BookingStatusResponse> UpdateStatus(BookingStatusDTO request)
         {
             var response = new BookingStatusResponse();
             try

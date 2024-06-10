@@ -2,6 +2,8 @@
 {
     public class BookingDTO
     {
+        public int Booking_Id { get; set; }
+
         public required int User_Id { get; set; }
 
         public required int Establishment_Id { get; set; }
