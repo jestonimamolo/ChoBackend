@@ -13,5 +13,7 @@ namespace choapi.DAL
         SaveEstablishment? Get(int id);
 
         List<SaveEstablishment>? GetByUserId(int id);
+
+        List<int> GetSaveEstablishmentOfUser(int id);
     }
 }

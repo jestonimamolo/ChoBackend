@@ -34,6 +34,8 @@ namespace choapi.Messages
 
         public double? Distance { get; set; } = null;
 
+        public List<int>? Save_User { get; set; } = null;
+
         public List<EstablishmentImages>? Images { get; set; } = null;
     }
 }

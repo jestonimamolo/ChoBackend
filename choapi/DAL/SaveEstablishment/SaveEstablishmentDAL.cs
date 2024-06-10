@@ -47,5 +47,10 @@ namespace choapi.DAL
         {
             return _context.SaveEstablishment.Where(s => s.User_Id  == id && s.Is_Deleted != true).ToList();
         }
+
+        public List<int> GetSaveEstablishmentOfUser(int id)
+        {
+            return _context.SaveEstablishment.Where(s => s.Establishment_Id == id && s.Is_Deleted == true).Select(s => s.User_Id).ToList();
+        }
     }
 }
