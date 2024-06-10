@@ -58,6 +58,7 @@ namespace choapi.Controllers
                     User_Id = request.User_Id,
                     Establishment_Id = request.Establishment_Id,
                     Booking_Date = request.Booking_Date,
+                    EstablishmentTable_Id = request.EstablishmentTable_Id,
                     Number_Of_Seats = request.Number_Of_Seats,
                     Status = request.Status,
                     Notes = request.Notes,
@@ -103,6 +104,87 @@ namespace choapi.Controllers
             }            
         }
 
+        [HttpPost("add/dining/session"), Authorize()]
+        public ActionResult<BookingResponse> AddDiningSession(BookingDTO request)
+        {
+            var response = new BookingResponse();
+            try
+            {
+                if (request.User_Id <= 0)
+                {
+                    response.Message = $"Required User Id.";
+                    response.Status = "Failed";
+
+                    return BadRequest(response);
+                }
+
+                if (request.Establishment_Id <= 0)
+                {
+                    response.Message = $"Required Establishment Id.";
+                    response.Status = "Failed";
+
+                    return BadRequest(response);
+                }
+
+                if (request.EstablishmentTable_Id <= 0)
+                {
+                    response.Message = $"Required Establishment Table Id.";
+                    response.Status = "Failed";
+
+                    return BadRequest(response);
+                }
+
+                var booking = new Bookings
+                {
+                    User_Id = request.User_Id,
+                    Establishment_Id = request.Establishment_Id,
+                    Booking_Date = request.Booking_Date,
+                    EstablishmentTable_Id = request.EstablishmentTable_Id,
+                    Number_Of_Seats = request.Number_Of_Seats,
+                    Status = request.Status,
+                    Notes = request.Notes,
+                    Reason_For_Rejection = request.Reason_For_Rejection,
+                    Created_Date = request.Created_Date,
+                    Payment_Status = request.Payment_Status,
+                    Transaction_Id = request?.Transaction_Id,
+                    Is_Deleted = false
+                };
+
+                var result = _bookingDAL.Add(booking);
+
+                var user = _userDAL.GetUser(result.User_Id);
+                var userResponse = new UserResponse();
+                if (user != null)
+                {
+                    userResponse.User_Id = user.User_Id;
+                    userResponse.Username = user.Username;
+                    userResponse.Email = user.Email;
+                    userResponse.Phone = user.Phone;
+                    userResponse.Role_Id = user.Role_Id;
+                    userResponse.Is_Active = user.Is_Active;
+                    userResponse.Display_Name = user.Display_Name;
+                    userResponse.Photo_Url = user.Photo_Url;
+                    userResponse.Latitude = user.Latitude;
+                    userResponse.Longitude = user.Longitude;
+                }
+
+                var establishment = _establishmentDAL.GetEstablishment(result.Establishment_Id);
+
+                response.User = userResponse;
+                response.Establishment = establishment;
+                response.Booking = result;
+                response.Message = "Successfully added.";
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
+
         [HttpPost("update"), Authorize()]
         public ActionResult<BookingStatusResponse> Update(BookingDTO request)
         {
@@ -115,6 +197,7 @@ namespace choapi.Controllers
                 {
                     booking.User_Id = request.User_Id;
                     booking.Establishment_Id = request.Establishment_Id;
+                    booking.EstablishmentTable_Id = request.EstablishmentTable_Id;
                     booking.Booking_Date = request.Booking_Date;
                     booking.Number_Of_Seats = request.Number_Of_Seats;
                     booking.Status = request.Status;
@@ -147,7 +230,7 @@ namespace choapi.Controllers
             }
         }
 
-        [HttpPost("/status/update"), Authorize()]
+        [HttpPost("status/update"), Authorize()]
         public ActionResult<BookingStatusResponse> UpdateStatus(BookingStatusDTO request)
         {
             var response = new BookingStatusResponse();

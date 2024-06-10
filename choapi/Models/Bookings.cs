@@ -11,6 +11,8 @@ namespace choapi.Models
 
         public int Establishment_Id { get; set; }
 
+        public int EstablishmentTable_Id { get; set; }
+
         public DateTime? Booking_Date { get; set; } = null;
 
         public int? Number_Of_Seats { get; set; } = null;

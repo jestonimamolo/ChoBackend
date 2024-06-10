@@ -8,6 +8,8 @@
 
         public required int Establishment_Id { get; set; }
 
+        public required int EstablishmentTable_Id { get; set; }
+
         public DateTime Booking_Date { get; set; } = DateTime.Now;
 
         public int? Number_Of_Seats { get; set; } = null;
