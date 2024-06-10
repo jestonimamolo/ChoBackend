@@ -448,7 +448,7 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "choapi.DTOs.BookingStatusDTO",
+        "Type": "choapi.DTOs.BookingDTO",
         "IsRequired": true
       }
     ],
@@ -3269,6 +3269,32 @@
     "ReturnTypes": [
       {
         "Type": "choapi.Messages.EstablishmentUserIdResponnse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.BookingController",
+    "Method": "UpdateStatus",
+    "RelativePath": "status/update",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "choapi.DTOs.BookingStatusDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.BookingStatusResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",

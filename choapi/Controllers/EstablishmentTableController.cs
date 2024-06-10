@@ -37,7 +37,7 @@ namespace choapi.Controllers
 
                 var establishementTable = new EstablishmentTable
                 {
-                    EstablishmentTable_Id = request.Establishment_Id,
+                    Establishment_Id = request.Establishment_Id,
                     Capacity = request.Capacity,
                     Time_Start = request.Time_Start
                 };
