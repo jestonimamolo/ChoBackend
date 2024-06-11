@@ -55,7 +55,7 @@ namespace choapi.DAL
 
         public List<Bookings>? GetEstablishmentBookingsByDateCreated(int id, DateTime from, DateTime to)
         {
-            return _context.Bookings.Where(b => b.Establishment_Id == id && b.Is_Deleted != true && b.Created_Date >= from && b.Created_Date <= to).ToList();
+            return _context.Bookings.Where(b => b.Establishment_Id == id && b.Is_Deleted != true && b.Created_Date.Date >= from.Date && b.Created_Date.Date <= to.Date).ToList();
         }
 
         public List<Bookings>? GetEstablishmentBookingsByMonthlyReport(int id, int month, int year)
@@ -65,7 +65,7 @@ namespace choapi.DAL
 
         public List<Bookings>? GetEstablishmentBookingsByDateFilter(int id, DateTime date)
         {
-            return _context.Bookings.Where(b => b.Establishment_Id == id && b.Is_Deleted != true && b.Created_Date == date).ToList();
+            return _context.Bookings.Where(b => b.Establishment_Id == id && b.Is_Deleted != true && b.Created_Date.Date == date.Date).ToList();
         }
     }
 }
