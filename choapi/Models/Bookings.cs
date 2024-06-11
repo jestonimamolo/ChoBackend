@@ -13,7 +13,7 @@ namespace choapi.Models
 
         public int EstablishmentTable_Id { get; set; }
 
-        public DateTime? Booking_Date { get; set; } = null;
+        public DateTime Booking_Date { get; set; } = DateTime.Now;
 
         public int? Number_Of_Seats { get; set; } = null;
 

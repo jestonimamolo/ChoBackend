@@ -856,7 +856,7 @@ namespace choapi.Controllers
 
                 if (response.Bookings.Count == 0)
                 {
-                    response.Message = $"No Bookings found for establishment by establishment id {establishmentId} and date filter {date}";
+                    response.Message = $"No Bookings found for establishment by establishment id {establishmentId} and date filter {date.Date}";
                     response.Status = "Failed";
 
                     return BadRequest(response);
