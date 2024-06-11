@@ -358,6 +358,37 @@
   },
   {
     "ContainingType": "choapi.Controllers.BookingController",
+    "Method": "RestaurantBookingDateFilter",
+    "RelativePath": "api/Booking/filter",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "establishmentId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "date",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.BookingBookingsResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.BookingController",
     "Method": "RestaurantsBooking",
     "RelativePath": "api/Booking/restaurants",
     "HttpMethod": "GET",
@@ -409,7 +440,7 @@
   },
   {
     "ContainingType": "choapi.Controllers.BookingController",
-    "Method": "RestaurantsBookingReportMonthly",
+    "Method": "RestaurantsBookingDateFilter",
     "RelativePath": "api/Booking/restaurants/filter",
     "HttpMethod": "GET",
     "IsController": true,
