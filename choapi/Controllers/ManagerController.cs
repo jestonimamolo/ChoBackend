@@ -40,6 +40,7 @@ namespace choapi.Controllers
 
                 var manager = new Manager
                 {
+                    User_Id = request.User_Id,
                     Establishment_Id = request.Establishment_Id,
                     Created_By = request.Created_By,
                     Created_Date = request.Created_Date
@@ -69,6 +70,7 @@ namespace choapi.Controllers
 
                 if (manager != null)
                 {
+                    manager.User_Id = request.User_Id;
                     manager.Establishment_Id = request.Establishment_Id;
                     manager.Created_By = request.Created_By;
                     manager.Created_Date = request.Created_Date;
@@ -137,7 +139,7 @@ namespace choapi.Controllers
 
                 if (result != null)
                 {
-                    var userResult = _userDAL.GetUser(result.Manager_Id);
+                    var userResult = _userDAL.GetUser(result.User_Id);
 
                     var user = new UserResponse();
 
@@ -190,7 +192,7 @@ namespace choapi.Controllers
                     {
                         var managerEstablishment = new ManagerEstablishmentResponse();
 
-                        var userResult = _userDAL.GetUser(manager.Manager_Id);
+                        var userResult = _userDAL.GetUser(manager.User_Id);
 
                         var user = new UserResponse();
 

@@ -4,6 +4,8 @@
     {
         public int Manager_Id { get; set; }
 
+        public int User_Id { get; set; }
+
         public int Establishment_Id { get; set; }
 
         public int? Created_By { get; set; } = null;
