@@ -487,9 +487,9 @@ namespace choapi.Controllers
 
                 if (resultEstablishment != null && resultEstablishment.Count > 0)
                 {
-                    var bookingsResponse = new BookingsResponse();
                     foreach (var restaurant in resultEstablishment)
                     {
+                        var bookingsResponse = new BookingsResponse();
                         var result = _bookingDAL.GetEstablishmentBookings(restaurant.Establishment_Id);
 
                         if (result != null && result.Count > 0)
@@ -571,7 +571,7 @@ namespace choapi.Controllers
 
                 if (resultEstablishment != null && resultEstablishment.Count > 0)
                 {
-                    var bookingsResponse = new BookingsResponse();
+                    
                     foreach (var restaurant in resultEstablishment)
                     {
                         var result = _bookingDAL.GetEstablishmentBookingsByDateCreated(restaurant.Establishment_Id, from, to);
@@ -580,6 +580,7 @@ namespace choapi.Controllers
                         {
                             foreach (var booking in result)
                             {
+                                var bookingsResponse = new BookingsResponse();
                                 bookingsResponse.Booking = booking;
 
                                 var user = _userDAL.GetUser(booking.User_Id);
@@ -655,8 +656,6 @@ namespace choapi.Controllers
 
                 if (resultEstablishment != null && resultEstablishment.Count > 0)
                 {
-                    var bookingsResponse = new BookingsResponse();
-
                     int intMonth = DateTime.ParseExact(month, "MMMM", CultureInfo.CurrentCulture).Month;
 
                     foreach (var restaurant in resultEstablishment)
@@ -667,6 +666,7 @@ namespace choapi.Controllers
                         {
                             foreach (var booking in result)
                             {
+                                var bookingsResponse = new BookingsResponse();
                                 bookingsResponse.Booking = booking;
 
                                 var user = _userDAL.GetUser(booking.User_Id);
@@ -742,8 +742,6 @@ namespace choapi.Controllers
 
                 if (resultEstablishment != null && resultEstablishment.Count > 0)
                 {
-                    var bookingsResponse = new BookingsResponse();
-
                     foreach (var restaurant in resultEstablishment)
                     {
                         var result = _bookingDAL.GetEstablishmentBookingsByDateFilter(restaurant.Establishment_Id, date);
@@ -752,6 +750,7 @@ namespace choapi.Controllers
                         {
                             foreach (var booking in result)
                             {
+                                var bookingsResponse = new BookingsResponse();
                                 bookingsResponse.Booking = booking;
 
                                 var user = _userDAL.GetUser(booking.User_Id);
@@ -823,13 +822,14 @@ namespace choapi.Controllers
                     return BadRequest(response);
                 }
                 
-                var bookingsResponse = new BookingsResponse();
+                
                 var result = _bookingDAL.GetEstablishmentBookingsByDateFilter(establishmentId, date);
 
                 if (result != null && result.Count > 0)
                 {
                     foreach (var booking in result)
                     {
+                        var bookingsResponse = new BookingsResponse();
                         bookingsResponse.Booking = booking;
 
                         var user = _userDAL.GetUser(booking.User_Id);
