@@ -185,7 +185,7 @@ namespace choapi.Controllers
             }
         }
 
-        [HttpGet("{id}"), Authorize()]
+        [HttpGet("{id}")]
         public ActionResult<EstablishmentByIdResponse> GetEstablishment(int id)
         {
             var response = new EstablishmentByIdResponse();
@@ -219,7 +219,7 @@ namespace choapi.Controllers
             }
         }
 
-        [HttpGet("establishments"), Authorize()]
+        [HttpGet("establishments")]
         public ActionResult<EstablishmentUserIdResponnse> GetEstablishments(int? userId)
         {
             var response = new EstablishmentUserIdResponnse();
@@ -426,7 +426,7 @@ namespace choapi.Controllers
             }
         }        
 
-        [HttpGet("images"), Authorize()]
+        [HttpGet("images")]
         public ActionResult<EstablishmentImagesResponse> GetImagesByEstablishmentId(int establishmentId)
         {
             var response = new EstablishmentImagesResponse();
@@ -458,7 +458,7 @@ namespace choapi.Controllers
             }
         }
 
-        [HttpGet("images/{id}"), Authorize()]
+        [HttpGet("images/{id}")]
         public ActionResult<EstablishmentImageResponse> GetImage(int id)
         {
             var response = new EstablishmentImageResponse();
@@ -650,7 +650,7 @@ namespace choapi.Controllers
             }
         }
 
-        [HttpGet("menus/{id}"), Authorize()]
+        [HttpGet("menus/{id}")]
         public ActionResult<MenuResponse> GetMenu(int id)
         {
             var response = new MenuResponse();
@@ -682,7 +682,7 @@ namespace choapi.Controllers
             }
         }
 
-        [HttpGet("menus"), Authorize()]
+        [HttpGet("menus")]
         public ActionResult<MenusResponse> GetMenus(int establishmentId)
         {
             var response = new MenusResponse();
@@ -816,7 +816,7 @@ namespace choapi.Controllers
             }
         }
 
-        [HttpGet("availabilities/{id}"), Authorize()]
+        [HttpGet("availabilities/{id}")]
         public ActionResult<EstablishmentAvailabilityResponse> GetAvailability(int id)
         {
             var response = new EstablishmentAvailabilityResponse();
@@ -849,7 +849,7 @@ namespace choapi.Controllers
             }
         }
 
-        [HttpGet("availabilities"), Authorize()]
+        [HttpGet("availabilities")]
         public ActionResult<EstablishmentAvailabilitiesResponse> GetAvailabilityByEstablishmentId(int establishmentId)
         {
             var response = new EstablishmentAvailabilitiesResponse();
@@ -982,7 +982,7 @@ namespace choapi.Controllers
             }
         }
 
-        [HttpGet("nonoperatinghours/{id}"), Authorize()]
+        [HttpGet("nonoperatinghours/{id}")]
         public ActionResult<NonOperatingHourResponse> GetNonOperatingHours(int id)
         {
             var response = new NonOperatingHourResponse();
@@ -1011,7 +1011,7 @@ namespace choapi.Controllers
             }
         }
 
-        [HttpGet("nonoperatinghours"), Authorize()]
+        [HttpGet("nonoperatinghours")]
         public ActionResult<NonOperatingHoursResponse> GetNonOperatingHoursByEstablishmentId(int establishmentId)
         {
             var response = new NonOperatingHoursResponse();
@@ -1040,7 +1040,7 @@ namespace choapi.Controllers
             }
         }
 
-        [HttpPost("cuisines/add"), Authorize()]
+        [HttpPost("cuisines/add")]
         public ActionResult<EstablishmentCuisineResponse> CuisinesAdd(EstablishmentCuisineDTO request)
         {
             var response = new EstablishmentCuisineResponse();
@@ -1138,7 +1138,7 @@ namespace choapi.Controllers
             }
         }
 
-        [HttpGet("cuicines/{id}"), Authorize()]
+        [HttpGet("cuicines/{id}")]
         public ActionResult<EstablishmentCuisineResponse> GetCuicine(int id)
         {
             var response = new EstablishmentCuisineResponse();
@@ -1170,7 +1170,7 @@ namespace choapi.Controllers
             }
         }
 
-        [HttpGet("cuicines"), Authorize()]
+        [HttpGet("cuicines")]
         public ActionResult<EstablishmentCuisinesResponse> GetCuicines(int? establishmentId)
         {
             var response = new EstablishmentCuisinesResponse();
@@ -1202,7 +1202,7 @@ namespace choapi.Controllers
             }
         }
 
-        [HttpPost("booktype/add"), Authorize()]
+        [HttpPost("booktype/add")]
         public ActionResult<EstablishmentBookTypeResponse> BookTypeAdd(EstablishmentBookTypeDTO request)
         {
             var response = new EstablishmentBookTypeResponse();
@@ -1373,7 +1373,7 @@ namespace choapi.Controllers
             }
         }
 
-        [HttpGet("restaurant/{id}"), Authorize()]
+        [HttpGet("restaurant/{id}")]
         public ActionResult<EstablishmentByIdResponse> GetRestaurant(int id)
         {
             var response = new EstablishmentByIdResponse();
@@ -1415,7 +1415,7 @@ namespace choapi.Controllers
             }
         }
 
-        [HttpGet("restaurants/user"), Authorize()]
+        [HttpGet("restaurants/user")]
         public ActionResult<EstablishmentUserIdResponnse> GetRestaurantsByUser(int? id)
         {
             var response = new EstablishmentUserIdResponnse();
@@ -1476,7 +1476,7 @@ namespace choapi.Controllers
             }
         }
 
-        [HttpGet("restaurants"), Authorize()]
+        [HttpGet("restaurants")]
         public ActionResult<EstablishmentUserIdResponnse> GetRestaurants()
         {
             var response = new EstablishmentUserIdResponnse();
@@ -1913,7 +1913,7 @@ namespace choapi.Controllers
             }
         }
 
-        [HttpGet("restaurants/search"), Authorize()]
+        [HttpGet("restaurants/search")]
         public ActionResult<EstablishmentUserIdResponnse> GetRestaurantsSearch(string keywords)
         {
             var response = new EstablishmentUserIdResponnse();
