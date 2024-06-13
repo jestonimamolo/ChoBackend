@@ -1537,7 +1537,7 @@ namespace choapi.Controllers
             }
         }
 
-        [HttpGet("distance/restaurants/device/location"), Authorize()]
+        [HttpGet("distance/restaurants/device/location")]
         public ActionResult<EstablishmentUserIdResponnse> GetDistanceRestaurantsUser(double latitude, double longitude)
         {
             var response = new EstablishmentUserIdResponnse();
@@ -1605,7 +1605,7 @@ namespace choapi.Controllers
             }
         }
 
-        [HttpGet("distance/restaurants/user/{id}"), Authorize()]
+        [HttpGet("distance/restaurants/user/{id}")]
         public ActionResult<EstablishmentUserIdResponnse> GetDistanceRestaurantsUser(int id)
         {
             var response = new EstablishmentUserIdResponnse();
@@ -1688,7 +1688,7 @@ namespace choapi.Controllers
             }
         }
 
-        [HttpGet("distance/restaurants/promoted/user/{id}"), Authorize()]
+        [HttpGet("distance/restaurants/promoted/user/{id}")]
         public ActionResult<EstablishmentUserIdResponnse> GetDistanceRestaurantsPromotedUser(int id)
         {
             var response = new EstablishmentUserIdResponnse();
@@ -1771,7 +1771,7 @@ namespace choapi.Controllers
             }
         }
 
-        [HttpGet("distance/restaurants/unpromoted/user/{id}"), Authorize()]
+        [HttpGet("distance/restaurants/unpromoted/user/{id}")]
         public ActionResult<EstablishmentUserIdResponnse> GetDistanceRestaurantsUnPromotedUser(int id)
         {
             var response = new EstablishmentUserIdResponnse();
