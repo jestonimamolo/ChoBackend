@@ -38,5 +38,10 @@ namespace choapi.DAL
 
             return model;
         }
+
+        public List<Category>? GetAll()
+        {
+            return _context.Category.ToList();
+        }
     }
 }

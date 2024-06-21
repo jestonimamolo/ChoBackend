@@ -48,8 +48,12 @@ namespace choapi.Models
 
         public virtual DbSet<AppInfo> AppInfo { get; set; }
 
+        public virtual DbSet<Notification> Notification { get; set; }
+
+        public virtual DbSet<Loyalty> Loyalty { get; set; }
+
+        public virtual DbSet<Invite> Invite { get; set; }
+
         public virtual DbSet<Payment> Payment { get; set; }
-
-
     }
 }

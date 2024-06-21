@@ -237,6 +237,7 @@ namespace choapi.Controllers
                         resultEstablishment.Establishment_Id = establishment.Establishment_Id;
                         resultEstablishment.Name = establishment.Name;
                         resultEstablishment.Description = establishment.Description;
+                        resultEstablishment.Category_Id = establishment.Category_Id;
                         resultEstablishment.User_Id = establishment.User_Id;
                         resultEstablishment.Credits = establishment.Credits;
                         resultEstablishment.Plan = establishment.Plan;
@@ -257,6 +258,58 @@ namespace choapi.Controllers
                 else
                 {
                     response.Message = $"No Establishment found by user id: {userId}";
+                    response.Status = "Failed";
+                    return BadRequest(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
+
+        [HttpGet("establishments/category")]
+        public ActionResult<EstablishmentUserIdResponnse> GetEstablishmentsByCategory(int categoryId, bool? isPromoted = null)
+        {
+            var response = new EstablishmentUserIdResponnse();
+
+            try
+            {
+                var resultEstablishments = _establishmentDAL.GetEstablishmentsByCategoryIdWithPromoted(categoryId, isPromoted);                
+
+                if (resultEstablishments != null && resultEstablishments.Count > 0)
+                {                    
+                    foreach (var establishment in resultEstablishments)
+                    {
+                        var resultEstablishment = new EstablishmentReponse();
+
+                        resultEstablishment.Establishment_Id = establishment.Establishment_Id;
+                        resultEstablishment.Name = establishment.Name;
+                        resultEstablishment.Description = establishment.Description;
+                        resultEstablishment.Category_Id = establishment.Category_Id;
+                        resultEstablishment.User_Id = establishment.User_Id;
+                        resultEstablishment.Credits = establishment.Credits;
+                        resultEstablishment.Plan = establishment.Plan;
+                        resultEstablishment.Latitude = establishment.Latitude;
+                        resultEstablishment.Longitude = establishment.Longitude;
+                        resultEstablishment.Is_Promoted = establishment.Is_Promoted;
+                        resultEstablishment.Address = establishment.Address;
+                        resultEstablishment.Is_Active = establishment.Is_Active;
+
+                        resultEstablishment.Images = _establishmentDAL.GetEstablishmentImages(establishment.Establishment_Id);
+
+                        response.Establishments.Add(resultEstablishment);
+                    }
+                    response.Message = $"Successfully get Establishments.";
+
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Message = $"No Establishment found by category id: {categoryId}";
                     response.Status = "Failed";
                     return BadRequest(response);
                 }
@@ -1309,7 +1362,7 @@ namespace choapi.Controllers
             }
         }
 
-        [HttpGet("booktype"), Authorize()]
+        [HttpGet("booktype")]
         public ActionResult<EstablishmentBookTypesResponse> GetBookTypes(int? establishmentId)
         {
             var response = new EstablishmentBookTypesResponse();
@@ -1341,7 +1394,7 @@ namespace choapi.Controllers
             }
         }
 
-        [HttpGet("booktype/{id}"), Authorize()]
+        [HttpGet("booktype/{id}")]
         public ActionResult<EstablishmentBookTypeResponse> GetBookTypes(int id)
         {
             var response = new EstablishmentBookTypeResponse();
@@ -1441,6 +1494,7 @@ namespace choapi.Controllers
                         resultEstablishment.Establishment_Id = establishment.Establishment_Id;
                         resultEstablishment.Name = establishment.Name;
                         resultEstablishment.Description = establishment.Description;
+                        resultEstablishment.Category_Id = establishment.Category_Id;
                         resultEstablishment.User_Id = establishment.User_Id;
                         resultEstablishment.Credits = establishment.Credits;
                         resultEstablishment.Plan = establishment.Plan;
@@ -1502,6 +1556,7 @@ namespace choapi.Controllers
                         resultEstablishment.Establishment_Id = establishment.Establishment_Id;
                         resultEstablishment.Name = establishment.Name;
                         resultEstablishment.Description = establishment.Description;
+                        resultEstablishment.Category_Id = establishment.Category_Id;
                         resultEstablishment.User_Id = establishment.User_Id;
                         resultEstablishment.Credits = establishment.Credits;
                         resultEstablishment.Plan = establishment.Plan;
@@ -1563,6 +1618,7 @@ namespace choapi.Controllers
                         resultEstablishment.Establishment_Id = establishment.Establishment_Id;
                         resultEstablishment.Name = establishment.Name;
                         resultEstablishment.Description = establishment.Description;
+                        resultEstablishment.Category_Id = establishment.Category_Id;
                         resultEstablishment.User_Id = establishment.User_Id;
                         resultEstablishment.Credits = establishment.Credits;
                         resultEstablishment.Plan = establishment.Plan;
@@ -1646,6 +1702,7 @@ namespace choapi.Controllers
                         resultEstablishment.Establishment_Id = establishment.Establishment_Id;
                         resultEstablishment.Name = establishment.Name;
                         resultEstablishment.Description = establishment.Description;
+                        resultEstablishment.Category_Id = establishment.Category_Id;
                         resultEstablishment.User_Id = establishment.User_Id;
                         resultEstablishment.Credits = establishment.Credits;
                         resultEstablishment.Plan = establishment.Plan;
@@ -1729,6 +1786,7 @@ namespace choapi.Controllers
                         resultEstablishment.Establishment_Id = establishment.Establishment_Id;
                         resultEstablishment.Name = establishment.Name;
                         resultEstablishment.Description = establishment.Description;
+                        resultEstablishment.Category_Id = establishment.Category_Id;
                         resultEstablishment.User_Id = establishment.User_Id;
                         resultEstablishment.Credits = establishment.Credits;
                         resultEstablishment.Plan = establishment.Plan;
@@ -1812,6 +1870,7 @@ namespace choapi.Controllers
                         resultEstablishment.Establishment_Id = establishment.Establishment_Id;
                         resultEstablishment.Name = establishment.Name;
                         resultEstablishment.Description = establishment.Description;
+                        resultEstablishment.Category_Id = establishment.Category_Id;
                         resultEstablishment.User_Id = establishment.User_Id;
                         resultEstablishment.Credits = establishment.Credits;
                         resultEstablishment.Plan = establishment.Plan;
@@ -1880,6 +1939,7 @@ namespace choapi.Controllers
                         resultEstablishment.Establishment_Id = establishment.Establishment_Id;
                         resultEstablishment.Name = establishment.Name;
                         resultEstablishment.Description = establishment.Description;
+                        resultEstablishment.Category_Id = establishment.Category_Id;
                         resultEstablishment.User_Id = establishment.User_Id;
                         resultEstablishment.Credits = establishment.Credits;
                         resultEstablishment.Plan = establishment.Plan;
@@ -1945,6 +2005,7 @@ namespace choapi.Controllers
                         resultEstablishment.Establishment_Id = establishment.Establishment_Id;
                         resultEstablishment.Name = establishment.Name;
                         resultEstablishment.Description = establishment.Description;
+                        resultEstablishment.Category_Id = establishment.Category_Id;
                         resultEstablishment.User_Id = establishment.User_Id;
                         resultEstablishment.Credits = establishment.Credits;
                         resultEstablishment.Plan = establishment.Plan;

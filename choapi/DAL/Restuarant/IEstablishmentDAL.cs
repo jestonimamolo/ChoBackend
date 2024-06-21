@@ -22,6 +22,8 @@ namespace choapi.DAL
 
         List<Establishment>? GetEstablishmentsByCategoryId(int categoryId);
 
+        List<Establishment>? GetEstablishmentsByCategoryIdWithPromoted(int categoryId, bool? isPromoted = null);
+
         EstablishmentImages UpdateImage(EstablishmentImages model);
 
         void DeleteImage(EstablishmentImages model);

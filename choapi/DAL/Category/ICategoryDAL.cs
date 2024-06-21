@@ -11,5 +11,7 @@ namespace choapi.DAL
         Category? Get(int id);
 
         Category? GetByName(string name);
+
+        List<Category>? GetAll();
     }
 }

@@ -3,60 +3,51 @@ using choapi.DTOs;
 using choapi.Messages;
 using choapi.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace choapi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ReviewController : ControllerBase
+    public class InviteController : ControllerBase
     {
-        private readonly IReviewDAL _modelDAL;
+        private readonly IInviteDAL _inviteDAL;
 
-        private readonly ILogger<ReviewController> _logger;
+        private readonly ILogger<InviteController> _logger;
 
-        private const string _entityName = "Review";
-
-        public ReviewController(ILogger<ReviewController> logger, IReviewDAL modelDAL)
+        public InviteController(ILogger<InviteController> logger, IInviteDAL inviteDAL)
         {
             _logger = logger;
-            _modelDAL = modelDAL;
+            _inviteDAL = inviteDAL;
         }
 
-        [HttpPost("add"), Authorize()]
-        public ActionResult<ReviewResponse> Add(ReviewDTO request)
+        [HttpPost("add")]
+        public ActionResult<InviteResponse> Add(InviteDTO request)
         {
-            var response = new ReviewResponse();
+            var response = new InviteResponse();
             try
             {
                 if (request.User_Id <= 0)
                 {
-                    response.Message = $"Required User Id.";
+                    response.Message = "Required User_Id Id.";
                     response.Status = "Failed";
 
                     return BadRequest(response);
                 }
 
-                if (request.Establishment_Id <= 0)
+                var model = new Invite
                 {
-                    response.Message = $"Required Establishment Id.";
-                    response.Status = "Failed";
-
-                    return BadRequest(response);
-                }
-
-                var model = new Review
-                {
-                    Establishment_Id = request.Establishment_Id,
                     User_Id = request.User_Id,
-                    Comment = request.Comment,
-                    Date_Added = request.Date_Added,
-                    Status = request.Status
+                    Invited_User = request.Invited_User,
+                    Booking_Id = request.Booking_Id,
+                    Status = request.Status,
+                    Created_Date = request.Created_Date
                 };
 
-                var result = _modelDAL.Add(model);
+                var result = _inviteDAL.Add(model);
 
-                response.Review = result;
+                response.Invite = result;
                 response.Message = "Successfully added.";
                 return Ok(response);
             }
@@ -69,29 +60,30 @@ namespace choapi.Controllers
         }
 
         [HttpPost("update"), Authorize()]
-        public ActionResult<ReviewResponse> Update(ReviewDTO request)
+        public ActionResult<InviteResponse> Update(InviteDTO request)
         {
-            var response = new ReviewResponse();
+            var response = new InviteResponse();
             try
             {
-                var model = _modelDAL.Get(request.Review_Id);
+                var model = _inviteDAL.Get(request.Invite_Id);
 
                 if (model != null)
                 {
-                    model.Establishment_Id = request.Establishment_Id;
                     model.User_Id = request.User_Id;
-                    model.Comment = request.Comment;
+                    model.Invited_User = request.Invited_User;
+                    model.Booking_Id = request.Booking_Id;
                     model.Status = request.Status;
+                    model.Created_Date = request.Created_Date;
 
-                    var result = _modelDAL.Update(model);
+                    var result = _inviteDAL.Update(model);
 
-                    response.Review = result;
+                    response.Invite = result;
                     response.Message = "Successfully updated.";
                     return Ok(response);
                 }
                 else
                 {
-                    response.Message = $"No {_entityName} found by id: {request.Review_Id}";
+                    response.Message = $"No Invite found by id: {request.Invite_Id}";
                     response.Status = "Failed";
                     return BadRequest(response);
                 }
@@ -105,25 +97,25 @@ namespace choapi.Controllers
         }
 
         [HttpPost("delete/{id}"), Authorize()]
-        public ActionResult<ReviewResponse> Delete(int id)
+        public ActionResult<InviteResponse> Delete(int id)
         {
-            var response = new ReviewResponse();
+            var response = new InviteResponse();
             try
             {
-                var model = _modelDAL.Get(id);
+                var model = _inviteDAL.Get(id);
 
                 if (model != null)
                 {
                     model.Is_Deleted = true;
 
-                    var result = _modelDAL.Delete(model);
+                    var result = _inviteDAL.Delete(model);
 
                     response.Message = "Successfully deleted.";
                     return Ok(response);
                 }
                 else
                 {
-                    response.Message = $"No {_entityName} found by id: {id}";
+                    response.Message = $"No Invite found by id: {id}";
                     response.Status = "Failed";
                     return BadRequest(response);
                 }
@@ -138,22 +130,52 @@ namespace choapi.Controllers
         }
 
         [HttpGet("{id}"), Authorize()]
-        public ActionResult<ReviewResponse> Get(int id)
+        public ActionResult<InviteResponse> Get(int id)
         {
-            var response = new ReviewResponse();
+            var response = new InviteResponse();
             try
             {
-                var result = _modelDAL.Get(id);
+                var result = _inviteDAL.Get(id);
 
                 if (result != null)
                 {
-                    response.Review = result;
-                    response.Message = $"Successfully get {_entityName}.";
+                    response.Invite = result;
+                    response.Message = "Successfully get Invite.";
                     return Ok(response);
                 }
                 else
                 {
-                    response.Message = $"No {_entityName} found by id: {id}";
+                    response.Message = $"No Invite found by id: {id}";
+                    response.Status = "Failed";
+                    return BadRequest(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
+
+        [HttpGet("bookings/{id}"), Authorize()]
+        public ActionResult<InviteesResponse> GetByBooking(int id)
+        {
+            var response = new InviteesResponse();
+            try
+            {
+                var result = _inviteDAL.GetByBooking(id);
+
+                if (result != null && result.Count > 0)
+                {
+                    response.Invitees = result;
+                    response.Message = "Successfully get Invitees.";
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Message = $"No Invite found by booking id: {id}";
                     response.Status = "Failed";
                     return BadRequest(response);
                 }
@@ -168,52 +190,22 @@ namespace choapi.Controllers
         }
 
         [HttpGet("users/{id}"), Authorize()]
-        public ActionResult<ReviewsResponse> GetByUser(int id)
+        public ActionResult<InviteesResponse> GetByUser(int id)
         {
-            var response = new ReviewsResponse();
+            var response = new InviteesResponse();
             try
             {
-                var result = _modelDAL.GetByUserId(id);
+                var result = _inviteDAL.GetByUser(id);
 
                 if (result != null && result.Count > 0)
                 {
-                    response.Reviews = result;
-                    response.Message = $"Successfully get ${_entityName}s.";
+                    response.Invitees = result;
+                    response.Message = "Successfully get Invitees.";
                     return Ok(response);
                 }
                 else
                 {
-                    response.Message = $"No ${_entityName} found by user id: {id}";
-                    response.Status = "Failed";
-                    return BadRequest(response);
-                }
-            }
-            catch (Exception ex)
-            {
-                response.Message = ex.Message;
-                response.Status = "Failed";
-
-                return BadRequest(response);
-            }
-        }
-
-        [HttpGet("establishments/{id}"), Authorize()]
-        public ActionResult<ReviewsResponse> GetByEstablishment(int id)
-        {
-            var response = new ReviewsResponse();
-            try
-            {
-                var result = _modelDAL.GeByEstablishmentId(id);
-
-                if (result != null && result.Count > 0)
-                {
-                    response.Reviews = result;
-                    response.Message = $"Successfully get ${_entityName}s.";
-                    return Ok(response);
-                }
-                else
-                {
-                    response.Message = $"No ${_entityName} found by establishment id: {id}";
+                    response.Message = $"No Invite found by user id: {id}";
                     response.Status = "Failed";
                     return BadRequest(response);
                 }

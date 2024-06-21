@@ -10,6 +10,8 @@ namespace choapi.Messages
 
         public string? Description { get; set; } = null;
 
+        public int? Category_Id { get; set; } = null;
+
         public int? User_Id { get; set; } = null;
 
         public int? Credits { get; set; } = null;

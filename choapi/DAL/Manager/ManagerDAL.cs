@@ -24,7 +24,7 @@ namespace choapi.DAL
         {
             _context.Manager.Update(model);
 
-            _context.SaveChanges(true);
+            _context.SaveChanges();
 
             return model;
         }
@@ -33,7 +33,7 @@ namespace choapi.DAL
         {
             _context.Manager.Update(model);
 
-            _context.SaveChanges(true);
+            _context.SaveChanges();
 
             return model;
         }

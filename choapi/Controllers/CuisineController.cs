@@ -50,7 +50,7 @@ namespace choapi.Controllers
             }
         }
 
-        [HttpGet("cuicines"), Authorize()]
+        [HttpGet("cuicines")]
         public ActionResult<CuisinesResponse> GetCuicines(int? cuisineId)
         {
             var response = new CuisinesResponse();

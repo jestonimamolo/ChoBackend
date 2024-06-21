@@ -152,5 +152,29 @@ namespace choapi.Controllers
                 return BadRequest(response);
             }
         }
+
+        [HttpGet("establishment/categories")]
+        public ActionResult GetAllCategories()
+        {
+            try
+            {
+                var restaurantCategory = _categoryDAL.GetAll();
+                if (restaurantCategory == null)
+                {
+                    return BadRequest("Failed: Categories no found ");
+                }
+
+                return new JsonResult(restaurantCategory, new JsonSerializerOptions
+                {
+                    ReferenceHandler = null,
+                    WriteIndented = true,
+                });
+                
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Failed: " + ex.Message);
+            }
+        }
     }
 }

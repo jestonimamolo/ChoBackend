@@ -80,6 +80,14 @@ namespace choapi.DAL
             return _context.Establishment.Where(r => r.Category_Id == categoryId).ToList();
         }
 
+        public List<Establishment>? GetEstablishmentsByCategoryIdWithPromoted(int categoryId, bool? isPromoted = null)
+        {
+            if (isPromoted == null)
+                return _context.Establishment.Where(r => r.Category_Id == categoryId).ToList();
+            else
+                return _context.Establishment.Where(r => r.Category_Id == categoryId && r.Is_Promoted == isPromoted).ToList();
+        }
+
         public EstablishmentImages UpdateImage(EstablishmentImages model)
         {
             _context.EstablishmentImages.Update(model);

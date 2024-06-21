@@ -3067,11 +3067,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\SourceCode\\git_Cho\\choapi\\choapi.csproj",
+      "projectUniqueName": "D:\\SourceCode\\git_SamaAll\\choapi\\choapi.csproj",
       "projectName": "choapi",
-      "projectPath": "D:\\SourceCode\\git_Cho\\choapi\\choapi.csproj",
+      "projectPath": "D:\\SourceCode\\git_SamaAll\\choapi\\choapi.csproj",
       "packagesPath": "C:\\Users\\GukoAdmin\\.nuget\\packages\\",
-      "outputPath": "D:\\SourceCode\\git_Cho\\choapi\\obj\\",
+      "outputPath": "D:\\SourceCode\\git_SamaAll\\choapi\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

@@ -142,7 +142,7 @@ namespace choapi.Controllers
             }
         }
 
-        [HttpGet("{id}"), Authorize()]
+        [HttpGet("{id}")]
         public ActionResult<EstablishmentTable> GetEstablishmentTable(int id)
         {
             var response = new EstablishmentTableResponse();
@@ -176,7 +176,7 @@ namespace choapi.Controllers
             }
         }
 
-        [HttpGet("establishment/{id}"), Authorize()]
+        [HttpGet("establishment/{id}")]
         public ActionResult<List<EstablishmentTablesResponse>> GetEstablishmentTables(int id)
         {
             var response = new EstablishmentTablesResponse();

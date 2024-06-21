@@ -13,5 +13,7 @@ namespace choapi.DAL
         Review? Get(int id);
 
         List<Review>? GetByUserId(int id);
+
+        List<Review>? GeByEstablishmentId(int id);
     }
 }

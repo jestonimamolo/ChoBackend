@@ -47,5 +47,10 @@ namespace choapi.DAL
         {
             return _context.Review.Where(s => s.User_Id == id && s.Is_Deleted != true).ToList();
         }
+
+        public List<Review>? GeByEstablishmentId(int id)
+        {
+            return _context.Review.Where(s => s.Establishment_Id == id && s.Is_Deleted != true).ToList();
+        }
     }
 }

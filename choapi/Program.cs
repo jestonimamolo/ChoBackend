@@ -54,6 +54,9 @@ builder.Services.AddScoped<ISaveEstablishmentDAL, SaveEstablishmentDAL>();
 builder.Services.AddScoped<IReviewDAL, ReviewDAL>();
 builder.Services.AddScoped<ICardDetailsDAL, CardDetailsDAL>();
 builder.Services.AddScoped<IAppInfoDAL, AppInfoDAL>();
+builder.Services.AddScoped<INotificationDAL, NotificationDAL>();
+builder.Services.AddScoped<ILoyaltyDAL, LoyaltyDAL>();
+builder.Services.AddScoped<IInviteDAL, InviteDAL>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

@@ -469,6 +469,80 @@ namespace choapi.Controllers
             }
         }
 
+        [HttpGet("establishments/report/monthly"), Authorize()]
+        public ActionResult<BookingBookingsResponse> EstablishmentBookingReportMonthly(int establishmentId, string month, int year, string status)
+        {
+            var response = new BookingBookingsResponse();
+            try
+            {
+                var resultEstablishment = _establishmentDAL.GetEstablishment(establishmentId);
+
+                if (resultEstablishment != null)
+                {
+                    int intMonth = DateTime.ParseExact(month, "MMMM", CultureInfo.CurrentCulture).Month;
+                    var result = _bookingDAL.GetEstablishmentBookingsByMonthlyReport(resultEstablishment.Establishment_Id, intMonth, year, status);
+
+                    if (result != null && result.Count > 0)
+                    {
+                        foreach (var booking in result)
+                        {
+                            var bookingsResponse = new BookingsResponse();
+                            bookingsResponse.Booking = booking;
+
+                            var user = _userDAL.GetUser(booking.User_Id);
+                            if (user != null)
+                            {
+                                bookingsResponse.User.User_Id = user.User_Id;
+                                bookingsResponse.User.Username = user.Username;
+                                bookingsResponse.User.Email = user.Email;
+                                bookingsResponse.User.Phone = user.Phone;
+                                bookingsResponse.User.Role_Id = user.Role_Id;
+                                bookingsResponse.User.Is_Active = user.Is_Active;
+                                bookingsResponse.User.Display_Name = user.Display_Name;
+                                bookingsResponse.User.Photo_Url = user.Photo_Url;
+                                bookingsResponse.User.Latitude = user.Latitude;
+                                bookingsResponse.User.Longitude = user.Longitude;
+                            }
+
+                            var establishment = _establishmentDAL.GetEstablishment(booking.Establishment_Id);
+                            bookingsResponse.Esablishment = establishment;
+
+                            response.Bookings.Add(bookingsResponse);
+                        }
+                    }
+
+                    if (response.Bookings.Count == 0)
+                    {
+                        response.Message = $"No Bookings found for establishment by monthly filter";
+                        response.Status = "Failed";
+
+                        return BadRequest(response);
+                    }
+                    else
+                    {
+                        response.Message = "Successfully get bookings establishment.";
+                        return Ok(response);
+                    }
+
+                }
+                else
+                {
+                    response.Message = $"No establishment booking found by establishment id {establishmentId}.";
+                    response.Status = "Failed";
+                    return BadRequest(response);
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = "Failed";
+
+                return BadRequest(response);
+            }
+        }
+
         [HttpGet("restaurants"), Authorize()]
         public ActionResult<BookingBookingsResponse> RestaurantsBooking()
         {
@@ -660,7 +734,7 @@ namespace choapi.Controllers
 
                     foreach (var restaurant in resultEstablishment)
                     {
-                        var result = _bookingDAL.GetEstablishmentBookingsByMonthlyReport(restaurant.Establishment_Id, intMonth, year);
+                        var result = _bookingDAL.GetEstablishmentBookingsByMonthlyReport(restaurant.Establishment_Id, intMonth, year, null);
 
                         if (result != null && result.Count > 0)
                         {
