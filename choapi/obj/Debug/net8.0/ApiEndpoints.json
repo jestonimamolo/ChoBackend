@@ -358,6 +358,47 @@
   },
   {
     "ContainingType": "choapi.Controllers.BookingController",
+    "Method": "EstablishmentBookingReportMonthly",
+    "RelativePath": "api/Booking/establishments/report/monthly",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "establishmentId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "month",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "year",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "status",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.BookingBookingsResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.BookingController",
     "Method": "RestaurantBookingDateFilter",
     "RelativePath": "api/Booking/filter",
     "HttpMethod": "GET",
@@ -1594,6 +1635,37 @@
   },
   {
     "ContainingType": "choapi.Controllers.EstablishmentController",
+    "Method": "GetEstablishmentsByCategory",
+    "RelativePath": "api/Establishment/establishments/category",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "categoryId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "isPromoted",
+        "Type": "System.Nullable\u00601[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.EstablishmentUserIdResponnse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.EstablishmentController",
     "Method": "GetImagesByEstablishmentId",
     "RelativePath": "api/Establishment/images",
     "HttpMethod": "GET",
@@ -2495,6 +2567,323 @@
     ]
   },
   {
+    "ContainingType": "choapi.Controllers.InviteController",
+    "Method": "Get",
+    "RelativePath": "api/Invite/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.InviteResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.InviteController",
+    "Method": "Add",
+    "RelativePath": "api/Invite/add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "choapi.DTOs.InviteDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.InviteResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.InviteController",
+    "Method": "GetByBooking",
+    "RelativePath": "api/Invite/bookings/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.InviteesResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.InviteController",
+    "Method": "Delete",
+    "RelativePath": "api/Invite/delete/{id}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.InviteResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.InviteController",
+    "Method": "Update",
+    "RelativePath": "api/Invite/update",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "choapi.DTOs.InviteDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.InviteResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.InviteController",
+    "Method": "GetByUser",
+    "RelativePath": "api/Invite/users/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.InviteesResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.LoyaltyController",
+    "Method": "GetLoyalty",
+    "RelativePath": "api/Loyalty/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.LoyaltyResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.LoyaltyController",
+    "Method": "Add",
+    "RelativePath": "api/Loyalty/add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "choapi.DTOs.LoyaltyDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.LoyaltyResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.LoyaltyController",
+    "Method": "Delete",
+    "RelativePath": "api/Loyalty/delete/{id}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.LoyaltyResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.LoyaltyController",
+    "Method": "GetLoyalties",
+    "RelativePath": "api/Loyalty/points/update",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "loyaltyId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "points",
+        "Type": "System.Double",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.LoyaltyResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.LoyaltyController",
+    "Method": "Update",
+    "RelativePath": "api/Loyalty/update",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "choapi.DTOs.LoyaltyDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.LoyaltyResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.LoyaltyController",
+    "Method": "GetLoyalties",
+    "RelativePath": "api/Loyalty/user/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.LoyaltiesResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "choapi.Controllers.ManagerController",
     "Method": "GetManager",
     "RelativePath": "api/Manager/{id}",
@@ -2615,6 +3004,136 @@
     "ReturnTypes": [
       {
         "Type": "choapi.Messages.ManagerResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.NotificationController",
+    "Method": "GetNotification",
+    "RelativePath": "api/Notification/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.NotificationResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.NotificationController",
+    "Method": "Add",
+    "RelativePath": "api/Notification/add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "choapi.DTOs.NotificationDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.NotificationResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.NotificationController",
+    "Method": "Delete",
+    "RelativePath": "api/Notification/delete/{id}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.NotificationResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.NotificationController",
+    "Method": "GetNotificationByUser",
+    "RelativePath": "api/Notification/notificatoins/user/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.NotificationsResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.NotificationController",
+    "Method": "Update",
+    "RelativePath": "api/Notification/update",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "choapi.DTOs.NotificationDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.NotificationResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -2860,6 +3379,32 @@
   },
   {
     "ContainingType": "choapi.Controllers.ReviewController",
+    "Method": "GetByEstablishment",
+    "RelativePath": "api/Review/establishments/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "choapi.Messages.ReviewsResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.ReviewController",
     "Method": "Update",
     "RelativePath": "api/Review/update",
     "HttpMethod": "POST",
@@ -2887,7 +3432,7 @@
   {
     "ContainingType": "choapi.Controllers.ReviewController",
     "Method": "GetByUser",
-    "RelativePath": "api/Review/user/{id}",
+    "RelativePath": "api/Review/users/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -3334,6 +3879,16 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "choapi.Controllers.WooCommerceController",
+    "Method": "GetAllCategories",
+    "RelativePath": "api/WooCommerce/establishment/categories",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "choapi.Controllers.WooCommerceController",
