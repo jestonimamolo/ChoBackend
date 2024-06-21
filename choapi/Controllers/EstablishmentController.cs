@@ -41,7 +41,7 @@ namespace choapi.Controllers
             var response = new EstablishmentResponse();
             try
             {
-                if (request.Category_Id <= 0)
+                if (request.Category_Id <= 0 || request.Category_Id == null)
                 {
                     response.Message = "Required Category Id.";
                     response.Status = "Failed";
