@@ -98,7 +98,7 @@ else
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Cho REST API");
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "SamaAll REST API");
         c.RoutePrefix = string.Empty;  // Set Swagger UI at apps root    
     });
 }
