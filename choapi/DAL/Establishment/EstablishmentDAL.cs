@@ -72,20 +72,20 @@ namespace choapi.DAL
             if (userId == null)
                 return _context.Establishment.ToList();
             else
-                return _context.Establishment.Where(r => r.User_Id == userId).ToList();
+                return _context.Establishment.Where(r => r.User_Id == userId && r.Is_Active == true).ToList();
         }
 
         public List<Establishment>? GetEstablishmentsByCategoryId(int categoryId)
         {
-            return _context.Establishment.Where(r => r.Category_Id == categoryId).ToList();
+            return _context.Establishment.Where(r => r.Category_Id == categoryId && r.Is_Active == true).ToList();
         }
 
         public List<Establishment>? GetEstablishmentsByCategoryIdWithPromoted(int categoryId, bool? isPromoted = null)
         {
             if (isPromoted == null)
-                return _context.Establishment.Where(r => r.Category_Id == categoryId).ToList();
+                return _context.Establishment.Where(r => r.Category_Id == categoryId && r.Is_Active == true).ToList();
             else
-                return _context.Establishment.Where(r => r.Category_Id == categoryId && r.Is_Promoted == isPromoted).ToList();
+                return _context.Establishment.Where(r => r.Category_Id == categoryId && r.Is_Promoted == isPromoted && r.Is_Active == true).ToList();
         }
 
         public EstablishmentImages UpdateImage(EstablishmentImages model)
@@ -288,25 +288,25 @@ namespace choapi.DAL
 
         public Establishment? GetRestaurant(int categoryId, int id)
         {
-            return _context.Establishment.FirstOrDefault(r => r.Establishment_Id == id && r.Category_Id == categoryId);
+            return _context.Establishment.FirstOrDefault(r => r.Establishment_Id == id && r.Category_Id == categoryId && r.Is_Active == true);
         }
 
         public List<Establishment>? GetRestaurants(int categoryId, int? userId)
         {
             if (userId == null)
-                return _context.Establishment.Where(r => r.Category_Id == categoryId).ToList();
+                return _context.Establishment.Where(r => r.Category_Id == categoryId && r.Is_Active == true).ToList();
             else
-                return _context.Establishment.Where(r => r.User_Id == userId && r.Category_Id == categoryId).ToList();
+                return _context.Establishment.Where(r => r.User_Id == userId && r.Category_Id == categoryId && r.Is_Active == true).ToList();
         }
 
         public List<Establishment>? GetEstablishmentsPromotedByCategoryId(int categoryId, bool isPromoted)
         {
-            return _context.Establishment.Where(r => r.Category_Id == categoryId && r.Is_Promoted == isPromoted).ToList();
+            return _context.Establishment.Where(r => r.Category_Id == categoryId && r.Is_Promoted == isPromoted && r.Is_Active == true).ToList();
         }
 
         public List<Establishment>? GetRestaurantsSearch(int categoryId, string keywords)
         {
-            return _context.Establishment.Where(r => r.Category_Id == categoryId && (r.Name.Contains(keywords) || (r.Address != null ? r.Address : "").Contains(keywords))).ToList();
+            return _context.Establishment.Where(r => r.Category_Id == categoryId && r.Is_Active == true && (r.Name.Contains(keywords) || (r.Address != null ? r.Address : "").Contains(keywords))).ToList();
         }
     }
 }
