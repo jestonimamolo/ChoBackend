@@ -8,6 +8,7 @@ using choapi.Models;
 using Microsoft.EntityFrameworkCore;
 using choapi.DAL;
 using Microsoft.Extensions.FileProviders;
+using choapi.CronJob;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
@@ -57,6 +58,8 @@ builder.Services.AddScoped<IAppInfoDAL, AppInfoDAL>();
 builder.Services.AddScoped<INotificationDAL, NotificationDAL>();
 builder.Services.AddScoped<ILoyaltyDAL, LoyaltyDAL>();
 builder.Services.AddScoped<IInviteDAL, InviteDAL>();
+
+builder.Services.AddHostedService<CronJobService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
