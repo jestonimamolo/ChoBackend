@@ -34,21 +34,34 @@ namespace choapi.CronJob
                     {
                         var dbContext = scope.ServiceProvider.GetRequiredService<ChoDBContext>();
 
-                        // Example: Query data using DbContext
+                        var expiresPromotion = dbContext.Promotion.Where(p => p.Date_Promoted <= DateTime.Now && p.Is_Active != false && p.Is_Deleted != false).ToList();
 
-                        var random = new Random();
-                        int randomId = random.Next(500, 1000);
-
-                        var availability = new Availability
+                        if (expiresPromotion.Any())
                         {
-                            Establishment_Id = randomId,
-                            Day = "M-F",
-                            Time_Start = "9: 00 AM",
-                            Time_End = "6:00 PM"
-                        };
+                            foreach (var promotion in expiresPromotion)
+                            {
+                                var establishment = dbContext.Establishment.FirstOrDefault(e => e.Establishment_Id == promotion.Establishment_Id);
 
-                        dbContext.Availability.Add(availability);
-                        dbContext.SaveChanges();
+                                if (establishment != null)
+                                {
+                                    if (establishment.Promo_Credit != null && establishment.Promo_Credit > 0)
+                                    {
+                                        establishment.Promo_Credit -= 1;
+
+                                        dbContext.Establishment.Update(establishment);
+                                        await dbContext.SaveChangesAsync();
+
+                                        // check if the promoType Auto/Non-Auto
+                                        // for auto credit 
+
+                                        promotion.Is_Active = false;
+
+                                        dbContext.Promotion.Update(promotion);
+                                        await dbContext.SaveChangesAsync();
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -57,7 +70,7 @@ namespace choapi.CronJob
                 }
 
                 // Delay for 1 minutes before running again
-                await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
+                await Task.Delay(TimeSpan.FromDays(1), stoppingToken);
             }
 
             _logger.LogInformation("Cron Job Service is stopping.");
