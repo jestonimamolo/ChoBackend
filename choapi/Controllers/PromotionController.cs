@@ -13,13 +13,15 @@ namespace choapi.Controllers
     public class PromotionController : ControllerBase
     {
         private readonly IPromotionDAL _modelDAL;
+        private readonly IEstablishmentDAL _establishmentDAL;
 
         private readonly ILogger<PromotionController> _logger;
 
-        public PromotionController(ILogger<PromotionController> logger, IPromotionDAL modelDAL)
+        public PromotionController(ILogger<PromotionController> logger, IPromotionDAL modelDAL, IEstablishmentDAL establishmentDAL)
         {
             _logger = logger;
             _modelDAL = modelDAL;
+            _establishmentDAL = establishmentDAL;
         }
 
         [HttpPost("add"), Authorize()]
@@ -45,6 +47,18 @@ namespace choapi.Controllers
                 };
 
                 var result = _modelDAL.Add(model);
+
+                var establishment = _establishmentDAL.GetEstablishment(model.Establishment_Id);
+
+                if (establishment != null)
+                {
+                    if (establishment.Promo_Credit != null)
+                        establishment.Promo_Credit += 1;
+                    else
+                        establishment.Promo_Credit = 1;
+
+                    var resultPromotCreditEstablishment = _establishmentDAL.Update(establishment);
+                }                
 
                 response.Promotion = result;
                 response.Message = "Successfully added.";
