@@ -1057,6 +1057,22 @@
     ]
   },
   {
+    "ContainingType": "choapi.Controllers.EmailController",
+    "Method": "SendEmail",
+    "RelativePath": "api/Email/send",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "choapi.DTOs.EmailDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "choapi.Controllers.EstablishmentController",
     "Method": "GetEstablishment",
     "RelativePath": "api/Establishment/{id}",
