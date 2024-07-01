@@ -34,7 +34,10 @@ namespace choapi.CronJob
                     {
                         var dbContext = scope.ServiceProvider.GetRequiredService<ChoDBContext>();
 
-                        var expiresPromotion = dbContext.Promotion.Where(p => p.Date_Promoted <= DateTime.Now && p.Is_Active != false && p.Is_Deleted != false).ToList();
+                        
+                        // date expired off the promoted -1
+
+                        var expiresPromotion = dbContext.Promotion.Where(p => p.Date_Promoted < DateTime.Now && p.Is_Active != true && p.Is_Deleted != false).ToList();
 
                         if (expiresPromotion.Any())
                         {
@@ -47,6 +50,7 @@ namespace choapi.CronJob
                                     if (establishment.Promo_Credit != null && establishment.Promo_Credit > 0)
                                     {
                                         establishment.Promo_Credit -= 1;
+                                        establishment.Is_Promoted = false;
 
                                         dbContext.Establishment.Update(establishment);
                                         await dbContext.SaveChangesAsync();
@@ -62,6 +66,38 @@ namespace choapi.CronJob
                                 }
                             }
                         }
+
+                        var promotions = dbContext.Promotion.Where(p => p.Date_Promoted == DateTime.Now && p.Is_Active != false && p.Is_Deleted != false).ToList();
+
+                        if (expiresPromotion.Any())
+                        {
+                            foreach (var promotion in expiresPromotion)
+                            {
+                                var establishment = dbContext.Establishment.FirstOrDefault(e => e.Establishment_Id == promotion.Establishment_Id);
+
+                                if (establishment != null)
+                                {
+                                    if (establishment.Promo_Credit != null && establishment.Promo_Credit > 0)
+                                    {
+                                        establishment.Promo_Credit += 1;
+                                        establishment.Is_Promoted = true;
+
+                                        dbContext.Establishment.Update(establishment);
+                                        await dbContext.SaveChangesAsync();
+
+                                        // check if the promoType Auto/Non-Auto
+                                        // for auto credit 
+
+                                        promotion.Is_Active = true;
+
+                                        dbContext.Promotion.Update(promotion);
+                                        await dbContext.SaveChangesAsync();
+                                    }
+                                }
+                            }
+                        }
+
+                        // date based to turn on promoted +1ch
                     }
                 }
                 catch (Exception ex)

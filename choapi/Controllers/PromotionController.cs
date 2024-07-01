@@ -48,17 +48,17 @@ namespace choapi.Controllers
 
                 var result = _modelDAL.Add(model);
 
-                var establishment = _establishmentDAL.GetEstablishment(model.Establishment_Id);
+                //var establishment = _establishmentDAL.GetEstablishment(model.Establishment_Id);
 
-                if (establishment != null)
-                {
-                    if (establishment.Promo_Credit != null)
-                        establishment.Promo_Credit += 1;
-                    else
-                        establishment.Promo_Credit = 1;
+                //if (establishment != null)
+                //{
+                //    if (establishment.Promo_Credit != null)
+                //        establishment.Promo_Credit += 1;
+                //    else
+                //        establishment.Promo_Credit = 1;
 
-                    var resultPromotCreditEstablishment = _establishmentDAL.Update(establishment);
-                }                
+                //    var resultPromotCreditEstablishment = _establishmentDAL.Update(establishment);
+                //}
 
                 response.Promotion = result;
                 response.Message = "Successfully added.";
