@@ -16,6 +16,7 @@ namespace choapi.Controllers
         private readonly ICategoryDAL _categoryDAL;
         private readonly IUserDAL _userDAL;
         private readonly ISaveEstablishmentDAL _saveEstablishmentDAL;
+        private readonly IEstablishmentTableDAL _establishmentTableDAL;
 
         private readonly ILogger<EstablishmentController> _logger;
 
@@ -26,13 +27,15 @@ namespace choapi.Controllers
             IEstablishmentDAL establishmentDAL, 
             ICategoryDAL categoryDAL, 
             IUserDAL userDAL,
-            ISaveEstablishmentDAL saveEstablishmentDAL)
+            ISaveEstablishmentDAL saveEstablishmentDAL,
+            IEstablishmentTableDAL establishmentTableDAL)
         {
             _logger = logger;
             _establishmentDAL = establishmentDAL;
             _categoryDAL = categoryDAL;
             _userDAL = userDAL;
             _saveEstablishmentDAL = saveEstablishmentDAL;
+            _establishmentTableDAL = establishmentTableDAL;
         }
 
         [HttpPost("register"), Authorize()]
@@ -249,6 +252,8 @@ namespace choapi.Controllers
 
                         resultEstablishment.Images = _establishmentDAL.GetEstablishmentImages(establishment.Establishment_Id);
 
+                        resultEstablishment.EstablishmentTables = _establishmentTableDAL.GetEstablishmentTables(establishment.Establishment_Id);
+
                         response.Establishments.Add(resultEstablishment);
                     }
                     response.Message = $"Successfully get Establishments.";
@@ -300,6 +305,8 @@ namespace choapi.Controllers
                         resultEstablishment.Is_Active = establishment.Is_Active;
 
                         resultEstablishment.Images = _establishmentDAL.GetEstablishmentImages(establishment.Establishment_Id);
+
+                        resultEstablishment.EstablishmentTables = _establishmentTableDAL.GetEstablishmentTables(establishment.Establishment_Id);
 
                         response.Establishments.Add(resultEstablishment);
                     }
@@ -1508,6 +1515,8 @@ namespace choapi.Controllers
 
                         resultEstablishment.Images = _establishmentDAL.GetEstablishmentImages(establishment.Establishment_Id);
 
+                        resultEstablishment.EstablishmentTables = _establishmentTableDAL.GetEstablishmentTables(establishment.Establishment_Id);
+
                         response.Establishments.Add(resultEstablishment);
                     }
                     response.Message = $"Successfully get Restaurants.";
@@ -1569,6 +1578,8 @@ namespace choapi.Controllers
                         resultEstablishment.Save_User = _saveEstablishmentDAL.GetSaveEstablishmentOfUser(establishment.Establishment_Id);
 
                         resultEstablishment.Images = _establishmentDAL.GetEstablishmentImages(establishment.Establishment_Id);
+
+                        resultEstablishment.EstablishmentTables = _establishmentTableDAL.GetEstablishmentTables(establishment.Establishment_Id);
 
                         response.Establishments.Add(resultEstablishment);
                     }
@@ -1638,6 +1649,8 @@ namespace choapi.Controllers
                         }
 
                         resultEstablishment.Images = _establishmentDAL.GetEstablishmentImages(establishment.Establishment_Id);
+
+                        resultEstablishment.EstablishmentTables = _establishmentTableDAL.GetEstablishmentTables(establishment.Establishment_Id);
 
                         response.Establishments.Add(resultEstablishment);
                     }
@@ -1723,6 +1736,8 @@ namespace choapi.Controllers
 
                         resultEstablishment.Images = _establishmentDAL.GetEstablishmentImages(establishment.Establishment_Id);
 
+                        resultEstablishment.EstablishmentTables = _establishmentTableDAL.GetEstablishmentTables(establishment.Establishment_Id);
+
                         response.Establishments.Add(resultEstablishment);
                     }
                     response.Message = $"Successfully get Restaurants.";
@@ -1806,6 +1821,8 @@ namespace choapi.Controllers
                         }
 
                         resultEstablishment.Images = _establishmentDAL.GetEstablishmentImages(establishment.Establishment_Id);
+
+                        resultEstablishment.EstablishmentTables = _establishmentTableDAL.GetEstablishmentTables(establishment.Establishment_Id);
 
                         response.Establishments.Add(resultEstablishment);
                     }
@@ -1891,6 +1908,8 @@ namespace choapi.Controllers
 
                         resultEstablishment.Images = _establishmentDAL.GetEstablishmentImages(establishment.Establishment_Id);
 
+                        resultEstablishment.EstablishmentTables = _establishmentTableDAL.GetEstablishmentTables(establishment.Establishment_Id);
+
                         response.Establishments.Add(resultEstablishment);
                     }
                     response.Message = $"Successfully get Restaurants.";
@@ -1950,6 +1969,8 @@ namespace choapi.Controllers
                         resultEstablishment.Is_Active = establishment.Is_Active;
 
                         resultEstablishment.Images = _establishmentDAL.GetEstablishmentImages(establishment.Establishment_Id);
+
+                        resultEstablishment.EstablishmentTables = _establishmentTableDAL.GetEstablishmentTables(establishment.Establishment_Id);
 
                         response.Establishments.Add(resultEstablishment);
                     }
@@ -2016,6 +2037,8 @@ namespace choapi.Controllers
                         resultEstablishment.Is_Active = establishment.Is_Active;
 
                         resultEstablishment.Images = _establishmentDAL.GetEstablishmentImages(establishment.Establishment_Id);
+
+                        resultEstablishment.EstablishmentTables = _establishmentTableDAL.GetEstablishmentTables(establishment.Establishment_Id);
 
                         response.Establishments.Add(resultEstablishment);
                     }

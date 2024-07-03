@@ -39,5 +39,7 @@ namespace choapi.Messages
         public List<int>? Save_User { get; set; } = null;
 
         public List<EstablishmentImages>? Images { get; set; } = null;
+
+        public List<EstablishmentTable>? EstablishmentTables { get; set; } = new List<EstablishmentTable>();
     }
 }
